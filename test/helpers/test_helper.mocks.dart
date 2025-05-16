@@ -119,14 +119,14 @@ class MockMovieRepository extends _i1.Mock implements _i5.MovieRepository {
           as _i6.Future<_i2.Either<_i7.Failure, List<_i8.Movie>>>);
 
   @override
-  _i6.Future<_i2.Either<_i7.Failure, List<_i8.Movie>>> getUpComing() =>
+  _i6.Future<_i2.Either<_i7.Failure, List<_i8.Movie>>> getUpComingMovies() =>
       (super.noSuchMethod(
-            Invocation.method(#getUpComing, []),
+            Invocation.method(#getUpComingMovies, []),
             returnValue:
                 _i6.Future<_i2.Either<_i7.Failure, List<_i8.Movie>>>.value(
                   _FakeEither_0<_i7.Failure, List<_i8.Movie>>(
                     this,
-                    Invocation.method(#getUpComing, []),
+                    Invocation.method(#getUpComingMovies, []),
                   ),
                 ),
           )
@@ -353,6 +353,15 @@ class MockMovieLocalDataSource extends _i1.Mock
           as _i6.Future<void>);
 
   @override
+  _i6.Future<void> cacheUpComingMovies(List<_i13.MovieTable>? movies) =>
+      (super.noSuchMethod(
+            Invocation.method(#cacheUpComingMovies, [movies]),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
+
+  @override
   _i6.Future<List<_i13.MovieTable>> getCachedNowPlayingMovies() =>
       (super.noSuchMethod(
             Invocation.method(#getCachedNowPlayingMovies, []),
@@ -376,6 +385,16 @@ class MockMovieLocalDataSource extends _i1.Mock
   _i6.Future<List<_i13.MovieTable>> getCachedTopRatedMovies() =>
       (super.noSuchMethod(
             Invocation.method(#getCachedTopRatedMovies, []),
+            returnValue: _i6.Future<List<_i13.MovieTable>>.value(
+              <_i13.MovieTable>[],
+            ),
+          )
+          as _i6.Future<List<_i13.MovieTable>>);
+
+  @override
+  _i6.Future<List<_i13.MovieTable>> getCachedUpComingMovies() =>
+      (super.noSuchMethod(
+            Invocation.method(#getCachedUpComingMovies, []),
             returnValue: _i6.Future<List<_i13.MovieTable>>.value(
               <_i13.MovieTable>[],
             ),

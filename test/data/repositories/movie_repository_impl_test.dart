@@ -711,6 +711,207 @@ void main() {
     });
   });
 
+  group('Up Coming Movies', () {
+    group('cache up coming movies', () {
+      late MovieLocalDataSourceImpl localDataSource;
+
+      setUp(() {
+        mockDatabaseHelper = MockDatabaseHelper();
+        localDataSource = MovieLocalDataSourceImpl(
+          databaseHelper: mockDatabaseHelper,
+        );
+      });
+
+      /**
+       * Menguji apakah method cacheNowPlayingMovies() menyimpan data ke local database.
+       * Verifikasi bahwa clearCache dan insertCacheTransaction terpanggil.
+       */
+      test('should call database helper to save data', () async {
+        // arrange
+        when(
+          mockDatabaseHelper.clearCache('up coming'),
+        ).thenAnswer((_) async => 1);
+        when(
+          mockDatabaseHelper.insertCacheTransaction([
+            testMovieCache,
+          ], 'up coming'),
+        ).thenAnswer((_) async => {});
+
+        final dataSource = MovieLocalDataSourceImpl(
+          databaseHelper: mockDatabaseHelper,
+        );
+        // act
+        await dataSource.cacheUpComingMovies([testMovieCache]);
+
+        // assert
+        verify(mockDatabaseHelper.clearCache('up coming'));
+        verify(
+          mockDatabaseHelper.insertCacheTransaction([
+            testMovieCache,
+          ], 'up coming'),
+        );
+      });
+
+      /// Jika cache ada → return list movie.
+      test('should return list of movies from db when data exist', () async {
+        // arrange
+        when(
+          mockDatabaseHelper.getCacheMovies('up coming'),
+        ).thenAnswer((_) async => [testMovieCacheMap]);
+
+        // act
+        final result = await localDataSource.getCachedUpComingMovies();
+
+        // assert
+        expect(result, [testMovieCache]);
+      });
+
+      /// Jika cache kosong → lempar CacheException.
+      test(
+        'should throw CacheException when cache data is not exist',
+        () async {
+          // arrange
+          when(
+            mockDatabaseHelper.getCacheMovies('up coming'),
+          ).thenAnswer((_) async => []);
+
+          // act
+          final call = localDataSource.getCachedUpComingMovies();
+
+          // assert
+          expect(() => call, throwsA(isA<CacheException>()));
+        },
+      );
+    });
+
+    group('when device is online', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      });
+
+      /// Memeriksa apakah aplikasi terhubung dengan internet?
+      test('should check if the device is online', () async {
+        // Arrange
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(
+          mockRemoteDataSource.getUpComingMovies(),
+        ).thenAnswer((_) async => []);
+
+        // Act
+        await repository.getUpComingMovies();
+
+        // Assert
+        verify(mockNetworkInfo.isConnected);
+      });
+
+      test(
+        'should return movie list when call to data source is successful',
+        () async {
+          // arrange
+          when(
+            mockRemoteDataSource.getUpComingMovies(),
+          ).thenAnswer((_) async => tMovieModelList);
+          // act
+          final result = await repository.getUpComingMovies();
+          // assert
+          /* workaround to test List in Right. Issue: https://github.com/spebbe/dartz/issues/80 */
+          final resultList = result.getOrElse(() => []);
+          expect(resultList, tMovieList);
+        },
+      );
+
+      /// Simpan data yang didapat dari API ke dalam database.
+      /// Setelah ambil data dari remote, data juga disimpan ke local (caching).
+      /// untuk memastikan bahwa memanggil data dari internet lalu menyimpannya secara lokal
+      test(
+        'should cache data locally when the call to remote data source is successful',
+        () async {
+          // arrange
+          when(
+            mockRemoteDataSource.getUpComingMovies(),
+          ).thenAnswer((_) async => tMovieModelList);
+          // act
+          await repository.getUpComingMovies();
+          // assert
+          verify(mockRemoteDataSource.getUpComingMovies());
+          verify(mockLocalDataSource.cacheUpComingMovies([testMovieCache]));
+        },
+      );
+
+      test(
+        'should return ServerFailure when call to data source is unsuccessful',
+        () async {
+          // arrange
+          when(
+            mockRemoteDataSource.getUpComingMovies(),
+          ).thenThrow(ServerException());
+          // act
+          final result = await repository.getUpComingMovies();
+          // assert
+          expect(result, Left(ServerFailure('')));
+        },
+      );
+    });
+
+    group('when device is offline', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      });
+
+      // test(
+      //   'should return ConnectionFailure when device is not connected to the internet',
+      //   () async {
+      //     // arrange
+      //     when(
+      //       mockRemoteDataSource.getUpComingMovies(),
+      //     ).thenThrow(SocketException('Failed to connect to the network'));
+      //     // act
+      //     final result = await repository.getUpComingMovies();
+      //     // assert
+      //     expect(
+      //       result,
+      //       Left(ConnectionFailure('Failed to connect to the network')),
+      //     );
+      //   },
+      // );
+
+      /// Saat offline, ambil data dari local cache.
+      /// Hasil berupa Right<List<Movie>>.
+      test('should return cached data when device is offline', () async {
+        // arrange
+        when(
+          mockLocalDataSource.getCachedUpComingMovies(),
+        ).thenAnswer((_) async => [testMovieCache]);
+
+        // act
+        // panggil method yang akan di uji dan simpan nilai kembaliannya ke dalam sebuah variabel.
+        final result = await repository.getUpComingMovies();
+
+        // assert
+        // masukkan ekspektasi pengujian yang diharapkan. ingin memastikan
+        // localDataSource.getCachedNowPlayingMovies() dipanggil lalu nilai yang
+        // dikembalikan juga sesuai.
+        verify(mockLocalDataSource.getCachedUpComingMovies());
+        final resultList = result.getOrElse(() => []);
+        expect(resultList, [testMovieFromCache]);
+      });
+
+      /// ketika tidak ada data di dalam cache
+      /// Jika cache kosong → return Left(CacheFailure).
+      test('should return CacheFailure when app has no cache', () async {
+        // arrange
+        when(
+          mockLocalDataSource.getCachedUpComingMovies(),
+        ).thenThrow(CacheException('No Cache'));
+        // act
+        final result = await repository.getUpComingMovies();
+        // assert
+        verify(mockLocalDataSource.getCachedUpComingMovies());
+        expect(result, Left(CacheFailure('No Cache')));
+      });
+    });
+  });
+
   group('Get Movie Detail', () {
     final tId = 1;
     final tMovieResponse = MovieDetailResponse(

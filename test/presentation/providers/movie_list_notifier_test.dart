@@ -23,7 +23,7 @@ void main() {
   late MockGetNowPlayingMovies mockGetNowPlayingMovies;
   late MockGetPopularMovies mockGetPopularMovies;
   late MockGetTopRatedMovies mockGetTopRatedMovies;
-  late MockUpComingMovies mockUpComingMovies;
+  late MockGetUpComingMovies mockGetUpComingMovies;
   late int listenerCallCount;
 
   setUp(() {
@@ -31,11 +31,12 @@ void main() {
     mockGetNowPlayingMovies = MockGetNowPlayingMovies();
     mockGetPopularMovies = MockGetPopularMovies();
     mockGetTopRatedMovies = MockGetTopRatedMovies();
+    mockGetUpComingMovies = MockGetUpComingMovies();
     provider = MovieListNotifier(
       getNowPlayingMovies: mockGetNowPlayingMovies,
       getPopularMovies: mockGetPopularMovies,
       getTopRatedMovies: mockGetTopRatedMovies,
-      getUpComingMovies: mockUpComingMovies,
+      getUpComingMovies: mockGetUpComingMovies,
     )..addListener(() {
       listenerCallCount += 1;
     });
@@ -197,5 +198,47 @@ void main() {
     });
   });
 
-  group('up coming movies', () {});
+  group('up coming movies', () {
+    test('should change state to loading when usecase is called', () {
+      // Arrange
+      when(
+        mockGetUpComingMovies.execute(),
+      ).thenAnswer((_) async => Right(tMovieList));
+
+      // Act
+      provider.fetchUpComingMovies();
+
+      // Assert
+      expect(provider.upComingMoviesState, RequestState.Loading);
+    });
+
+    test(
+      'should change movies data when data is gotten successfully',
+      () async {
+        // arrange
+        when(
+          mockGetUpComingMovies.execute(),
+        ).thenAnswer((_) async => Right(tMovieList));
+        // act
+        await provider.fetchUpComingMovies();
+        // assert
+        expect(provider.upComingMoviesState, RequestState.Loaded);
+        expect(provider.upComingMovies, tMovieList);
+        expect(listenerCallCount, 2);
+      },
+    );
+
+    test('should return error when data is unsuccessful', () async {
+      // arrange
+      when(
+        mockGetUpComingMovies.execute(),
+      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+      // act
+      await provider.fetchUpComingMovies();
+      // assert
+      expect(provider.upComingMoviesState, RequestState.Error);
+      expect(provider.message, 'Server Failure');
+      expect(listenerCallCount, 2);
+    });
+  });
 }
