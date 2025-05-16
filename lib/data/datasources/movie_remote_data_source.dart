@@ -29,7 +29,6 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
   MovieRemoteDataSourceImpl({required this.client});
 
-  /// Already Unit Testing
   @override
   Future<List<MovieModel>> getNowPlayingMovies() async {
     final response = await client.get(
@@ -43,7 +42,6 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
     }
   }
 
-  /// Process Unit Testing Data Offline
   @override
   Future<MovieDetailResponse> getMovieDetail(int id) async {
     final response = await client.get(
@@ -70,7 +68,6 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
     }
   }
 
-  /// Already Unit Testing
   @override
   Future<List<MovieModel>> getPopularMovies() async {
     final response = await client.get(
@@ -84,7 +81,6 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
     }
   }
 
-  /// Already Unit Testing
   @override
   Future<List<MovieModel>> getTopRatedMovies() async {
     final response = await client.get(

@@ -142,7 +142,6 @@ class MovieRepositoryImpl implements MovieRepository {
 
   @override
   Future<Either<Failure, List<Movie>>> getTopRatedMovies() async {
-    // networkInfo.isConnected;
     if (await networkInfo.isConnected) {
       try {
         final result = await remoteDataSource.getTopRatedMovies();
@@ -166,28 +165,28 @@ class MovieRepositoryImpl implements MovieRepository {
     }
   }
 
-  // @override
-  // Future<Either<Failure, List<Movie>>> getPopularMovies() async {
-  //   networkInfo.isConnected;
-  //   try {
-  //     final result = await remoteDataSource.getPopularMovies();
-  //     return Right(result.map((model) => model.toEntity()).toList());
-  //   } on ServerException {
-  //     return Left(ServerFailure(''));
-  //   } on SocketException {
-  //     return Left(ConnectionFailure('Failed to connect to the network'));
-  //   }
-  // }
-
   @override
-  Future<Either<Failure, List<Movie>>> getUpComing() async {
-    try {
-      final result = await remoteDataSource.getUpComingMovies();
-      return Right(result.map((model) => model.toEntity()).toList());
-    } on ServerException {
-      return Left(ServerFailure(''));
-    } on SocketException {
-      return Left(ConnectionFailure('Failed to connect to the network'));
+  Future<Either<Failure, List<Movie>>> getUpComingMovies() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getUpComingMovies();
+        // Memanggil cacheUpComingMovies
+        localDataSource.cacheUpComingMovies(
+          result.map((movie) => MovieTable.fromDTO(movie)).toList(),
+        );
+        return Right(result.map((model) => model.toEntity()).toList());
+      } on ServerException {
+        return Left(ServerFailure(''));
+      } on SocketException {
+        return Left(ConnectionFailure('Failed to connect to the network'));
+      }
+    } else {
+      try {
+        final result = await localDataSource.getCachedUpComingMovies();
+        return Right(result.map((model) => model.toEntity()).toList());
+      } on CacheException catch (e) {
+        return Left(CacheFailure(e.message));
+      }
     }
   }
 

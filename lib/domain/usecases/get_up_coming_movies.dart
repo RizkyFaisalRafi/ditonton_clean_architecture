@@ -9,6 +9,6 @@ class GetUpComingMovies {
   GetUpComingMovies(this.movieRepository);
 
   Future<Either<Failure, List<Movie>>> execute() {
-    return movieRepository.getUpComing();
+    return movieRepository.getUpComingMovies();
   }
 }

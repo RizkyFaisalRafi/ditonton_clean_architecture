@@ -17,11 +17,15 @@ abstract class MovieLocalDataSource {
 
   Future<void> cacheTopRatedMovies(List<MovieTable> movies);
 
+  Future<void> cacheUpComingMovies(List<MovieTable> movies);
+
   Future<List<MovieTable>> getCachedNowPlayingMovies();
 
   Future<List<MovieTable>> getCachedPopularMovies();
 
   Future<List<MovieTable>> getCachedTopRatedMovies();
+
+  Future<List<MovieTable>> getCachedUpComingMovies();
 
   Future<String> insertWatchlist(MovieTable movie);
 
@@ -118,8 +122,24 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
   }
 
   @override
+  Future<void> cacheUpComingMovies(List<MovieTable> movies) async {
+    await databaseHelper.clearCache('up coming');
+    await databaseHelper.insertCacheTransaction(movies, 'up coming');
+  }
+
+  @override
   Future<List<MovieTable>> getCachedTopRatedMovies() async {
     final result = await databaseHelper.getCacheMovies('top rated');
+    if (result.length > 0) {
+      return result.map((data) => MovieTable.fromMap(data)).toList();
+    } else {
+      throw CacheException("Can't get the data :(");
+    }
+  }
+
+  @override
+  Future<List<MovieTable>> getCachedUpComingMovies() async {
+    final result = await databaseHelper.getCacheMovies('up coming');
     if (result.length > 0) {
       return result.map((data) => MovieTable.fromMap(data)).toList();
     } else {
