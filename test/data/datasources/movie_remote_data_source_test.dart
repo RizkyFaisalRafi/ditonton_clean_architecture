@@ -6,7 +6,6 @@ import 'package:ditonton_clean_architecture/common/exception.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
-
 import '../../json_reader.dart';
 import '../../helpers/test_helper.mocks.dart';
 
@@ -110,6 +109,32 @@ void main() {
           // assert
           expect(() => call, throwsA(isA<ServerException>()));
         });
+  });
+
+  group('get Upcoming Movies', () {
+    final tMovieList = MovieResponse.fromJson(
+      json.decode(readJson('dummy_data/upcoming.json')),
+    ).movieList;
+
+    test('should return list of movies when the response code is 200', () async {
+      // arrange
+      when(mockHttpClient.get(Uri.parse('$BASE_URL/movie/upcoming?$API_KEY')))
+          .thenAnswer((_) async => http.Response(readJson('dummy_data/upcoming.json'), 200));
+      // act
+      final result = await dataSource.getUpComingMovies();
+      // assert
+      expect(result, tMovieList);
+    });
+
+    test('should throw ServerException when the response code is not 200', () async {
+      // arrange
+      when(mockHttpClient.get(Uri.parse('$BASE_URL/movie/upcoming?$API_KEY')))
+          .thenAnswer((_) async => http.Response('Not Found', 404));
+      // act
+      final call = dataSource.getUpComingMovies();
+      // assert
+      expect(() => call, throwsA(isA<ServerException>()));
+    });
   });
 
   group('get movie detail', () {

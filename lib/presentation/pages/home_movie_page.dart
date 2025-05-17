@@ -6,6 +6,7 @@ import 'package:ditonton_clean_architecture/presentation/pages/movie_detail_page
 import 'package:ditonton_clean_architecture/presentation/pages/popular_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/search_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/top_rated_movies_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/watchlist_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
@@ -147,7 +148,14 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               ),
 
               /// Up Coming
-              _buildSubHeading(title: 'Up Coming', onTap: () {}),
+              _buildSubHeading(
+                title: 'Up Coming',
+                onTap:
+                    () => Navigator.pushNamed(
+                      context,
+                      UpComingMoviesPage.ROUTE_NAME,
+                    ),
+              ),
 
               Consumer<MovieListNotifier>(
                 builder: (context, data, child) {

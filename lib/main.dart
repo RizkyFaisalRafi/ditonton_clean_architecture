@@ -6,12 +6,14 @@ import 'package:ditonton_clean_architecture/presentation/pages/home_movie_page.d
 import 'package:ditonton_clean_architecture/presentation/pages/popular_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/search_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/top_rated_movies_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/watchlist_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_search_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/popular_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/top_rated_movies_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/up_coming_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +48,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => di.locator<WatchlistMovieNotifier>(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<UpComingMoviesNotifier>(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -78,6 +83,8 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => WatchlistMoviesPage());
             case AboutPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => AboutPage());
+            case UpComingMoviesPage.ROUTE_NAME:
+              return MaterialPageRoute(builder: (_) => UpComingMoviesPage());
             default:
               return MaterialPageRoute(
                 builder: (_) {

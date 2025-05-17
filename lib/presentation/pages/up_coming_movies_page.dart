@@ -1,36 +1,36 @@
-import 'package:ditonton_clean_architecture/common/state_enum.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/top_rated_movies_notifier.dart';
-import 'package:ditonton_clean_architecture/presentation/widgets/movie_card_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../common/state_enum.dart';
+import '../provider/up_coming_movies_notifier.dart';
+import '../widgets/movie_card_list.dart';
 
-class TopRatedMoviesPage extends StatefulWidget {
-  static const ROUTE_NAME = '/top-rated-movie';
+class UpComingMoviesPage extends StatefulWidget {
+  static const ROUTE_NAME = '/up-coming-movie';
 
   @override
-  _TopRatedMoviesPageState createState() => _TopRatedMoviesPageState();
+  State<UpComingMoviesPage> createState() => _UpComingMoviesPageState();
 }
 
-class _TopRatedMoviesPageState extends State<TopRatedMoviesPage> {
+class _UpComingMoviesPageState extends State<UpComingMoviesPage> {
   @override
   void initState() {
     super.initState();
     Future.microtask(
       () =>
-          Provider.of<TopRatedMoviesNotifier>(
+          Provider.of<UpComingMoviesNotifier>(
             context,
             listen: false,
-          ).fetchTopRatedMovies(),
+          ).fetchUpComingMovies(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Top Rated Movies')),
+      appBar: AppBar(title: Text('Up Coming Movies')),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Consumer<TopRatedMoviesNotifier>(
+        padding: EdgeInsets.all(8.0),
+        child: Consumer<UpComingMoviesNotifier>(
           builder: (context, data, child) {
             if (data.state == RequestState.Loading) {
               return Center(child: CircularProgressIndicator());

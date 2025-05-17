@@ -51,9 +51,11 @@ dependencies:
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
-  mockito: ^5.4.6
-  build_runner: ^2.4.15
-  flutter_test:
+  mockito: ^5.4.6 # Data Tiruan
+  build_runner: ^2.4.15 # Generator
+  sqflite_common_ffi: ^2.3.5 # test sqflite Testing atau aplikasi desktop/CLI
+#  test: ^1.25.15 # Unit test murni Dart (tanpa dependensi Flutter UI).
+  flutter_test: # Widget test dan unit test yang bergantung pada Flutter framework.
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to

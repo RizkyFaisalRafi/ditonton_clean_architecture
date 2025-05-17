@@ -1,7 +1,6 @@
 import 'package:ditonton_clean_architecture/common/exception.dart';
 import 'package:ditonton_clean_architecture/data/datasources/db/database_helper.dart';
 import 'package:ditonton_clean_architecture/data/models/movie_table.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie_detail.dart';
 
 /*
  * Sesuai namanya, data sources merupakan sumber data yang akan digunakan di dalam aplikasi.
@@ -146,20 +145,4 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
       throw CacheException("Can't get the data :(");
     }
   }
-
-  // @override
-  // Future<void> cacheGetMovieDetail(MovieTable movies) async {
-  //   await databaseHelper.clearCache('movie detail');
-  //   await databaseHelper.insertCacheTransaction2(movies, 'movie detail');
-  // }
-  //
-  // @override
-  // Future<MovieTable?> getCachedMovieDetail(int id) async {
-  //   final result = await databaseHelper.getCacheMovieDetailById(id);
-  //   if (result != null) {
-  //     return MovieTable.fromMap(result);
-  //   } else {
-  //     throw CacheException('No cached movie detail found');
-  //   }
-  // }
 }
