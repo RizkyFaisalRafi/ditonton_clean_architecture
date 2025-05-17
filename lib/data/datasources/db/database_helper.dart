@@ -59,22 +59,18 @@ class DatabaseHelper {
       for (final movie in movies) {
         final movieJson = movie.toJson();
         movieJson['category'] = category;
-        txn.insert(_tblCache, movieJson);
-      }
-    });
-  }
 
-  Future<void> insertCacheTransaction2(
-    MovieTable movies,
-    String category,
-  ) async {
-    final db = await database;
-    db!.transaction((txn) async {
-      // for (final movie in movies) {
-      final movieJson = movies.toJson();
-      movieJson['category'] = category;
-      txn.insert(_tblCache, movieJson);
-      // }
+        // Error DatabaseException(UNIQUE constraint failed: cache.id)
+        // txn.insert(_tblCache, movieJson);
+
+        // Data baru akan mengganti data lama jika memiliki id yang sama (sesuai ConflictAlgorithm.replace).
+        // Aplikasi lebih stabil dan aman saat caching ulang.
+        txn.insert(
+          _tblCache,
+          movieJson,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
     });
   }
 

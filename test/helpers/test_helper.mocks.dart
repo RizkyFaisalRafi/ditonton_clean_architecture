@@ -475,18 +475,6 @@ class MockDatabaseHelper extends _i1.Mock implements _i15.DatabaseHelper {
           as _i6.Future<void>);
 
   @override
-  _i6.Future<void> insertCacheTransaction2(
-    _i13.MovieTable? movies,
-    String? category,
-  ) =>
-      (super.noSuchMethod(
-            Invocation.method(#insertCacheTransaction2, [movies, category]),
-            returnValue: _i6.Future<void>.value(),
-            returnValueForMissingStub: _i6.Future<void>.value(),
-          )
-          as _i6.Future<void>);
-
-  @override
   _i6.Future<List<Map<String, dynamic>>> getCacheMovies(String? category) =>
       (super.noSuchMethod(
             Invocation.method(#getCacheMovies, [category]),

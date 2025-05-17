@@ -1,0 +1,36 @@
+import 'package:dartz/dartz.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/get_up_coming_movies.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import '../../helpers/test_helper.mocks.dart';
+
+void main() {
+  late GetUpComingMovies usecase;
+  late MockMovieRepository mockMovieRepository;
+
+  setUp(() {
+    mockMovieRepository = MockMovieRepository();
+    usecase = GetUpComingMovies(mockMovieRepository);
+  });
+
+  final tMovies = <Movie>[];
+
+  group('GetUpComingMovies Tests', () {
+    group('execute', () {
+      test(
+        'should get list of movies from the repository when execute function is called',
+        () async {
+          // arrange
+          when(
+            mockMovieRepository.getUpComingMovies(),
+          ).thenAnswer((_) async => Right(tMovies));
+          // act
+          final result = await usecase.execute();
+          // assert
+          expect(result, Right(tMovies));
+        },
+      );
+    });
+  });
+}

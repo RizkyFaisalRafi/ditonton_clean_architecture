@@ -1,12 +1,13 @@
-import 'package:ditonton_clean_architecture/common/state_enum.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
-import 'package:ditonton_clean_architecture/domain/usecases/get_top_rated_movies.dart';
-import 'package:flutter/foundation.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/get_up_coming_movies.dart';
+import 'package:flutter/cupertino.dart';
 
-class TopRatedMoviesNotifier extends ChangeNotifier {
-  final GetTopRatedMovies getTopRatedMovies;
+import '../../common/state_enum.dart';
+import '../../domain/entities/movie.dart';
 
-  TopRatedMoviesNotifier({required this.getTopRatedMovies});
+class UpComingMoviesNotifier extends ChangeNotifier {
+  final GetUpComingMovies getUpComingMovies;
+
+  UpComingMoviesNotifier({required this.getUpComingMovies});
 
   RequestState _state = RequestState.Empty;
 
@@ -20,11 +21,11 @@ class TopRatedMoviesNotifier extends ChangeNotifier {
 
   String get message => _message;
 
-  Future<void> fetchTopRatedMovies() async {
+  Future<void> fetchUpComingMovies() async {
     _state = RequestState.Loading;
     notifyListeners();
 
-    final result = await getTopRatedMovies.execute();
+    final result = await getUpComingMovies.execute();
 
     result.fold(
       (failure) {
