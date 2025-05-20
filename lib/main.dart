@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => di.locator<TvDetailNotifier>()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Flutter Expert',
         theme: ThemeData.dark().copyWith(
           colorScheme: kColorScheme,
           primaryColor: kRichBlack,

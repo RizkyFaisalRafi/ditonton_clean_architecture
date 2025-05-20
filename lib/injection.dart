@@ -19,6 +19,7 @@ import 'package:ditonton_clean_architecture/domain/usecases/save_watchlist.dart'
 import 'package:ditonton_clean_architecture/domain/usecases/search_movies.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_airing_today_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_tv_detail.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_tv_recommendations.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_search_notifier.dart';
@@ -73,6 +74,7 @@ void init() {
       getWatchListStatus: locator(),
       saveWatchlist: locator(),
       removeWatchlist: locator(),
+      getTvRecommendations: locator()
     ),
   );
 
@@ -90,6 +92,7 @@ void init() {
   locator.registerLazySingleton(() => GetUpComingMovies(locator()));
   locator.registerLazySingleton(() => GetAiringTodayTv(locator()));
   locator.registerLazySingleton(() => GetTvDetail(repository: locator()));
+  locator.registerLazySingleton(() => GetTvRecommendations(locator()));
 
   // repository
   locator.registerLazySingleton<MovieRepository>(
