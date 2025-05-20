@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
-import 'package:ditonton_clean_architecture/data/datasources/movie_local_data_source.dart';
-import 'package:ditonton_clean_architecture/data/datasources/movie_remote_data_source.dart';
+import 'package:ditonton_clean_architecture/data/datasources/movies/movie_local_data_source.dart';
 import 'package:ditonton_clean_architecture/data/models/movie_table.dart';
 import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
 import 'package:ditonton_clean_architecture/domain/entities/movie_detail.dart';
@@ -10,6 +9,7 @@ import 'package:ditonton_clean_architecture/common/exception.dart';
 import 'package:ditonton_clean_architecture/common/failure.dart';
 
 import '../../common/network_info.dart';
+import '../datasources/movies/movie_remote_data_source.dart';
 
 /**
  * Repository pada data layer merupakan implementasi dari kontrak yang dibuat sebelumnya.

@@ -6,6 +6,8 @@ import 'package:ditonton_clean_architecture/presentation/pages/home_movie_page.d
 import 'package:ditonton_clean_architecture/presentation/pages/popular_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/search_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/top_rated_movies_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/watchlist_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_detail_notifier.dart';
@@ -13,6 +15,8 @@ import 'package:ditonton_clean_architecture/presentation/provider/movie_list_not
 import 'package:ditonton_clean_architecture/presentation/provider/movie_search_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/popular_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/top_rated_movies_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/tv_detail_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/tv_list_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/up_coming_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:flutter/cupertino.dart';
@@ -51,6 +55,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => di.locator<UpComingMoviesNotifier>(),
         ),
+        ChangeNotifierProvider(create: (_) => di.locator<TvListNotifier>()),
+        ChangeNotifierProvider(create: (_) => di.locator<TvDetailNotifier>()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -85,6 +91,13 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => AboutPage());
             case UpComingMoviesPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => UpComingMoviesPage());
+            case TvSeriesPage.ROUTE_NAME:
+              return MaterialPageRoute(builder: (_) => TvSeriesPage());
+            case TvSeriesDetailPage.ROUTE_NAME:
+              final id = settings.arguments as int;
+              return MaterialPageRoute(
+                builder: (_) => TvSeriesDetailPage(id: id),
+              );
             default:
               return MaterialPageRoute(
                 builder: (_) {

@@ -6,6 +6,7 @@ import 'package:ditonton_clean_architecture/presentation/pages/movie_detail_page
 import 'package:ditonton_clean_architecture/presentation/pages/popular_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/search_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/top_rated_movies_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/watchlist_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_list_notifier.dart';
@@ -14,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomeMoviePage extends StatefulWidget {
+  const HomeMoviePage({super.key});
+
   @override
   _HomeMoviePageState createState() => _HomeMoviePageState();
 }
@@ -23,18 +26,20 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
   void initState() {
     super.initState();
     Future.microtask(
-      () =>
-          Provider.of<MovieListNotifier>(context, listen: false)
-            ..fetchNowPlayingMovies()
-            ..fetchPopularMovies()
-            ..fetchTopRatedMovies()
-            ..fetchUpComingMovies(),
+          () =>
+      Provider.of<MovieListNotifier>(context, listen: false)
+        ..fetchNowPlayingMovies()
+        ..fetchPopularMovies()
+        ..fetchTopRatedMovies()
+        ..fetchUpComingMovies(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      /// Navigation Drawer
       drawer: Drawer(
         child: Column(
           children: [
@@ -47,6 +52,8 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               accountEmail: Text('ditonton@dicoding.com'),
               decoration: BoxDecoration(color: Colors.grey.shade900),
             ),
+
+            /// Movies Navigation Drawer
             ListTile(
               leading: Icon(Icons.movie),
               title: Text('Movies'),
@@ -54,6 +61,17 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                 Navigator.pop(context);
               },
             ),
+
+            /// TV Series Navigation Drawer
+            ListTile(
+              leading: Icon(Icons.tv_rounded),
+              title: Text('TV Series'),
+              onTap: () {
+                Navigator.pushNamed(context, TvSeriesPage.ROUTE_NAME);
+              }
+            ),
+
+            /// Watchlist Navigation Drawer
             ListTile(
               leading: Icon(Icons.save_alt),
               title: Text('Watchlist'),
@@ -61,6 +79,8 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                 Navigator.pushNamed(context, WatchlistMoviesPage.ROUTE_NAME);
               },
             ),
+
+            /// About Navigation Drawer
             ListTile(
               onTap: () {
                 Navigator.pushNamed(context, AboutPage.ROUTE_NAME);
@@ -71,6 +91,8 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
           ],
         ),
       ),
+
+      /// Home Content
       appBar: AppBar(
         title: Text('Ditonton'),
         actions: [
@@ -107,7 +129,8 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               _buildSubHeading(
                 title: 'Popular',
                 onTap:
-                    () => Navigator.pushNamed(
+                    () =>
+                    Navigator.pushNamed(
                       context,
                       PopularMoviesPage.ROUTE_NAME,
                     ),
@@ -129,7 +152,8 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               _buildSubHeading(
                 title: 'Top Rated',
                 onTap:
-                    () => Navigator.pushNamed(
+                    () =>
+                    Navigator.pushNamed(
                       context,
                       TopRatedMoviesPage.ROUTE_NAME,
                     ),
@@ -151,7 +175,8 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               _buildSubHeading(
                 title: 'Up Coming',
                 onTap:
-                    () => Navigator.pushNamed(
+                    () =>
+                    Navigator.pushNamed(
                       context,
                       UpComingMoviesPage.ROUTE_NAME,
                     ),
@@ -198,7 +223,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
 class MovieList extends StatelessWidget {
   final List<Movie> movies;
 
-  MovieList(this.movies);
+  const MovieList(this.movies, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -212,6 +237,7 @@ class MovieList extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: InkWell(
               onTap: () {
+                /// Go to Detail Page Data Provider dari MovieDetailNotifier harusnya
                 Navigator.pushNamed(
                   context,
                   MovieDetailPage.ROUTE_NAME,
@@ -224,7 +250,7 @@ class MovieList extends StatelessWidget {
                   imageUrl: '$BASE_IMAGE_URL${movie.posterPath}',
                   placeholder:
                       (context, url) =>
-                          Center(child: CircularProgressIndicator()),
+                      Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),

@@ -11,7 +11,7 @@ import '../repositories/movie_repository.dart';
  *
  * Use case hanya memiliki satu function publik yaitu execute
  * yang bisa diakses oleh presentation layer.
- */
+*/
 
 class GetMovieDetail {
   final MovieRepository repository;

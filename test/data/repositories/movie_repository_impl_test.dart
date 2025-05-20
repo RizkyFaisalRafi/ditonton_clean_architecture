@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
-import 'package:ditonton_clean_architecture/data/datasources/movie_local_data_source.dart';
+import 'package:ditonton_clean_architecture/data/datasources/movies/movie_local_data_source.dart';
 import 'package:ditonton_clean_architecture/data/models/genre_model.dart';
 import 'package:ditonton_clean_architecture/data/models/movie_detail_model.dart';
 import 'package:ditonton_clean_architecture/data/models/movie_model.dart';
