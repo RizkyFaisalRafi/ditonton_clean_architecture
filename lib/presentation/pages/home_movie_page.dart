@@ -7,6 +7,7 @@ import 'package:ditonton_clean_architecture/presentation/pages/popular_movies_pa
 import 'package:ditonton_clean_architecture/presentation/pages/search_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/top_rated_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/watchlist_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/watchlist_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_list_notifier.dart';
@@ -77,6 +78,15 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               title: Text('Watchlist'),
               onTap: () {
                 Navigator.pushNamed(context, WatchlistMoviesPage.ROUTE_NAME);
+              },
+            ),
+
+            /// Watchlist Tv Series Navigation Drawer
+            ListTile(
+              leading: Icon(Icons.save_alt),
+              title: Text('Watchlist Tv Series'),
+              onTap: () {
+                Navigator.pushNamed(context, WatchlistTvPage.ROUTE_NAME);
               },
             ),
 

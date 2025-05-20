@@ -1,26 +1,25 @@
 import 'dart:io';
-
 import 'package:dartz/dartz.dart';
-
 import 'package:ditonton_clean_architecture/common/failure.dart';
+import 'package:ditonton_clean_architecture/data/datasources/tv_series/tv_series_local_data_source.dart';
 import 'package:ditonton_clean_architecture/data/datasources/tv_series/tv_series_remote_data_source.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_detail.dart';
-
 import 'package:ditonton_clean_architecture/domain/entities/tv_series.dart';
-
 import '../../common/exception.dart';
 import '../../common/network_info.dart';
 import '../../domain/repositories/tv_series_repository.dart';
+import '../models/tv_series/tv_series_table.dart';
 
 class TvSeriesRepositoryImpl implements TvSeriesRepository {
   final TvSeriesRemoteDataSource remoteDataSource;
 
-  // final MovieLocalDataSource localDataSource;
+  final TvSeriesLocalDatasource localDataSource;
   final NetworkInfo networkInfo;
 
   TvSeriesRepositoryImpl({
     required this.remoteDataSource,
     required this.networkInfo,
+    required this.localDataSource,
   });
 
   @override
@@ -58,5 +57,43 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
     } on SocketException {
       return Left(ConnectionFailure('Failed to connect to the network'));
     }
+  }
+
+  @override
+  Future<Either<Failure, String>> saveWatchlist(TvDetail tv) async {
+    try {
+      final result = await localDataSource.insertWatchlist(
+        TvSeriesTable.fromEntity(tv),
+      );
+      return Right(result);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> removeWatchlist(TvDetail tv) async {
+    try {
+      final result = await localDataSource.removeWatchlist(
+        TvSeriesTable.fromEntity(tv),
+      );
+      return Right(result);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TvSeries>>> getWatchlistTv() async {
+    final result = await localDataSource.getWatchlistTv();
+    return Right(result.map((data) => data.toEntity()).toList());
+  }
+
+  @override
+  Future<bool> isAddedToWatchlist(int id) async {
+    final result = await localDataSource.getTvSeriesById(id);
+    return result != null;
   }
 }

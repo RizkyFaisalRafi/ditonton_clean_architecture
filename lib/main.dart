@@ -8,8 +8,10 @@ import 'package:ditonton_clean_architecture/presentation/pages/search_page.dart'
 import 'package:ditonton_clean_architecture/presentation/pages/top_rated_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/watchlist_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/watchlist_movies_page.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/WatchlistTvNotifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_search_notifier.dart';
@@ -57,6 +59,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) => di.locator<TvListNotifier>()),
         ChangeNotifierProvider(create: (_) => di.locator<TvDetailNotifier>()),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<WatchlistTvNotifier>(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Expert',
@@ -98,6 +103,8 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(
                 builder: (_) => TvSeriesDetailPage(id: id),
               );
+            case WatchlistTvPage.ROUTE_NAME:
+              return MaterialPageRoute(builder: (_) => WatchlistTvPage());
             default:
               return MaterialPageRoute(
                 builder: (_) {
