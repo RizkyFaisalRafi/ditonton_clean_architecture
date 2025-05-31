@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:ditonton_clean_architecture/common/failure.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie_detail.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie_detail.dart';
 
 /*
  * Jika Anda ingat pada diagram arsitektur sebelumnya, repository termasuk

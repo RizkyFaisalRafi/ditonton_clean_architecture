@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
-import 'package:ditonton_clean_architecture/domain/usecases/get_up_coming_movies.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/movies/get_up_coming_movies.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import '../../helpers/test_helper.mocks.dart';

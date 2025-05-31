@@ -1,6 +1,6 @@
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
 import 'package:ditonton_clean_architecture/common/utils.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/watchlist_movie_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/movies/watchlist_movie_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/movie_card_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

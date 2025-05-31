@@ -1,5 +1,5 @@
-import 'package:ditonton_clean_architecture/data/models/movie_model.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_model.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

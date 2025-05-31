@@ -20,11 +20,11 @@ import 'package:ditonton_clean_architecture/data/datasources/tv_series/tv_series
     as _i25;
 import 'package:ditonton_clean_architecture/data/datasources/tv_series/tv_series_remote_data_source.dart'
     as _i23;
-import 'package:ditonton_clean_architecture/data/models/movie_detail_model.dart'
+import 'package:ditonton_clean_architecture/data/models/movies/movie_detail_model.dart'
     as _i3;
-import 'package:ditonton_clean_architecture/data/models/movie_model.dart'
+import 'package:ditonton_clean_architecture/data/models/movies/movie_model.dart'
     as _i12;
-import 'package:ditonton_clean_architecture/data/models/movie_table.dart'
+import 'package:ditonton_clean_architecture/data/models/movies/movie_table.dart'
     as _i14;
 import 'package:ditonton_clean_architecture/data/models/tv_series/tv_detail_model.dart'
     as _i4;
@@ -32,8 +32,8 @@ import 'package:ditonton_clean_architecture/data/models/tv_series/tv_model.dart'
     as _i24;
 import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart'
     as _i18;
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart' as _i9;
-import 'package:ditonton_clean_architecture/domain/entities/movie_detail.dart'
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart' as _i9;
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie_detail.dart'
     as _i10;
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_detail.dart'
     as _i22;

@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:ditonton_clean_architecture/data/models/movie_detail_model.dart';
-import 'package:ditonton_clean_architecture/data/models/movie_model.dart';
-import 'package:ditonton_clean_architecture/data/models/movie_response.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_detail_model.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_model.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_response.dart';
 import 'package:ditonton_clean_architecture/common/exception.dart';
 import 'package:http/http.dart' as http;
 

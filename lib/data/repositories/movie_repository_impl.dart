@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:ditonton_clean_architecture/data/datasources/movies/movie_local_data_source.dart';
-import 'package:ditonton_clean_architecture/data/models/movie_table.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie_detail.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_table.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie_detail.dart';
 import 'package:ditonton_clean_architecture/domain/repositories/movie_repository.dart';
 import 'package:ditonton_clean_architecture/common/exception.dart';
 import 'package:ditonton_clean_architecture/common/failure.dart';

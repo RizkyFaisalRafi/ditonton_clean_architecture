@@ -1,8 +1,8 @@
-import 'package:ditonton_clean_architecture/data/models/movie_table.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_table.dart';
 import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart';
 import 'package:ditonton_clean_architecture/domain/entities/genre.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie_detail.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie_detail.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/created_by.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/episode_to_air.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/production_companies.dart';

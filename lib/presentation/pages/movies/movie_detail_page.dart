@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/common/constants.dart';
 import 'package:ditonton_clean_architecture/domain/entities/genre.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie_detail.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/movie_detail_notifier.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie_detail.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';

@@ -1,4 +1,4 @@
-import 'package:ditonton_clean_architecture/data/models/movie_model.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_model.dart';
 import 'package:equatable/equatable.dart';
 
 class MovieResponse extends Equatable {

@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:ditonton_clean_architecture/data/models/movie_model.dart';
-import 'package:ditonton_clean_architecture/data/models/movie_response.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_model.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_response.dart';
 import 'package:flutter_test/flutter_test.dart';
 import '../../../json_reader.dart';
 

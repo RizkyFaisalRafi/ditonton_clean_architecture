@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:ditonton_clean_architecture/common/failure.dart';
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/up_coming_movies_notifier.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/movies/up_coming_movies_notifier.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

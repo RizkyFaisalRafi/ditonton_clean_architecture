@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/movie.dart';
-import '../../domain/entities/movie_detail.dart';
+import '../../../domain/entities/movies/movie.dart';
+import '../../../domain/entities/movies/movie_detail.dart';
 import 'movie_detail_model.dart';
 import 'movie_model.dart';
 

@@ -1,11 +1,11 @@
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
-import 'package:ditonton_clean_architecture/domain/usecases/get_now_playing_movies.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/movies/get_now_playing_movies.dart';
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
-import 'package:ditonton_clean_architecture/domain/usecases/get_popular_movies.dart';
-import 'package:ditonton_clean_architecture/domain/usecases/get_top_rated_movies.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/movies/get_popular_movies.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/movies/get_top_rated_movies.dart';
 import 'package:flutter/material.dart';
 
-import '../../domain/usecases/get_up_coming_movies.dart';
+import '../../../domain/usecases/movies/get_up_coming_movies.dart';
 
 class MovieListNotifier extends ChangeNotifier {
   var _nowPlayingMovies = <Movie>[];

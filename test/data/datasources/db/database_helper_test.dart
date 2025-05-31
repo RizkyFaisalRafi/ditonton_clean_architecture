@@ -2,7 +2,7 @@ import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_tabl
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:ditonton_clean_architecture/data/datasources/db/database_helper.dart';
-import 'package:ditonton_clean_architecture/data/models/movie_table.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_table.dart';
 
 void main() {
   late DatabaseHelper databaseHelper;

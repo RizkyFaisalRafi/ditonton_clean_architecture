@@ -1,6 +1,6 @@
 import 'package:ditonton_clean_architecture/common/exception.dart';
 import 'package:ditonton_clean_architecture/data/datasources/db/database_helper.dart';
-import 'package:ditonton_clean_architecture/data/models/movie_table.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_table.dart';
 
 /*
  * Sesuai namanya, data sources merupakan sumber data yang akan digunakan di dalam aplikasi.

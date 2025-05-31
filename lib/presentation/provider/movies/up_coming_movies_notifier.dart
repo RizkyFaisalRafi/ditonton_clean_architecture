@@ -1,8 +1,8 @@
-import 'package:ditonton_clean_architecture/domain/usecases/get_up_coming_movies.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/movies/get_up_coming_movies.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../common/state_enum.dart';
-import '../../domain/entities/movie.dart';
+import '../../../common/state_enum.dart';
+import '../../../domain/entities/movies/movie.dart';
 
 class UpComingMoviesNotifier extends ChangeNotifier {
   final GetUpComingMovies getUpComingMovies;

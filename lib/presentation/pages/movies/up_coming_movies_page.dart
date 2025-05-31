@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../common/state_enum.dart';
-import '../provider/up_coming_movies_notifier.dart';
-import '../widgets/movie_card_list.dart';
+import '../../../common/state_enum.dart';
+import '../../provider/movies/up_coming_movies_notifier.dart';
+import '../../widgets/movie_card_list.dart';
 
 class UpComingMoviesPage extends StatefulWidget {
   static const ROUTE_NAME = '/up-coming-movie';

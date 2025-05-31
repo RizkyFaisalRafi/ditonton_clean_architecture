@@ -1,39 +1,39 @@
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/top_rated_movies_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/movies/popular_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/movie_card_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TopRatedMoviesPage extends StatefulWidget {
-  static const ROUTE_NAME = '/top-rated-movie';
+class PopularMoviesPage extends StatefulWidget {
+  static const ROUTE_NAME = '/popular-movie';
 
   @override
-  _TopRatedMoviesPageState createState() => _TopRatedMoviesPageState();
+  _PopularMoviesPageState createState() => _PopularMoviesPageState();
 }
 
-class _TopRatedMoviesPageState extends State<TopRatedMoviesPage> {
+class _PopularMoviesPageState extends State<PopularMoviesPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-      () =>
-          Provider.of<TopRatedMoviesNotifier>(
-            context,
-            listen: false,
-          ).fetchTopRatedMovies(),
-    );
+    Future.microtask(() =>
+        Provider.of<PopularMoviesNotifier>(context, listen: false)
+            .fetchPopularMovies());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Top Rated Movies')),
+      appBar: AppBar(
+        title: Text('Popular Movies'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer<TopRatedMoviesNotifier>(
+        child: Consumer<PopularMoviesNotifier>(
           builder: (context, data, child) {
             if (data.state == RequestState.Loading) {
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             } else if (data.state == RequestState.Loaded) {
               return ListView.builder(
                 itemBuilder: (context, index) {
