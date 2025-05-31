@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_detail.dart';
-import 'package:ditonton_clean_architecture/domain/entities/tv_series.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/tv_detail_notifier.dart';
+import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_detail_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';

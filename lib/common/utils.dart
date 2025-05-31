@@ -16,5 +16,6 @@ String showDuration(int runtime) {
 }
 
 String showGenres(List<Genre> genres) {
+  if (genres.isEmpty) return '-';
   return genres.map((genre) => genre.name).join(', ');
 }

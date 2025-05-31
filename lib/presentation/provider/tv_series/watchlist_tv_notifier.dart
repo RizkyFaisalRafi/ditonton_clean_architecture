@@ -1,8 +1,8 @@
-import 'package:ditonton_clean_architecture/domain/entities/tv_series.dart';
+import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_watchlist_tv.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/state_enum.dart';
+import '../../../common/state_enum.dart';
 
 class WatchlistTvNotifier extends ChangeNotifier {
   var _watchlistTv = <TvSeries>[];

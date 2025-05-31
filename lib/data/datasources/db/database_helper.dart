@@ -22,8 +22,7 @@ class DatabaseHelper {
   static const String _tblWatchlist = 'watchlist';
   static const String _tblWatchlistTv = 'watchlistTv';
   static const String _tblCache = 'cache';
-
-  // static const String _tblCacheTv = 'cachetv';
+  static const String _tblCacheTv = 'cacheTv';
 
   Future<Database> _initDb() async {
     final path = await getDatabasesPath();
@@ -61,8 +60,19 @@ class DatabaseHelper {
         posterPath TEXT
       );
     ''');
+
+    await db.execute('''
+      CREATE TABLE  $_tblCacheTv (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        overview TEXT,
+        posterPath TEXT,
+        category TEXT
+      );
+    ''');
   }
 
+  // Movies
   Future<void> insertCacheTransaction(
     List<MovieTable> movies,
     String category,
@@ -118,6 +128,51 @@ class DatabaseHelper {
       _tblWatchlist,
       where: 'id = ?',
       whereArgs: [movie.id],
+    );
+  }
+
+  /// TV Series
+  Future<void> insertCacheTransactionTvSeries(
+    List<TvSeriesTable> tvSeries,
+    String category,
+  ) async {
+    final db = await database;
+    db!.transaction((txn) async {
+      for (final tv in tvSeries) {
+        final movieJson = tv.toJson();
+        movieJson['category'] = category;
+
+        // Error DatabaseException(UNIQUE constraint failed: cache.id)
+        // txn.insert(_tblCache, movieJson);
+
+        // Data baru akan mengganti data lama jika memiliki id yang sama (sesuai ConflictAlgorithm.replace).
+        // Aplikasi lebih stabil dan aman saat caching ulang.
+        txn.insert(
+          _tblCacheTv,
+          movieJson,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> getCacheTvSeries(String category) async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db!.query(
+      _tblCacheTv,
+      where: 'category = ?',
+      whereArgs: [category],
+    );
+
+    return results;
+  }
+
+  Future<int> clearCacheTvSeries(String category) async {
+    final db = await database;
+    return await db!.delete(
+      _tblCacheTv,
+      where: 'category = ?',
+      whereArgs: [category],
     );
   }
 

@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ditonton_clean_architecture/domain/entities/tv_series.dart';
+import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/tv_list_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../common/constants.dart';
 import '../../../common/state_enum.dart';
+import '../../provider/tv_series/tv_list_notifier.dart';
 
 class TvSeriesPage extends StatefulWidget {
   static const ROUTE_NAME = '/tv-series';

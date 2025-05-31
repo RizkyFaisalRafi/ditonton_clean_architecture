@@ -1,5 +1,5 @@
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
-import 'package:ditonton_clean_architecture/domain/entities/tv_series.dart';
+import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_airing_today_tv.dart';
 import 'package:flutter/cupertino.dart';
 

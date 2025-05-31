@@ -4,7 +4,7 @@ import 'package:ditonton_clean_architecture/common/failure.dart';
 import 'package:ditonton_clean_architecture/data/datasources/tv_series/tv_series_local_data_source.dart';
 import 'package:ditonton_clean_architecture/data/datasources/tv_series/tv_series_remote_data_source.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_detail.dart';
-import 'package:ditonton_clean_architecture/domain/entities/tv_series.dart';
+import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import '../../common/exception.dart';
 import '../../common/network_info.dart';
 import '../../domain/repositories/tv_series_repository.dart';
@@ -24,13 +24,28 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
 
   @override
   Future<Either<Failure, List<TvSeries>>> getAiringToday() async {
-    try {
-      final result = await remoteDataSource.getAiringToday();
-      return Right(result.map((model) => model.toEntity()).toList());
-    } on ServerException {
-      return Left(ServerFailure(''));
-    } on SocketException {
-      return Left(ConnectionFailure('Failed to connect to the network'));
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getAiringToday();
+
+        // Memanggil cacheAiringTodayTvSeries
+        localDataSource.cacheAiringTodayTvSeries(
+          result.map((tv) => TvSeriesTable.fromDTO(tv)).toList(),
+        );
+
+        return Right(result.map((model) => model.toEntity()).toList());
+      } on ServerException {
+        return Left(ServerFailure(''));
+      }
+    } else {
+      try {
+        final result = await localDataSource.getCachedAiringTodayTv();
+        return Right(result.map((model) => model.toEntity()).toList());
+      } on CacheException catch (e) {
+        return Left(CacheFailure(e.message));
+      } on SocketException {
+        return Left(ConnectionFailure('Failed to connect to the network'));
+      }
     }
   }
 

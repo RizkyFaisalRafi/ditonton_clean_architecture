@@ -25,20 +25,20 @@ import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_watchl
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_watchlist_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/remove_watchlist_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/save_watchlist_tv.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/WatchlistTvNotifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_search_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/popular_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/top_rated_movies_notifier.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/tv_detail_notifier.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/tv_list_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/up_coming_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'common/network_info.dart';
 import 'data/datasources/movies/movie_remote_data_source.dart';
+import 'presentation/provider/tv_series/tv_list_notifier.dart';
+import 'presentation/provider/tv_series/watchlist_tv_notifier.dart';
 
 final locator = GetIt.instance;
 

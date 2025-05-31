@@ -11,20 +11,20 @@ import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_seri
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/watchlist_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/watchlist_movies_page.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/WatchlistTvNotifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movie_search_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/popular_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/top_rated_movies_notifier.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/tv_detail_notifier.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/tv_list_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/up_coming_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ditonton_clean_architecture/injection.dart' as di;
+import 'presentation/provider/tv_series/tv_list_notifier.dart';
+import 'presentation/provider/tv_series/watchlist_tv_notifier.dart';
 
 void main() {
   di.init();
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) => di.locator<TvListNotifier>()),
         ChangeNotifierProvider(create: (_) => di.locator<TvDetailNotifier>()),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<WatchlistTvNotifier>(
           create: (_) => di.locator<WatchlistTvNotifier>(),
         ),
       ],

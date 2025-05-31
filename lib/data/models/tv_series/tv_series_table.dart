@@ -1,7 +1,7 @@
 import 'package:ditonton_clean_architecture/data/models/tv_series/tv_detail_model.dart';
 import 'package:ditonton_clean_architecture/data/models/tv_series/tv_model.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_detail.dart';
-import 'package:ditonton_clean_architecture/domain/entities/tv_series.dart';
+import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:equatable/equatable.dart';
 
 class TvSeriesTable extends Equatable {

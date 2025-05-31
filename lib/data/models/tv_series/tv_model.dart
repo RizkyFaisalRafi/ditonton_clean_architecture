@@ -1,4 +1,4 @@
-import 'package:ditonton_clean_architecture/domain/entities/tv_series.dart';
+import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:equatable/equatable.dart';
 
 class TvModel extends Equatable {
