@@ -1,7 +1,7 @@
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
-import 'package:ditonton_clean_architecture/presentation/pages/top_rated_movies_page.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/top_rated_movies_notifier.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/movies/top_rated_movies_page.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/movies/top_rated_movies_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';

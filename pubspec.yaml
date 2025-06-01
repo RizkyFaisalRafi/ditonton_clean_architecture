@@ -54,6 +54,7 @@ dev_dependencies:
   mockito: ^5.4.6 # Data Tiruan
   build_runner: ^2.4.15 # Generator
   sqflite_common_ffi: ^2.3.5 # test sqflite Testing atau aplikasi desktop/CLI
+  mocktail_image_network: ^0.3.0
 #  test: ^1.25.15 # Unit test murni Dart (tanpa dependensi Flutter UI).
   flutter_test: # Widget test dan unit test yang bergantung pada Flutter framework.
     sdk: flutter

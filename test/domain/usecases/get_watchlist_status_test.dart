@@ -1,4 +1,4 @@
-import 'package:ditonton_clean_architecture/domain/usecases/get_watchlist_status.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/movies/get_watchlist_status.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import '../../helpers/test_helper.mocks.dart';

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/common/constants.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movie.dart';
-import 'package:ditonton_clean_architecture/presentation/pages/movie_detail_page.dart';
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/movies/movie_detail_page.dart';
 import 'package:flutter/material.dart';
 
 class MovieCard extends StatelessWidget {
@@ -56,6 +56,7 @@ class MovieCard extends StatelessWidget {
                 bottom: 16,
               ),
               child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
                 child: CachedNetworkImage(
                   imageUrl: '$BASE_IMAGE_URL${movie.posterPath}',
                   width: 80,
@@ -64,7 +65,6 @@ class MovieCard extends StatelessWidget {
                   ),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(8)),
               ),
             ),
           ],
