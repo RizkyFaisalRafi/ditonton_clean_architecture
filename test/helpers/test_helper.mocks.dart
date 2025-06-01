@@ -32,7 +32,8 @@ import 'package:ditonton_clean_architecture/data/models/tv_series/tv_model.dart'
     as _i24;
 import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart'
     as _i18;
-import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart' as _i9;
+import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart'
+    as _i9;
 import 'package:ditonton_clean_architecture/domain/entities/movies/movie_detail.dart'
     as _i10;
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_detail.dart'
@@ -687,6 +688,22 @@ class MockTvSeriesRepository extends _i1.Mock
           as _i7.Future<_i2.Either<_i8.Failure, List<_i21.TvSeries>>>);
 
   @override
+  _i7.Future<_i2.Either<_i8.Failure, List<_i21.TvSeries>>> searchTvSeries(
+    String? query,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#searchTvSeries, [query]),
+            returnValue:
+                _i7.Future<_i2.Either<_i8.Failure, List<_i21.TvSeries>>>.value(
+                  _FakeEither_0<_i8.Failure, List<_i21.TvSeries>>(
+                    this,
+                    Invocation.method(#searchTvSeries, [query]),
+                  ),
+                ),
+          )
+          as _i7.Future<_i2.Either<_i8.Failure, List<_i21.TvSeries>>>);
+
+  @override
   _i7.Future<_i2.Either<_i8.Failure, String>> saveWatchlist(
     _i22.TvDetail? tv,
   ) =>
@@ -773,6 +790,14 @@ class MockTvSeriesRemoteDataSource extends _i1.Mock
   _i7.Future<List<_i24.TvModel>> getTvRecommendations(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#getTvRecommendations, [id]),
+            returnValue: _i7.Future<List<_i24.TvModel>>.value(<_i24.TvModel>[]),
+          )
+          as _i7.Future<List<_i24.TvModel>>);
+
+  @override
+  _i7.Future<List<_i24.TvModel>> searchTvSeries(String? query) =>
+      (super.noSuchMethod(
+            Invocation.method(#searchTvSeries, [query]),
             returnValue: _i7.Future<List<_i24.TvModel>>.value(<_i24.TvModel>[]),
           )
           as _i7.Future<List<_i24.TvModel>>);

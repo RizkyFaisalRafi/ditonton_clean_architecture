@@ -6,6 +6,7 @@ import 'package:ditonton_clean_architecture/presentation/pages/movies/home_movie
 import 'package:ditonton_clean_architecture/presentation/pages/movies/popular_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/search_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/top_rated_movies_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/search_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/watchlist_tv_page.dart';
@@ -19,6 +20,7 @@ import 'package:ditonton_clean_architecture/presentation/provider/movies/top_rat
 import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/up_coming_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/watchlist_movie_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_search_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -62,6 +64,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<WatchlistTvNotifier>(
           create: (_) => di.locator<WatchlistTvNotifier>(),
         ),
+        ChangeNotifierProvider(create: (_) => di.locator<TvSearchNotifier>()),
       ],
       child: MaterialApp(
         title: 'Flutter Expert',
@@ -103,6 +106,8 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(
                 builder: (_) => TvSeriesDetailPage(id: id),
               );
+            case SearchTvPage.ROUTE_NAME:
+              return CupertinoPageRoute(builder: (_) => SearchTvPage());
             case WatchlistTvPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => WatchlistTvPage());
             default:

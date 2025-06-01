@@ -7,6 +7,7 @@ import 'package:ditonton_clean_architecture/data/models/tv_series/tv_response.da
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
+import '../../../helpers/test_helper.dart';
 import '../../../helpers/test_helper.mocks.dart';
 import '../../../json_reader.dart';
 
@@ -135,6 +136,41 @@ void main() {
         ).thenAnswer((_) async => http.Response('Not Found', 404));
         // act
         final call = dataSource.getTvRecommendations(tId);
+        // assert
+        expect(() => call, throwsA(isA<ServerException>()));
+      },
+    );
+  });
+
+  group('search TvSeries', () {
+    final tSearchResult =
+        TvResponse.fromJson(
+          jsonDecode(readJson('dummy_data/search_squid_game_tv.json')),
+        ).tvList;
+    final tQuery = 'Squid Game';
+    final endpointSearch = '$baseUrl/search/tv?$apiKey&query=$tQuery';
+
+    test('should return list of tv when response code is 200', () async {
+      // Arrange
+      when(mockHttpClient.get(Uri.parse(endpointSearch))).thenAnswer((_) async {
+        return mockJsonResponse('dummy_data/search_squid_game_tv.json');
+      });
+
+      // Act
+      final result = await dataSource.searchTvSeries(tQuery);
+      // Assert
+      expect(result, tSearchResult);
+    });
+
+    test(
+      'should throw ServerException when response code is other than 200',
+      () async {
+        // arrange
+        when(
+          mockHttpClient.get(Uri.parse(endpointSearch)),
+        ).thenAnswer((_) async => http.Response('Not Found', 404));
+        // act
+        final call = dataSource.searchTvSeries(tQuery);
         // assert
         expect(() => call, throwsA(isA<ServerException>()));
       },

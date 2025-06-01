@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/search_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,7 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
         actions: [
           IconButton(
             onPressed: () {
-              // Navigator.pushNamed(context, SearchPage.ROUTE_NAME);
+              Navigator.pushNamed(context, SearchTvPage.ROUTE_NAME);
             },
             icon: Icon(Icons.search),
           ),

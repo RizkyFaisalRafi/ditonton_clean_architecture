@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ditonton_clean_architecture/common/constants.dart';
-import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
-import 'package:ditonton_clean_architecture/presentation/pages/movies/movie_detail_page.dart';
+import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
 import 'package:flutter/material.dart';
 
-class MovieCard extends StatelessWidget {
-  final Movie movie;
+import '../../common/constants.dart';
 
-  MovieCard(this.movie);
+class TvCard extends StatelessWidget {
+  final TvSeries tv;
+
+  const TvCard({super.key, required this.tv});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +18,8 @@ class MovieCard extends StatelessWidget {
         onTap: () {
           Navigator.pushNamed(
             context,
-            MovieDetailPage.ROUTE_NAME,
-            arguments: movie.id,
+            TvSeriesDetailPage.ROUTE_NAME,
+            arguments: tv.id,
           );
         },
         child: Stack(
@@ -35,14 +36,14 @@ class MovieCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      movie.title ?? '-',
+                      tv.name ?? '-',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: kHeading6,
                     ),
                     SizedBox(height: 16),
                     Text(
-                      movie.overview ?? '-',
+                      tv.overview ?? '-',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -51,18 +52,15 @@ class MovieCard extends StatelessWidget {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(
-                left: 16,
-                bottom: 16,
-              ),
+              margin: const EdgeInsets.only(left: 16, bottom: 16),
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 child: CachedNetworkImage(
-                  imageUrl: '$BASE_IMAGE_URL${movie.posterPath}',
+                  imageUrl: '$BASE_IMAGE_URL${tv.posterPath}',
                   width: 80,
-                  placeholder: (context, url) => Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  placeholder:
+                      (context, url) =>
+                          Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),

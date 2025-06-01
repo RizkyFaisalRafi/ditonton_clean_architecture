@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/search_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_page.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_list_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_search_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -12,13 +14,15 @@ import 'package:mocktail_image_network/mocktail_image_network.dart';
 import 'package:provider/provider.dart';
 import 'tv_series_page_test.mocks.dart';
 
-@GenerateMocks([TvListNotifier])
+@GenerateMocks([TvListNotifier, TvSearchNotifier])
 void main() {
   late MockTvListNotifier mockNotifier;
   late List<TvSeries> testTvSeries;
+  late MockTvSearchNotifier mockTvSearchNotifier;
 
   setUp(() {
     mockNotifier = MockTvListNotifier();
+    mockTvSearchNotifier = MockTvSearchNotifier();
     testTvSeries = [
       TvSeries(
         id: 1,
@@ -56,13 +60,19 @@ void main() {
   });
 
   Widget makeTestableWidget(Widget body) {
-    return ChangeNotifierProvider<TvListNotifier>.value(
-      value: mockNotifier,
-      child: MaterialApp(
-        home: Scaffold(
-          body: body,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TvListNotifier>.value(value: mockNotifier),
+        ChangeNotifierProvider<TvSearchNotifier>.value(
+          value: mockTvSearchNotifier,
         ),
-        routes: {TvSeriesDetailPage.ROUTE_NAME: (context) => Container()},
+      ],
+      child: MaterialApp(
+        home: Scaffold(body: body),
+        routes: {
+          TvSeriesDetailPage.ROUTE_NAME: (context) => Container(),
+          SearchTvPage.ROUTE_NAME: (context) => SearchTvPage(),
+        },
       ),
     );
   }
@@ -163,15 +173,49 @@ void main() {
         findsNothing,
       ); // Since we mocked the route
     });
+
+    testWidgets('should navigate to SearchTvPage when search icon is tapped and search query in SearchTvPage', (
+      tester,
+    ) async {
+      // Arrange
+      when(mockNotifier.airingTodayState).thenReturn(RequestState.Loaded);
+      when(mockNotifier.airingTodayTvSeries).thenReturn(testTvSeries);
+      // Add these stubs for the search notifier
+      when(mockTvSearchNotifier.state).thenReturn(RequestState.Empty);
+      when(mockTvSearchNotifier.searchResult).thenReturn([]);
+      when(mockTvSearchNotifier.message).thenReturn('');
+
+      await mockNetworkImages(() async {
+        await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
+
+        // Verify initial state
+        expect(find.byType(TvSeriesPage), findsOneWidget);
+        expect(find.byType(SearchTvPage), findsNothing);
+
+        // Act - Tap IconButton
+        await tester.tap(find.byType(IconButton));
+        await tester.pumpAndSettle();
+
+        // Assert - Verify navigation occurred
+        expect(find.byType(TvSeriesPage), findsNothing);
+        expect(find.byType(SearchTvPage), findsOneWidget);
+
+        // verify search notifier was initialized
+        verifyNever(mockTvSearchNotifier.fetchTvSearch(any)); // Shouldn't be called yet
+
+        // Tapi boleh terpanggil setelah submit
+        await tester.enterText(find.byType(TextField), 'naruto');
+        await tester.testTextInput.receiveAction(TextInputAction.search);
+        verify(mockTvSearchNotifier.fetchTvSearch('naruto')).called(1);
+      });
+    });
   });
 
   group('TvSeriesList Widget Tests', () {
     testWidgets('should display correct number of items', (tester) async {
       // Arrange & Act
       await mockNetworkImages(() async {
-        await tester.pumpWidget(
-          makeTestableWidget(TvSeriesList(testTvSeries)),
-        );
+        await tester.pumpWidget(makeTestableWidget(TvSeriesList(testTvSeries)));
       });
 
       // Assert
@@ -186,9 +230,7 @@ void main() {
     ) async {
       // Arrange & Act
       await mockNetworkImages(() async {
-        await tester.pumpWidget(
-          makeTestableWidget(TvSeriesList(testTvSeries)),
-        );
+        await tester.pumpWidget(makeTestableWidget(TvSeriesList(testTvSeries)));
 
         // Assert
         final cachedImages = tester.widgetList<CachedNetworkImage>(
@@ -210,9 +252,7 @@ void main() {
     ) async {
       // Arrange & Act
       await mockNetworkImages(() async {
-        await tester.pumpWidget(
-          makeTestableWidget(TvSeriesList(testTvSeries)),
-        );
+        await tester.pumpWidget(makeTestableWidget(TvSeriesList(testTvSeries)));
 
         await tester.tap(find.byType(InkWell).first);
         await tester.pumpAndSettle();

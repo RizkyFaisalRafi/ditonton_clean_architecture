@@ -25,6 +25,7 @@ import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_watchl
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_watchlist_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/remove_watchlist_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/save_watchlist_tv.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/tv_series/search_tv_series.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_search_notifier.dart';
@@ -33,6 +34,7 @@ import 'package:ditonton_clean_architecture/presentation/provider/movies/top_rat
 import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/up_coming_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/watchlist_movie_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_search_notifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'common/network_info.dart';
@@ -84,6 +86,7 @@ void init() {
     ),
   );
   locator.registerFactory(() => WatchlistTvNotifier(getWatchlistTv: locator()));
+  locator.registerFactory(() => TvSearchNotifier(searchTvSeries: locator()));
 
   // use case
   locator.registerLazySingleton(() => GetNowPlayingMovies(locator()));
@@ -104,6 +107,7 @@ void init() {
   locator.registerLazySingleton(() => RemoveWatchlistTv(locator()));
   locator.registerLazySingleton(() => GetWatchListStatusTv(locator()));
   locator.registerLazySingleton(() => GetWatchlistTv(locator()));
+  locator.registerLazySingleton(() => SearchTvSeries(locator()));
 
   // repository
   locator.registerLazySingleton<MovieRepository>(
