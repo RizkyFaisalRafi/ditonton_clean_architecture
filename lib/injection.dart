@@ -19,6 +19,7 @@ import 'package:ditonton_clean_architecture/domain/usecases/movies/remove_watchl
 import 'package:ditonton_clean_architecture/domain/usecases/movies/save_watchlist.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/movies/search_movies.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_airing_today_tv.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_on_the_air_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_tv_detail.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_tv_recommendations.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_watchlist_status_tv.dart';
@@ -75,7 +76,9 @@ void init() {
   locator.registerFactory(
     () => UpComingMoviesNotifier(getUpComingMovies: locator()),
   );
-  locator.registerFactory(() => TvListNotifier(getAiringTodayTv: locator()));
+  locator.registerFactory(
+    () => TvListNotifier(getAiringTodayTv: locator(), getOnTheAirTv: locator()),
+  );
   locator.registerFactory(
     () => TvDetailNotifier(
       getTvDetail: locator(),
@@ -108,6 +111,7 @@ void init() {
   locator.registerLazySingleton(() => GetWatchListStatusTv(locator()));
   locator.registerLazySingleton(() => GetWatchlistTv(locator()));
   locator.registerLazySingleton(() => SearchTvSeries(locator()));
+  locator.registerLazySingleton(() => GetOnTheAirTv(locator()));
 
   // repository
   locator.registerLazySingleton<MovieRepository>(

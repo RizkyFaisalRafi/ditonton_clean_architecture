@@ -281,6 +281,214 @@ void main() {
     });
   });
 
+  group('On The Air Tv Series', () {
+    group('cache on the air tv series', () {
+      late TvSeriesLocalDatasourceImpl localDataSource;
+      setUp(() {
+        mockDatabaseHelper = MockDatabaseHelper();
+        localDataSource = TvSeriesLocalDatasourceImpl(
+          databaseHelper: mockDatabaseHelper,
+        );
+      });
+
+      /**
+       * Menguji apakah method cacheOnTheAirTvSeries() menyimpan data ke local database.
+       * Verifikasi bahwa clearCacheTv dan insertCacheTransactionTv terpanggil.
+       */
+      test('should call database helper to save data', () async {
+        // arrange
+        when(
+          mockDatabaseHelper.clearCacheTvSeries('on the air'),
+        ).thenAnswer((_) async => 1);
+        when(
+          mockDatabaseHelper.insertCacheTransactionTvSeries([
+            testTvCache,
+          ], 'on the air'),
+        ).thenAnswer((_) async => {});
+
+        final dataSource = TvSeriesLocalDatasourceImpl(
+          databaseHelper: mockDatabaseHelper,
+        );
+        // act
+        await dataSource.cacheOnTheAirTvSeries([testTvCache]);
+
+        // assert
+        verify(mockDatabaseHelper.clearCacheTvSeries('on the air'));
+        verify(
+          mockDatabaseHelper.insertCacheTransactionTvSeries([
+            testTvCache,
+          ], 'on the air'),
+        );
+      });
+
+      /// Jika cache ada → return list tvSeries.
+      test('should return list of movies from db when data exist', () async {
+        // arrange
+        when(
+          mockDatabaseHelper.getCacheTvSeries('on the air'),
+        ).thenAnswer((_) async => [testTvCacheMap]);
+
+        // act
+        final result = await localDataSource.getCachedOnTheAirTv();
+
+        // assert
+        expect(result, [testTvCache]);
+      });
+
+      /// Jika cache kosong → lempar CacheException.
+      test(
+        'should throw CacheException when cache data is not exist',
+            () async {
+          // arrange
+          when(
+            mockDatabaseHelper.getCacheTvSeries('on the air'),
+          ).thenAnswer((_) async => []);
+
+          // act
+          final call = localDataSource.getCachedOnTheAirTv();
+
+          // assert
+          expect(() => call, throwsA(isA<CacheException>()));
+        },
+      );
+
+    },);
+
+    group('when device is online', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      });
+
+      /// Memeriksa apakah aplikasi terhubung dengan internet?
+      test('should check if the device is online', () async {
+        // arrange (Menyiapkan objek dan konfigurasi untuk pengujian)
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.getOnTheAir()).thenAnswer((_) async => []);
+
+        // act (Aksi dalam Skenario Pengujian)
+        await repository.getOnTheAir();
+
+        // assert (Assert adalah memvalidasi nilai atau aksi yang diekspektasikan)
+        // ingin memverifikasi bahwa telah dilakukan pengecekan apakah aplikasi terhubung ke internet.
+        verify(mockNetworkInfo.isConnected);
+        //   Fungsi verify() merupakan fungsi dari package mockito untuk memverifikasi apakah suatu method dieksekusi.
+      });
+
+      /// Jika sukses ambil data dari API, kembalikan hasil Right<List<TvSeries>>.
+      test(
+        'should return remote data when the call to remote data source is successful',
+            () async {
+          // arrange
+          // Ketika mockRemoteDataSource.getOnTheAir dijalankan maka
+          // jawabannya hasil response (Ini mensimulasikan respons sukses dari server)
+          when(
+            mockRemoteDataSource.getOnTheAir(),
+          ).thenAnswer((_) async => tTvSeriesModelList);
+
+          // act
+          // Melakukan aksi/memanggil fungsi yang akan diuji kemudian disimpan di variabel
+          final result = await repository.getOnTheAir();
+
+          // assert
+          //  memastikan bahwa sebuah metode mock (tiruan) dipanggil saat test dijalankan.
+          verify(mockRemoteDataSource.getOnTheAir());
+          /* workaround to test List in Right. Issue: https://github.com/spebbe/dartz/issues/80 */
+          // repository.getNowPlayingMovies() kemungkinan besar mengembalikan objek Either<Failure, List<Movie>> dari package dartz
+          // digunakan untuk mengambil nilai di dalam Right, atau list kosong jika hasilnya Left.
+          /**
+           * Ini adalah workaround untuk menghindari masalah membandingkan
+           * Right<List> langsung (karena dartz tidak membolehkan langsung
+           * menggunakan expect(result, Right(expected)) pada list, karena
+           * masalah equality kompleks,
+           */
+          final resultList = result.getOrElse(() => []);
+          // Digunakan untuk memeriksa hasil (output) dari sebuah operasi.
+          // expect(actualValue, expectedValue);
+          expect(resultList, tTvSeriesList);
+        },
+      );
+
+      /// Simpan data yang didapat dari API ke dalam database.
+      /// Setelah ambil data dari remote, data juga disimpan ke local (caching).
+      /// untuk memastikan bahwa memanggil data dari internet lalu menyimpannya secara lokal
+      test(
+        'should cache data locally when the call to remote data source is successful',
+            () async {
+          // arrange
+          when(
+            mockRemoteDataSource.getOnTheAir(),
+          ).thenAnswer((_) async => tTvSeriesModelList);
+          // act
+          await repository.getOnTheAir();
+          // assert
+          verify(mockRemoteDataSource.getOnTheAir());
+          verify(mockLocalDataSource.cacheOnTheAirTvSeries([testTvCache]));
+        },
+      );
+
+      /// Remote gagal
+      /// Jika terjadi ServerException, return Left(ServerFailure).
+      test(
+        'should return server failure when the call to remote data source is unsuccessful',
+            () async {
+          // arrange
+          when(
+            mockRemoteDataSource.getOnTheAir(),
+          ).thenThrow(ServerException());
+          // act
+          final result = await repository.getOnTheAir();
+          // assert
+          verify(mockRemoteDataSource.getOnTheAir());
+          expect(result, equals(Left(ServerFailure(''))));
+        },
+      );
+
+    },);
+
+    group('when device is offline', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      });
+
+      /// Saat offline, ambil data dari local cache.
+      /// Hasil berupa Right<List<TvSeries>>.
+      test('should return cached data when device is offline', () async {
+        // arrange
+        when(
+          mockLocalDataSource.getCachedOnTheAirTv(),
+        ).thenAnswer((_) async => [testTvCache]);
+
+        // act
+        // panggil method yang akan di uji dan simpan nilai kembaliannya ke dalam sebuah variabel.
+        final result = await repository.getOnTheAir();
+
+        // assert
+        // masukkan ekspektasi pengujian yang diharapkan. Kita ingin memastikan
+        // localDataSource.getCachedOnTheAirTv() dipanggil lalu nilai yang
+        // dikembalikan juga sesuai.
+        verify(mockLocalDataSource.getCachedOnTheAirTv());
+        final resultList = result.getOrElse(() => []);
+        expect(resultList, [testTvFromCache]);
+      });
+
+      /// ketika tidak ada data di dalam cache
+      /// Jika cache kosong → return Left(CacheFailure).
+      test('should return CacheFailure when app has no cache', () async {
+        // arrange
+        when(
+          mockLocalDataSource.getCachedOnTheAirTv(),
+        ).thenThrow(CacheException('No Cache'));
+        // act
+        final result = await repository.getOnTheAir();
+        // assert
+        verify(mockLocalDataSource.getCachedOnTheAirTv());
+        expect(result, Left(CacheFailure('No Cache')));
+      });
+
+    },);
+
+  });
+
   group('Get Tv Detail', () {
     final tId = 1;
     final tTvDetailResponse = TvDetailResponse(
@@ -505,7 +713,58 @@ void main() {
     );
   });
 
-  group('Search TvSeries', () {});
+  group('Search TvSeries', () {
+    final tQuery = 'gutezeiten';
+
+    test(
+      'should return tv list when call to data source is successful',
+          () async {
+        // arrange
+        when(
+          mockRemoteDataSource.searchTvSeries(tQuery),
+        ).thenAnswer((_) async => tTvSeriesModelList);
+        // act
+        final result = await repository.searchTvSeries(tQuery);
+        // assert
+        /* workaround to test List in Right. Issue: https://github.com/spebbe/dartz/issues/80 */
+        final resultList = result.getOrElse(() => []);
+        expect(resultList, tTvSeriesList);
+      },
+    );
+
+    test(
+      'should return ServerFailure when call to data source is unsuccessful',
+          () async {
+        // arrange
+        when(
+          mockRemoteDataSource.searchTvSeries(tQuery),
+        ).thenThrow(ServerException());
+        // act
+        final result = await repository.searchTvSeries(tQuery);
+        // assert
+        expect(result, Left(ServerFailure('')));
+      },
+    );
+
+    test(
+      'should return ConnectionFailure when device is not connected to the internet',
+          () async {
+        // arrange
+        when(
+          mockRemoteDataSource.searchTvSeries(tQuery),
+        ).thenThrow(SocketException('Failed to connect to the network'));
+        // act
+        final result = await repository.searchTvSeries(tQuery);
+        // assert
+        expect(
+          result,
+          Left(ConnectionFailure('Failed to connect to the network')),
+        );
+      },
+    );
+
+
+  });
 
   group('save watchlist', () {
     test('should return success message when saving successful', () async {

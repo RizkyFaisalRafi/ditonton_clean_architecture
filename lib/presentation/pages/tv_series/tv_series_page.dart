@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/on_the_air_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/search_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,8 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
     Future.microtask(
       () =>
           Provider.of<TvListNotifier>(context, listen: false)
-            ..fetchTvSeriesAiringToday(),
+            ..fetchTvSeriesAiringToday()
+            ..fetchTvSeriesOnTheAir(),
     );
   }
 
@@ -65,10 +67,68 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                   }
                 },
               ),
+
+              /// On The Air
+              _buildSubHeading(
+                title: 'On The Air',
+                onTap: () {
+                  return Navigator.pushNamed(context, OnTheAirPage.ROUTE_NAME);
+                },
+              ),
+              Consumer<TvListNotifier>(
+                builder: (context, data, child) {
+                  final state = data.onTheAirState;
+                  if (state == RequestState.Loading) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (state == RequestState.Loaded) {
+                    return TvSeriesList(data.onTheAirTvSeries);
+                  } else {
+                    return Text('Failed');
+                  }
+                },
+              ),
+
+              /// Popular Tv Series
+              _buildSubHeading(
+                title: 'Popular',
+                onTap: () {
+                  // return Navigator.pushNamed(context, OnTheAirPage.ROUTE_NAME);
+                },
+              ),
+
+              /// Popular Top Rated
+              _buildSubHeading(
+                title: 'Top Rated',
+                onTap: () {
+                  // return Navigator.pushNamed(context, OnTheAirPage.ROUTE_NAME);
+                },
+              ),
+
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Row _buildSubHeading({required String title, required Function() onTap}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: kHeading6),
+        InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Text('See More $title'),
+                Icon(Icons.arrow_forward_ios),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
