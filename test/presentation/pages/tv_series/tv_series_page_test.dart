@@ -84,6 +84,8 @@ void main() {
       // Arrange
       when(mockNotifier.airingTodayState).thenReturn(RequestState.Loading);
       when(mockNotifier.airingTodayTvSeries).thenReturn([]);
+      when(mockNotifier.onTheAirState).thenReturn(RequestState.Loading);
+      when(mockNotifier.onTheAirTvSeries).thenReturn([]);
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
@@ -99,12 +101,17 @@ void main() {
       // Arrange
       when(mockNotifier.airingTodayState).thenReturn(RequestState.Loading);
       when(mockNotifier.airingTodayTvSeries).thenReturn([]);
+      when(mockNotifier.onTheAirState).thenReturn(RequestState.Loading);
+      when(mockNotifier.onTheAirTvSeries).thenReturn([]);
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
 
       // Assert
       verify(mockNotifier.fetchTvSeriesAiringToday()).called(1);
+      verify(
+        mockNotifier.fetchTvSeriesOnTheAir(),
+      ).called(1); // Also verify this
     });
 
     testWidgets('should show loading indicator when state is Loading', (
@@ -113,12 +120,14 @@ void main() {
       // Arrange
       when(mockNotifier.airingTodayState).thenReturn(RequestState.Loading);
       when(mockNotifier.airingTodayTvSeries).thenReturn([]);
+      when(mockNotifier.onTheAirState).thenReturn(RequestState.Loading);
+      when(mockNotifier.onTheAirTvSeries).thenReturn([]);
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
 
       // Assert
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
     });
 
     testWidgets('should show error message when state is Error', (
@@ -127,13 +136,15 @@ void main() {
       // Arrange
       when(mockNotifier.airingTodayState).thenReturn(RequestState.Error);
       when(mockNotifier.airingTodayTvSeries).thenReturn([]);
+      when(mockNotifier.onTheAirState).thenReturn(RequestState.Error);
+      when(mockNotifier.onTheAirTvSeries).thenReturn([]);
       when(mockNotifier.message).thenReturn('Error message');
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
 
       // Assert
-      expect(find.text('Failed'), findsOneWidget);
+      expect(find.text('Failed'), findsNWidgets(2));
     });
 
     testWidgets('should show TvSeriesList when state is Loaded', (
@@ -142,6 +153,8 @@ void main() {
       // Arrange
       when(mockNotifier.airingTodayState).thenReturn(RequestState.Loaded);
       when(mockNotifier.airingTodayTvSeries).thenReturn(testTvSeries);
+      when(mockNotifier.onTheAirState).thenReturn(RequestState.Loaded);
+      when(mockNotifier.onTheAirTvSeries).thenReturn(testTvSeries);
 
       // Act
       await mockNetworkImages(() async {
@@ -149,8 +162,9 @@ void main() {
       });
 
       // Assert
-      expect(find.byType(TvSeriesList), findsOneWidget);
+      expect(find.byType(TvSeriesList), findsNWidgets(2));
       expect(find.text('Airing Today'), findsOneWidget);
+      expect(find.text('On The Air'), findsOneWidget);
     });
 
     testWidgets('should navigate to detail page when tv series is tapped', (
@@ -159,6 +173,8 @@ void main() {
       // Arrange
       when(mockNotifier.airingTodayState).thenReturn(RequestState.Loaded);
       when(mockNotifier.airingTodayTvSeries).thenReturn(testTvSeries);
+      when(mockNotifier.onTheAirState).thenReturn(RequestState.Loaded);
+      when(mockNotifier.onTheAirTvSeries).thenReturn(testTvSeries);
 
       // Act
       await mockNetworkImages(() async {
@@ -174,41 +190,46 @@ void main() {
       ); // Since we mocked the route
     });
 
-    testWidgets('should navigate to SearchTvPage when search icon is tapped and search query in SearchTvPage', (
-      tester,
-    ) async {
-      // Arrange
-      when(mockNotifier.airingTodayState).thenReturn(RequestState.Loaded);
-      when(mockNotifier.airingTodayTvSeries).thenReturn(testTvSeries);
-      // Add these stubs for the search notifier
-      when(mockTvSearchNotifier.state).thenReturn(RequestState.Empty);
-      when(mockTvSearchNotifier.searchResult).thenReturn([]);
-      when(mockTvSearchNotifier.message).thenReturn('');
+    testWidgets(
+      'should navigate to SearchTvPage when search icon is tapped and search query in SearchTvPage',
+      (tester) async {
+        // Arrange
+        when(mockNotifier.airingTodayState).thenReturn(RequestState.Loaded);
+        when(mockNotifier.airingTodayTvSeries).thenReturn(testTvSeries);
+        when(mockNotifier.onTheAirState).thenReturn(RequestState.Loaded);
+        when(mockNotifier.onTheAirTvSeries).thenReturn(testTvSeries);
+        // Add these stubs for the search notifier
+        when(mockTvSearchNotifier.state).thenReturn(RequestState.Empty);
+        when(mockTvSearchNotifier.searchResult).thenReturn([]);
+        when(mockTvSearchNotifier.message).thenReturn('');
 
-      await mockNetworkImages(() async {
-        await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
+        await mockNetworkImages(() async {
+          await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
 
-        // Verify initial state
-        expect(find.byType(TvSeriesPage), findsOneWidget);
-        expect(find.byType(SearchTvPage), findsNothing);
+          // Verify initial state
+          expect(find.byType(TvSeriesPage), findsOneWidget);
+          expect(find.byType(SearchTvPage), findsNothing);
 
-        // Act - Tap IconButton
-        await tester.tap(find.byType(IconButton));
-        await tester.pumpAndSettle();
+          // Act - Tap IconButton
+          await tester.tap(find.byType(IconButton));
+          await tester.pumpAndSettle();
 
-        // Assert - Verify navigation occurred
-        expect(find.byType(TvSeriesPage), findsNothing);
-        expect(find.byType(SearchTvPage), findsOneWidget);
+          // Assert - Verify navigation occurred
+          expect(find.byType(TvSeriesPage), findsNothing);
+          expect(find.byType(SearchTvPage), findsOneWidget);
 
-        // verify search notifier was initialized
-        verifyNever(mockTvSearchNotifier.fetchTvSearch(any)); // Shouldn't be called yet
+          // verify search notifier was initialized
+          verifyNever(
+            mockTvSearchNotifier.fetchTvSearch(any),
+          ); // Shouldn't be called yet
 
-        // Tapi boleh terpanggil setelah submit
-        await tester.enterText(find.byType(TextField), 'naruto');
-        await tester.testTextInput.receiveAction(TextInputAction.search);
-        verify(mockTvSearchNotifier.fetchTvSearch('naruto')).called(1);
-      });
-    });
+          // Tapi boleh terpanggil setelah submit
+          await tester.enterText(find.byType(TextField), 'naruto');
+          await tester.testTextInput.receiveAction(TextInputAction.search);
+          verify(mockTvSearchNotifier.fetchTvSearch('naruto')).called(1);
+        });
+      },
+    );
   });
 
   group('TvSeriesList Widget Tests', () {

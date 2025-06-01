@@ -1065,7 +1065,7 @@ void main() {
     );
   });
 
-  group('Seach Movies', () {
+  group('Search Movies', () {
     final tQuery = 'spiderman';
 
     test(

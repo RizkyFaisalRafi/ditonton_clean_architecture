@@ -6,6 +6,7 @@ import 'package:ditonton_clean_architecture/presentation/pages/movies/home_movie
 import 'package:ditonton_clean_architecture/presentation/pages/movies/popular_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/search_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/top_rated_movies_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/on_the_air_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/search_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_page.dart';
@@ -110,6 +111,8 @@ class MyApp extends StatelessWidget {
               return CupertinoPageRoute(builder: (_) => SearchTvPage());
             case WatchlistTvPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => WatchlistTvPage());
+            case OnTheAirPage.ROUTE_NAME:
+              return CupertinoPageRoute(builder: (_) => OnTheAirPage());
             default:
               return MaterialPageRoute(
                 builder: (_) {

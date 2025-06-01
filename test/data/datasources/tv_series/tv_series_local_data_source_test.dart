@@ -164,4 +164,52 @@ void main() {
       expect(() => call, throwsA(isA<CacheException>()));
     });
   });
+
+  // on the air tv series
+  group('cache on the air tv series', () {
+    test('should call DatabaseHelper to clear and insert cache', () async {
+      // arrange
+      when(
+        mockDatabaseHelper.clearCacheTvSeries('on the air'),
+      ).thenAnswer((_) async => 1);
+      when(
+        mockDatabaseHelper.insertCacheTransactionTvSeries([
+          testTvTable,
+        ], 'on the air'),
+      ).thenAnswer((_) async {});
+      // act
+      await dataSource.cacheOnTheAirTvSeries([testTvTable]);
+      // assert
+      verify(mockDatabaseHelper.clearCacheTvSeries('on the air'));
+      verify(
+        mockDatabaseHelper.insertCacheTransactionTvSeries([
+          testTvTable,
+        ], 'on the air'),
+      );
+    });
+  });
+
+  group('get cached on the air tv series', () {
+    test('should return list of TvTable when cache data is present', () async {
+      // arrange
+      when(
+        mockDatabaseHelper.getCacheTvSeries('on the air'),
+      ).thenAnswer((_) async => [testTvMap]);
+      // act
+      final result = await dataSource.getCachedOnTheAirTv();
+      // assert
+      expect(result, [testTvTable]);
+    });
+
+    test('should throw CacheException when cache data is empty', () async {
+      // arrange
+      when(
+        mockDatabaseHelper.getCacheTvSeries('on the air'),
+      ).thenAnswer((_) async => []);
+      // act
+      final call = dataSource.getCachedOnTheAirTv();
+      // assert
+      expect(() => call, throwsA(isA<CacheException>()));
+    });
+  });
 }
