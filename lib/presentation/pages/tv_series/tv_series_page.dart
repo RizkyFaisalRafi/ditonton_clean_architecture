@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/on_the_air_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/tv_series/popular_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/search_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,8 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
       () =>
           Provider.of<TvListNotifier>(context, listen: false)
             ..fetchTvSeriesAiringToday()
-            ..fetchTvSeriesOnTheAir(),
+            ..fetchTvSeriesOnTheAir()
+            ..fetchTvSeriesPopularTv(),
     );
   }
 
@@ -92,7 +94,19 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
               _buildSubHeading(
                 title: 'Popular',
                 onTap: () {
-                  // return Navigator.pushNamed(context, OnTheAirPage.ROUTE_NAME);
+                  return Navigator.pushNamed(context, PopularTvPage.ROUTE_NAME);
+                },
+              ),
+              Consumer<TvListNotifier>(
+                builder: (context, data, child) {
+                  final state = data.popularTvState;
+                  if (state == RequestState.Loading) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (state == RequestState.Loaded) {
+                    return TvSeriesList(data.popularTvSeries);
+                  } else {
+                    return Text('Failed');
+                  }
                 },
               ),
 
@@ -103,7 +117,6 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                   // return Navigator.pushNamed(context, OnTheAirPage.ROUTE_NAME);
                 },
               ),
-
             ],
           ),
         ),
@@ -140,7 +153,7 @@ class TvSeriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,

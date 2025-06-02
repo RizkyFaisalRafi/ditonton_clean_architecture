@@ -86,6 +86,8 @@ void main() {
       when(mockNotifier.airingTodayTvSeries).thenReturn([]);
       when(mockNotifier.onTheAirState).thenReturn(RequestState.Loading);
       when(mockNotifier.onTheAirTvSeries).thenReturn([]);
+      when(mockNotifier.popularTvState).thenReturn(RequestState.Loading);
+      when(mockNotifier.popularTvSeries).thenReturn([]);
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
@@ -103,6 +105,8 @@ void main() {
       when(mockNotifier.airingTodayTvSeries).thenReturn([]);
       when(mockNotifier.onTheAirState).thenReturn(RequestState.Loading);
       when(mockNotifier.onTheAirTvSeries).thenReturn([]);
+      when(mockNotifier.popularTvState).thenReturn(RequestState.Loading);
+      when(mockNotifier.popularTvSeries).thenReturn([]);
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
@@ -122,12 +126,14 @@ void main() {
       when(mockNotifier.airingTodayTvSeries).thenReturn([]);
       when(mockNotifier.onTheAirState).thenReturn(RequestState.Loading);
       when(mockNotifier.onTheAirTvSeries).thenReturn([]);
+      when(mockNotifier.popularTvState).thenReturn(RequestState.Loading);
+      when(mockNotifier.popularTvSeries).thenReturn([]);
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
 
       // Assert
-      expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+      expect(find.byType(CircularProgressIndicator), findsNWidgets(3));
     });
 
     testWidgets('should show error message when state is Error', (
@@ -139,12 +145,14 @@ void main() {
       when(mockNotifier.onTheAirState).thenReturn(RequestState.Error);
       when(mockNotifier.onTheAirTvSeries).thenReturn([]);
       when(mockNotifier.message).thenReturn('Error message');
+      when(mockNotifier.popularTvState).thenReturn(RequestState.Error);
+      when(mockNotifier.popularTvSeries).thenReturn([]);
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
 
       // Assert
-      expect(find.text('Failed'), findsNWidgets(2));
+      expect(find.text('Failed'), findsNWidgets(3));
     });
 
     testWidgets('should show TvSeriesList when state is Loaded', (
@@ -155,6 +163,8 @@ void main() {
       when(mockNotifier.airingTodayTvSeries).thenReturn(testTvSeries);
       when(mockNotifier.onTheAirState).thenReturn(RequestState.Loaded);
       when(mockNotifier.onTheAirTvSeries).thenReturn(testTvSeries);
+      when(mockNotifier.popularTvState).thenReturn(RequestState.Loaded);
+      when(mockNotifier.popularTvSeries).thenReturn([]);
 
       // Act
       await mockNetworkImages(() async {
@@ -162,9 +172,10 @@ void main() {
       });
 
       // Assert
-      expect(find.byType(TvSeriesList), findsNWidgets(2));
+      expect(find.byType(TvSeriesList), findsNWidgets(3));
       expect(find.text('Airing Today'), findsOneWidget);
       expect(find.text('On The Air'), findsOneWidget);
+      expect(find.text('Popular'), findsOneWidget);
     });
 
     testWidgets('should navigate to detail page when tv series is tapped', (
@@ -175,6 +186,8 @@ void main() {
       when(mockNotifier.airingTodayTvSeries).thenReturn(testTvSeries);
       when(mockNotifier.onTheAirState).thenReturn(RequestState.Loaded);
       when(mockNotifier.onTheAirTvSeries).thenReturn(testTvSeries);
+      when(mockNotifier.popularTvState).thenReturn(RequestState.Loaded);
+      when(mockNotifier.popularTvSeries).thenReturn([]);
 
       // Act
       await mockNetworkImages(() async {
@@ -198,6 +211,8 @@ void main() {
         when(mockNotifier.airingTodayTvSeries).thenReturn(testTvSeries);
         when(mockNotifier.onTheAirState).thenReturn(RequestState.Loaded);
         when(mockNotifier.onTheAirTvSeries).thenReturn(testTvSeries);
+        when(mockNotifier.popularTvState).thenReturn(RequestState.Loaded);
+        when(mockNotifier.popularTvSeries).thenReturn([]);
         // Add these stubs for the search notifier
         when(mockTvSearchNotifier.state).thenReturn(RequestState.Empty);
         when(mockTvSearchNotifier.searchResult).thenReturn([]);

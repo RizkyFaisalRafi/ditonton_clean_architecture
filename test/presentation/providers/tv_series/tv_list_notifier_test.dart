@@ -4,6 +4,7 @@ import 'package:ditonton_clean_architecture/common/state_enum.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_airing_today_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_on_the_air_tv.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_popular_tv.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_list_notifier.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -11,20 +12,23 @@ import 'package:mockito/mockito.dart';
 import '../../../dummy_data/dummy_objects.dart';
 import 'tv_list_notifier_test.mocks.dart';
 
-@GenerateMocks([GetAiringTodayTv, GetOnTheAirTv])
+@GenerateMocks([GetAiringTodayTv, GetOnTheAirTv, GetPopularTv])
 void main() {
   late TvListNotifier provider;
   late MockGetAiringTodayTv mockGetAiringTodayTv;
   late MockGetOnTheAirTv mockGetOnTheAirTv;
+  late MockGetPopularTv mockGetPopularTv;
   late int listenerCallCount;
 
   setUp(() {
     listenerCallCount = 0;
     mockGetAiringTodayTv = MockGetAiringTodayTv();
     mockGetOnTheAirTv = MockGetOnTheAirTv();
+    mockGetPopularTv = MockGetPopularTv();
     provider = TvListNotifier(
       getAiringTodayTv: mockGetAiringTodayTv,
       getOnTheAirTv: mockGetOnTheAirTv,
+      getPopularTv: mockGetPopularTv,
     )..addListener(() {
       listenerCallCount += 1;
     });
@@ -138,5 +142,60 @@ void main() {
       expect(provider.message, 'Server Failure');
       expect(listenerCallCount, 2);
     });
+  });
+
+  group('Popular Tv', () {
+    test('initialState should be empty', () {
+      expect(provider.popularTvState, equals(RequestState.Empty));
+    });
+
+    test('should get data from the usecase', () async {
+      // arrange
+      when(
+        mockGetPopularTv.execute(),
+      ).thenAnswer((_) async => Right(tTvSeries));
+      // act
+      provider.fetchTvSeriesPopularTv();
+      // assert
+      verify(mockGetPopularTv.execute());
+    });
+
+    test('should change state to Loading when usecase is called', () {
+      // arrange
+      when(
+        mockGetPopularTv.execute(),
+      ).thenAnswer((_) async => Right(tTvSeries));
+      // act
+      provider.fetchTvSeriesPopularTv();
+      // assert
+      expect(provider.popularTvState, RequestState.Loading);
+    });
+
+    test('should change tvSeries when data is gotten successfully', () async {
+      // arrange
+      when(
+        mockGetPopularTv.execute(),
+      ).thenAnswer((_) async => Right(tTvSeries));
+      // act
+      await provider.fetchTvSeriesPopularTv();
+      // assert
+      expect(provider.popularTvState, RequestState.Loaded);
+      expect(provider.popularTvSeries, tTvSeries);
+      expect(listenerCallCount, 2);
+    });
+
+    test('should return error when data is unsuccessful', () async {
+      // arrange
+      when(
+        mockGetPopularTv.execute(),
+      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+      // act
+      await provider.fetchTvSeriesPopularTv();
+      // assert
+      expect(provider.popularTvState, RequestState.Error);
+      expect(provider.message, 'Server Failure');
+      expect(listenerCallCount, 2);
+    });
+
   });
 }
