@@ -9,11 +9,15 @@ abstract class TvSeriesLocalDatasource {
 
   Future<void> cachePopularTvSeries(List<TvSeriesTable> tv);
 
+  Future<void> cacheTopRatedTvSeries(List<TvSeriesTable> tv);
+
   Future<List<TvSeriesTable>> getCachedAiringTodayTv();
 
   Future<List<TvSeriesTable>> getCachedOnTheAirTv();
 
   Future<List<TvSeriesTable>> getCachedPopularTv();
+
+  Future<List<TvSeriesTable>> getCachedTopRatedTv();
 
   Future<String> insertWatchlist(TvSeriesTable tv);
 
@@ -106,6 +110,22 @@ class TvSeriesLocalDatasourceImpl implements TvSeriesLocalDatasource {
   @override
   Future<List<TvSeriesTable>> getCachedPopularTv() async {
     final result = await databaseHelper.getCacheTvSeries('popular');
+    if (result.length > 0) {
+      return result.map((data) => TvSeriesTable.fromMap(data)).toList();
+    } else {
+      throw CacheException("Can't get the data :(");
+    }
+  }
+
+  @override
+  Future<void> cacheTopRatedTvSeries(List<TvSeriesTable> tv) async {
+    await databaseHelper.clearCacheTvSeries('top rated tv');
+    await databaseHelper.insertCacheTransactionTvSeries(tv, 'top rated tv');
+  }
+
+  @override
+  Future<List<TvSeriesTable>> getCachedTopRatedTv() async {
+    final result = await databaseHelper.getCacheTvSeries('top rated tv');
     if (result.length > 0) {
       return result.map((data) => TvSeriesTable.fromMap(data)).toList();
     } else {

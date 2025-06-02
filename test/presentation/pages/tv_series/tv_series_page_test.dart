@@ -88,6 +88,8 @@ void main() {
       when(mockNotifier.onTheAirTvSeries).thenReturn([]);
       when(mockNotifier.popularTvState).thenReturn(RequestState.Loading);
       when(mockNotifier.popularTvSeries).thenReturn([]);
+      when(mockNotifier.topRatedTvState).thenReturn(RequestState.Loading);
+      when(mockNotifier.topRatedTvSeries).thenReturn([]);
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
@@ -97,9 +99,7 @@ void main() {
       expect(find.byIcon(Icons.search), findsOneWidget);
     });
 
-    testWidgets('should call fetchTvSeriesAiringToday when initState', (
-      tester,
-    ) async {
+    testWidgets('should call fetchTvSeries when initState', (tester) async {
       // Arrange
       when(mockNotifier.airingTodayState).thenReturn(RequestState.Loading);
       when(mockNotifier.airingTodayTvSeries).thenReturn([]);
@@ -107,15 +107,17 @@ void main() {
       when(mockNotifier.onTheAirTvSeries).thenReturn([]);
       when(mockNotifier.popularTvState).thenReturn(RequestState.Loading);
       when(mockNotifier.popularTvSeries).thenReturn([]);
+      when(mockNotifier.topRatedTvState).thenReturn(RequestState.Loading);
+      when(mockNotifier.topRatedTvSeries).thenReturn([]);
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
 
       // Assert
       verify(mockNotifier.fetchTvSeriesAiringToday()).called(1);
-      verify(
-        mockNotifier.fetchTvSeriesOnTheAir(),
-      ).called(1); // Also verify this
+      verify(mockNotifier.fetchTvSeriesOnTheAir()).called(1);
+      verify(mockNotifier.fetchTvSeriesPopularTv()).called(1);
+      verify(mockNotifier.fetchTvSeriesTopRatedTv()).called(1);
     });
 
     testWidgets('should show loading indicator when state is Loading', (
@@ -128,12 +130,14 @@ void main() {
       when(mockNotifier.onTheAirTvSeries).thenReturn([]);
       when(mockNotifier.popularTvState).thenReturn(RequestState.Loading);
       when(mockNotifier.popularTvSeries).thenReturn([]);
+      when(mockNotifier.topRatedTvState).thenReturn(RequestState.Loading);
+      when(mockNotifier.topRatedTvSeries).thenReturn([]);
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
 
       // Assert
-      expect(find.byType(CircularProgressIndicator), findsNWidgets(3));
+      expect(find.byType(CircularProgressIndicator), findsNWidgets(4));
     });
 
     testWidgets('should show error message when state is Error', (
@@ -147,12 +151,14 @@ void main() {
       when(mockNotifier.message).thenReturn('Error message');
       when(mockNotifier.popularTvState).thenReturn(RequestState.Error);
       when(mockNotifier.popularTvSeries).thenReturn([]);
+      when(mockNotifier.topRatedTvState).thenReturn(RequestState.Error);
+      when(mockNotifier.topRatedTvSeries).thenReturn([]);
 
       // Act
       await tester.pumpWidget(makeTestableWidget(TvSeriesPage()));
 
       // Assert
-      expect(find.text('Failed'), findsNWidgets(3));
+      expect(find.text('Failed'), findsNWidgets(4));
     });
 
     testWidgets('should show TvSeriesList when state is Loaded', (
@@ -165,6 +171,8 @@ void main() {
       when(mockNotifier.onTheAirTvSeries).thenReturn(testTvSeries);
       when(mockNotifier.popularTvState).thenReturn(RequestState.Loaded);
       when(mockNotifier.popularTvSeries).thenReturn([]);
+      when(mockNotifier.topRatedTvState).thenReturn(RequestState.Loaded);
+      when(mockNotifier.topRatedTvSeries).thenReturn([]);
 
       // Act
       await mockNetworkImages(() async {
@@ -172,10 +180,11 @@ void main() {
       });
 
       // Assert
-      expect(find.byType(TvSeriesList), findsNWidgets(3));
+      expect(find.byType(TvSeriesList), findsNWidgets(4));
       expect(find.text('Airing Today'), findsOneWidget);
       expect(find.text('On The Air'), findsOneWidget);
       expect(find.text('Popular'), findsOneWidget);
+      expect(find.text('Top Rated'), findsOneWidget);
     });
 
     testWidgets('should navigate to detail page when tv series is tapped', (
@@ -188,6 +197,8 @@ void main() {
       when(mockNotifier.onTheAirTvSeries).thenReturn(testTvSeries);
       when(mockNotifier.popularTvState).thenReturn(RequestState.Loaded);
       when(mockNotifier.popularTvSeries).thenReturn([]);
+      when(mockNotifier.topRatedTvState).thenReturn(RequestState.Loaded);
+      when(mockNotifier.topRatedTvSeries).thenReturn([]);
 
       // Act
       await mockNetworkImages(() async {
@@ -197,10 +208,7 @@ void main() {
       });
 
       // Assert
-      expect(
-        find.byType(TvSeriesDetailPage),
-        findsNothing,
-      ); // Since we mocked the route
+      expect(find.byType(TvSeriesDetailPage), findsNothing);
     });
 
     testWidgets(
@@ -213,6 +221,8 @@ void main() {
         when(mockNotifier.onTheAirTvSeries).thenReturn(testTvSeries);
         when(mockNotifier.popularTvState).thenReturn(RequestState.Loaded);
         when(mockNotifier.popularTvSeries).thenReturn([]);
+        when(mockNotifier.topRatedTvState).thenReturn(RequestState.Loaded);
+        when(mockNotifier.topRatedTvSeries).thenReturn([]);
         // Add these stubs for the search notifier
         when(mockTvSearchNotifier.state).thenReturn(RequestState.Empty);
         when(mockTvSearchNotifier.searchResult).thenReturn([]);

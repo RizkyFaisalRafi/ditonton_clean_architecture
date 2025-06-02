@@ -82,7 +82,7 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
       try {
         final result = await remoteDataSource.getPopularTv();
 
-        // Memanggil cacheOnTheAirTvSeries
+        // Memanggil cachePopularTvSeries
         localDataSource.cachePopularTvSeries(
           result.map((tv) => TvSeriesTable.fromDTO(tv)).toList(),
         );
@@ -94,6 +94,33 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
     } else {
       try {
         final result = await localDataSource.getCachedPopularTv();
+        return Right(result.map((model) => model.toEntity()).toList());
+      } on CacheException catch (e) {
+        return Left(CacheFailure(e.message));
+      } on SocketException {
+        return Left(ConnectionFailure('Failed to connect to the network'));
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TvSeries>>> getTopRatedTv() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getTopRatedTv();
+
+        // Memanggil cacheTopRatedTvSeries
+        localDataSource.cacheTopRatedTvSeries(
+          result.map((tv) => TvSeriesTable.fromDTO(tv)).toList(),
+        );
+
+        return Right(result.map((model) => model.toEntity()).toList());
+      } on ServerException {
+        return Left(ServerFailure(''));
+      }
+    } else {
+      try {
+        final result = await localDataSource.getCachedTopRatedTv();
         return Right(result.map((model) => model.toEntity()).toList());
       } on CacheException catch (e) {
         return Left(CacheFailure(e.message));
