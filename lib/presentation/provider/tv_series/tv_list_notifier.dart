@@ -3,6 +3,7 @@ import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_airing_today_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_on_the_air_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_popular_tv.dart';
+import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_top_rated_tv.dart';
 import 'package:flutter/cupertino.dart';
 
 class TvListNotifier extends ChangeNotifier {
@@ -18,6 +19,10 @@ class TvListNotifier extends ChangeNotifier {
 
   List<TvSeries> get popularTvSeries => _popularTvSeries;
 
+  var _topRatedTvSeries = <TvSeries>[];
+
+  List<TvSeries> get topRatedTvSeries => _topRatedTvSeries;
+
   RequestState _airingTodayState = RequestState.Empty;
 
   RequestState get airingTodayState => _airingTodayState;
@@ -30,6 +35,10 @@ class TvListNotifier extends ChangeNotifier {
 
   RequestState get popularTvState => _popularTvState;
 
+  RequestState _topRatedTvState = RequestState.Empty;
+
+  RequestState get topRatedTvState => _topRatedTvState;
+
   String _message = '';
 
   String get message => _message;
@@ -37,11 +46,13 @@ class TvListNotifier extends ChangeNotifier {
   final GetAiringTodayTv getAiringTodayTv;
   final GetOnTheAirTv getOnTheAirTv;
   final GetPopularTv getPopularTv;
+  final GetTopRatedTv getTopRatedTv;
 
   TvListNotifier({
     required this.getAiringTodayTv,
     required this.getOnTheAirTv,
     required this.getPopularTv,
+    required this.getTopRatedTv,
   });
 
   /// Fetch Airing Today
@@ -99,6 +110,26 @@ class TvListNotifier extends ChangeNotifier {
       (tvSeriesData) {
         _popularTvState = RequestState.Loaded;
         _popularTvSeries = tvSeriesData;
+        notifyListeners();
+      },
+    );
+  }
+
+  /// Fetch Top Rated Tv
+  Future<void> fetchTvSeriesTopRatedTv() async {
+    _topRatedTvState = RequestState.Loading;
+    notifyListeners();
+
+    final result = await getTopRatedTv.execute();
+    result.fold(
+      (failure) {
+        _topRatedTvState = RequestState.Error;
+        _message = failure.message;
+        notifyListeners();
+      },
+      (tvSeriesData) {
+        _topRatedTvState = RequestState.Loaded;
+        _topRatedTvSeries = tvSeriesData;
         notifyListeners();
       },
     );
