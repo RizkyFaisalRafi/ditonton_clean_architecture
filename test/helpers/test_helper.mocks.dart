@@ -672,6 +672,20 @@ class MockTvSeriesRepository extends _i1.Mock
           as _i7.Future<_i2.Either<_i8.Failure, List<_i21.TvSeries>>>);
 
   @override
+  _i7.Future<_i2.Either<_i8.Failure, List<_i21.TvSeries>>> getPopularTv() =>
+      (super.noSuchMethod(
+            Invocation.method(#getPopularTv, []),
+            returnValue:
+                _i7.Future<_i2.Either<_i8.Failure, List<_i21.TvSeries>>>.value(
+                  _FakeEither_0<_i8.Failure, List<_i21.TvSeries>>(
+                    this,
+                    Invocation.method(#getPopularTv, []),
+                  ),
+                ),
+          )
+          as _i7.Future<_i2.Either<_i8.Failure, List<_i21.TvSeries>>>);
+
+  @override
   _i7.Future<_i2.Either<_i8.Failure, _i22.TvDetail>> getTvDetail(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#getTvDetail, [id]),
@@ -796,6 +810,14 @@ class MockTvSeriesRemoteDataSource extends _i1.Mock
           as _i7.Future<List<_i24.TvModel>>);
 
   @override
+  _i7.Future<List<_i24.TvModel>> getPopularTv() =>
+      (super.noSuchMethod(
+            Invocation.method(#getPopularTv, []),
+            returnValue: _i7.Future<List<_i24.TvModel>>.value(<_i24.TvModel>[]),
+          )
+          as _i7.Future<List<_i24.TvModel>>);
+
+  @override
   _i7.Future<_i4.TvDetailResponse> getTvDetail(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#getTvDetail, [id]),
@@ -853,6 +875,15 @@ class MockTvSeriesLocalDatasource extends _i1.Mock
           as _i7.Future<void>);
 
   @override
+  _i7.Future<void> cachePopularTvSeries(List<_i18.TvSeriesTable>? tv) =>
+      (super.noSuchMethod(
+            Invocation.method(#cachePopularTvSeries, [tv]),
+            returnValue: _i7.Future<void>.value(),
+            returnValueForMissingStub: _i7.Future<void>.value(),
+          )
+          as _i7.Future<void>);
+
+  @override
   _i7.Future<List<_i18.TvSeriesTable>> getCachedAiringTodayTv() =>
       (super.noSuchMethod(
             Invocation.method(#getCachedAiringTodayTv, []),
@@ -866,6 +897,16 @@ class MockTvSeriesLocalDatasource extends _i1.Mock
   _i7.Future<List<_i18.TvSeriesTable>> getCachedOnTheAirTv() =>
       (super.noSuchMethod(
             Invocation.method(#getCachedOnTheAirTv, []),
+            returnValue: _i7.Future<List<_i18.TvSeriesTable>>.value(
+              <_i18.TvSeriesTable>[],
+            ),
+          )
+          as _i7.Future<List<_i18.TvSeriesTable>>);
+
+  @override
+  _i7.Future<List<_i18.TvSeriesTable>> getCachedPopularTv() =>
+      (super.noSuchMethod(
+            Invocation.method(#getCachedPopularTv, []),
             returnValue: _i7.Future<List<_i18.TvSeriesTable>>.value(
               <_i18.TvSeriesTable>[],
             ),

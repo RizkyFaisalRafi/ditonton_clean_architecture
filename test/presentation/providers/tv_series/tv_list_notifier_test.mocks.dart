@@ -15,6 +15,8 @@ import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_airing
     as _i4;
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_on_the_air_tv.dart'
     as _i8;
+import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_popular_tv.dart'
+    as _i9;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -81,6 +83,40 @@ class MockGetAiringTodayTv extends _i1.Mock implements _i4.GetAiringTodayTv {
 /// See the documentation for Mockito's code generation for more information.
 class MockGetOnTheAirTv extends _i1.Mock implements _i8.GetOnTheAirTv {
   MockGetOnTheAirTv() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.TvSeriesRepository get repository =>
+      (super.noSuchMethod(
+            Invocation.getter(#repository),
+            returnValue: _FakeTvSeriesRepository_0(
+              this,
+              Invocation.getter(#repository),
+            ),
+          )
+          as _i2.TvSeriesRepository);
+
+  @override
+  _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>> execute() =>
+      (super.noSuchMethod(
+            Invocation.method(#execute, []),
+            returnValue:
+                _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>>.value(
+                  _FakeEither_1<_i6.Failure, List<_i7.TvSeries>>(
+                    this,
+                    Invocation.method(#execute, []),
+                  ),
+                ),
+          )
+          as _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>>);
+}
+
+/// A class which mocks [GetPopularTv].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetPopularTv extends _i1.Mock implements _i9.GetPopularTv {
+  MockGetPopularTv() {
     _i1.throwOnMissingStub(this);
   }
 

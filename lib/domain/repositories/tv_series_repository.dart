@@ -8,6 +8,8 @@ abstract class TvSeriesRepository {
 
   Future<Either<Failure, List<TvSeries>>> getOnTheAir();
 
+  Future<Either<Failure, List<TvSeries>>> getPopularTv();
+
   Future<Either<Failure, TvDetail>> getTvDetail(int id);
 
   Future<Either<Failure, List<TvSeries>>> getTvRecommendations(int id);

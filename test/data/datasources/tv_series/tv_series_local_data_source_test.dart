@@ -212,4 +212,52 @@ void main() {
       expect(() => call, throwsA(isA<CacheException>()));
     });
   });
+
+  // popular tv series
+  group('cache popular tv series', () {
+    test('should call DatabaseHelper to clear and insert cache', () async {
+      // arrange
+      when(
+        mockDatabaseHelper.clearCacheTvSeries('popular'),
+      ).thenAnswer((_) async => 1);
+      when(
+        mockDatabaseHelper.insertCacheTransactionTvSeries([
+          testTvTable,
+        ], 'popular'),
+      ).thenAnswer((_) async {});
+      // act
+      await dataSource.cachePopularTvSeries([testTvTable]);
+      // assert
+      verify(mockDatabaseHelper.clearCacheTvSeries('popular'));
+      verify(
+        mockDatabaseHelper.insertCacheTransactionTvSeries([
+          testTvTable,
+        ], 'popular'),
+      );
+    });
+  });
+
+  group('get cached popular tv series', () {
+    test('should return list of TvTable when cache data is present', () async {
+      // arrange
+      when(
+        mockDatabaseHelper.getCacheTvSeries('popular'),
+      ).thenAnswer((_) async => [testTvMap]);
+      // act
+      final result = await dataSource.getCachedPopularTv();
+      // assert
+      expect(result, [testTvTable]);
+    });
+
+    test('should throw CacheException when cache data is empty', () async {
+      // arrange
+      when(
+        mockDatabaseHelper.getCacheTvSeries('popular'),
+      ).thenAnswer((_) async => []);
+      // act
+      final call = dataSource.getCachedPopularTv();
+      // assert
+      expect(() => call, throwsA(isA<CacheException>()));
+    });
+  });
 }

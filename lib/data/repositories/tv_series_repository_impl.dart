@@ -77,6 +77,33 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
   }
 
   @override
+  Future<Either<Failure, List<TvSeries>>> getPopularTv() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getPopularTv();
+
+        // Memanggil cacheOnTheAirTvSeries
+        localDataSource.cachePopularTvSeries(
+          result.map((tv) => TvSeriesTable.fromDTO(tv)).toList(),
+        );
+
+        return Right(result.map((model) => model.toEntity()).toList());
+      } on ServerException {
+        return Left(ServerFailure(''));
+      }
+    } else {
+      try {
+        final result = await localDataSource.getCachedPopularTv();
+        return Right(result.map((model) => model.toEntity()).toList());
+      } on CacheException catch (e) {
+        return Left(CacheFailure(e.message));
+      } on SocketException {
+        return Left(ConnectionFailure('Failed to connect to the network'));
+      }
+    }
+  }
+
+  @override
   Future<Either<Failure, TvDetail>> getTvDetail(int id) async {
     networkInfo.isConnected;
     try {
