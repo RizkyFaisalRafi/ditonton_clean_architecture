@@ -38,12 +38,13 @@ void main() {
     backdropPath: null,
     genreIds: const [],
     id: 1,
+    // Name null untuk tes fallback '-'
     name: null,
-    overview: null,
     // Overview null untuk tes fallback '-'
+    overview: null,
     popularity: 0,
-    posterPath: null,
     // Poster path null untuk tes error widget
+    posterPath: null,
     firstAirDate: null,
     originalName: null,
     originalLanguage: null,

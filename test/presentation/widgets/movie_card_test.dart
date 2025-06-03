@@ -28,7 +28,6 @@ void main() {
     posterPath: '/rweIrveL43TaxUN0akQEaAXL6x0.jpg',
     releaseDate: '2002-05-01',
     title: 'Spider-Man',
-    // Nama film yang akan dicari di tes
     video: false,
     voteAverage: 7.2,
     voteCount: 13507,
@@ -40,14 +39,14 @@ void main() {
     genreIds: const [],
     id: 1,
     originalTitle: null,
-    overview: null,
     // Overview null untuk tes fallback '-'
+    overview: null,
     popularity: 0,
-    posterPath: null,
     // Poster path null untuk tes error widget
+    posterPath: null,
     releaseDate: null,
-    title: null,
     // Title null untuk tes fallback '-'
+    title: null,
     video: false,
     voteAverage: 0,
     voteCount: 0,
