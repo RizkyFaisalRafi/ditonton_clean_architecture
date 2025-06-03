@@ -156,8 +156,11 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
   }
 
   @override
-  Future<Either<Failure, String>> saveWatchlist(TvDetail tv) async {
+  Future<Either<Failure, String>> saveWatchlist(TvDetail? tv) async {
     try {
+      if (tv == null) {
+        return Left(DatabaseFailure("Can not be null"));
+      }
       final result = await localDataSource.insertWatchlist(
         TvSeriesTable.fromEntity(tv),
       );
@@ -183,8 +186,12 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
 
   @override
   Future<Either<Failure, List<TvSeries>>> getWatchlistTv() async {
-    final result = await localDataSource.getWatchlistTv();
-    return Right(result.map((data) => data.toEntity()).toList());
+    try {
+      final result = await localDataSource.getWatchlistTv();
+      return Right(result.map((data) => data.toEntity()).toList());
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    }
   }
 
   @override

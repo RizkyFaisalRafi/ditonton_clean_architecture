@@ -55,81 +55,137 @@ class TvSeriesLocalDatasourceImpl implements TvSeriesLocalDatasource {
 
   @override
   Future<List<TvSeriesTable>> getWatchlistTv() async {
-    final result = await databaseHelper.getWatchlistTvSeries();
-    return result.map((data) => TvSeriesTable.fromMap(data)).toList();
+    try {
+      final result = await databaseHelper.getWatchlistTvSeries();
+      return result.map((data) => TvSeriesTable.fromMap(data)).toList();
+    } catch (e) {
+      throw DatabaseException(e.toString());
+    }
   }
 
   @override
   Future<TvSeriesTable?> getTvSeriesById(int id) async {
-    final result = await databaseHelper.getTvSeriesById(id);
-    if (result != null) {
-      return TvSeriesTable.fromMap(result);
-    } else {
-      return null;
+    try {
+      final result = await databaseHelper.getTvSeriesById(id);
+      if (result != null) {
+        return TvSeriesTable.fromMap(result);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw DatabaseException(e.toString());
     }
   }
 
   @override
   Future<void> cacheAiringTodayTvSeries(List<TvSeriesTable> tv) async {
-    await databaseHelper.clearCacheTvSeries('airing today');
-    await databaseHelper.insertCacheTransactionTvSeries(tv, 'airing today');
+    try {
+      await databaseHelper.clearCacheTvSeries('airing today');
+      await databaseHelper.insertCacheTransactionTvSeries(tv, 'airing today');
+    } catch (e) {
+      throw DatabaseException(e.toString());
+    }
   }
 
   @override
   Future<List<TvSeriesTable>> getCachedAiringTodayTv() async {
-    final result = await databaseHelper.getCacheTvSeries('airing today');
-    if (result.length > 0) {
-      return result.map((data) => TvSeriesTable.fromMap(data)).toList();
-    } else {
-      throw CacheException("Can't get the data :(");
+    try {
+      final result = await databaseHelper.getCacheTvSeries('airing today');
+      if (result.length > 0) {
+        return result.map((data) => TvSeriesTable.fromMap(data)).toList();
+      } else {
+        throw CacheException("Can't get the data :(");
+      }
+    } catch (e) {
+      if (e is CacheException) {
+        rethrow;
+      } else {
+        throw DatabaseException(e.toString());
+      }
     }
   }
 
   @override
   Future<void> cacheOnTheAirTvSeries(List<TvSeriesTable> tv) async {
-    await databaseHelper.clearCacheTvSeries('on the air');
-    await databaseHelper.insertCacheTransactionTvSeries(tv, 'on the air');
+    try {
+      await databaseHelper.clearCacheTvSeries('on the air');
+      await databaseHelper.insertCacheTransactionTvSeries(tv, 'on the air');
+    } catch (e) {
+      throw DatabaseException(e.toString());
+    }
   }
 
   @override
   Future<List<TvSeriesTable>> getCachedOnTheAirTv() async {
-    final result = await databaseHelper.getCacheTvSeries('on the air');
-    if (result.length > 0) {
-      return result.map((data) => TvSeriesTable.fromMap(data)).toList();
-    } else {
-      throw CacheException("Can't get the data :(");
+    try {
+      final result = await databaseHelper.getCacheTvSeries('on the air');
+      if (result.length > 0) {
+        return result.map((data) => TvSeriesTable.fromMap(data)).toList();
+      } else {
+        throw CacheException("Can't get the data :(");
+      }
+    } catch (e) {
+      if (e is CacheException) {
+        rethrow;
+      } else {
+        throw DatabaseException(e.toString());
+      }
     }
   }
 
   @override
   Future<void> cachePopularTvSeries(List<TvSeriesTable> tv) async {
-    await databaseHelper.clearCacheTvSeries('popular');
-    await databaseHelper.insertCacheTransactionTvSeries(tv, 'popular');
+    try {
+      await databaseHelper.clearCacheTvSeries('popular');
+      await databaseHelper.insertCacheTransactionTvSeries(tv, 'popular');
+    } catch (e) {
+      throw DatabaseException(e.toString());
+    }
   }
 
   @override
   Future<List<TvSeriesTable>> getCachedPopularTv() async {
-    final result = await databaseHelper.getCacheTvSeries('popular');
-    if (result.length > 0) {
-      return result.map((data) => TvSeriesTable.fromMap(data)).toList();
-    } else {
-      throw CacheException("Can't get the data :(");
+    try {
+      final result = await databaseHelper.getCacheTvSeries('popular');
+      if (result.length > 0) {
+        return result.map((data) => TvSeriesTable.fromMap(data)).toList();
+      } else {
+        throw CacheException("Can't get the data :(");
+      }
+    } catch (e) {
+      if (e is CacheException) {
+        rethrow;
+      } else {
+        throw DatabaseException(e.toString());
+      }
     }
   }
 
   @override
   Future<void> cacheTopRatedTvSeries(List<TvSeriesTable> tv) async {
-    await databaseHelper.clearCacheTvSeries('top rated tv');
-    await databaseHelper.insertCacheTransactionTvSeries(tv, 'top rated tv');
+    try {
+      await databaseHelper.clearCacheTvSeries('top rated tv');
+      await databaseHelper.insertCacheTransactionTvSeries(tv, 'top rated tv');
+    } catch (e) {
+      throw DatabaseException(e.toString());
+    }
   }
 
   @override
   Future<List<TvSeriesTable>> getCachedTopRatedTv() async {
-    final result = await databaseHelper.getCacheTvSeries('top rated tv');
-    if (result.length > 0) {
-      return result.map((data) => TvSeriesTable.fromMap(data)).toList();
-    } else {
-      throw CacheException("Can't get the data :(");
+    try {
+      final result = await databaseHelper.getCacheTvSeries('top rated tv');
+      if (result.length > 0) {
+        return result.map((data) => TvSeriesTable.fromMap(data)).toList();
+      } else {
+        throw CacheException("Can't get the data :(");
+      }
+    } catch (e) {
+      if (e is CacheException) {
+        rethrow;
+      } else {
+        throw DatabaseException(e.toString());
+      }
     }
   }
 }

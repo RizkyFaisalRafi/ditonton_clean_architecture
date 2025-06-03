@@ -55,6 +55,7 @@ dev_dependencies:
   build_runner: ^2.4.15 # Generator
   sqflite_common_ffi: ^2.3.5 # test sqflite Testing atau aplikasi desktop/CLI
   mocktail_image_network: ^0.3.0
+  mocktail: ^0.3.0
 #  test: ^1.25.15 # Unit test murni Dart (tanpa dependensi Flutter UI).
   flutter_test: # Widget test dan unit test yang bergantung pada Flutter framework.
     sdk: flutter
@@ -94,7 +95,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

@@ -1,5 +1,6 @@
 import 'package:ditonton_clean_architecture/common/exception.dart';
 import 'package:ditonton_clean_architecture/data/datasources/movies/movie_local_data_source.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/movie_table.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import '../../../dummy_data/dummy_objects.dart';
@@ -14,294 +15,230 @@ void main() {
     dataSource = MovieLocalDataSourceImpl(databaseHelper: mockDatabaseHelper);
   });
 
-  group('save watchlist', () {
-    test(
-      'should return success message when insert to database is success',
-      () async {
-        // arrange
+  group('Watchlist Operations', () {
+    group('insertWatchlist', () {
+      test('should return success message when insert succeeds', () async {
         when(
           mockDatabaseHelper.insertWatchlist(testMovieTable),
         ).thenAnswer((_) async => 1);
-        // act
+
         final result = await dataSource.insertWatchlist(testMovieTable);
-        // assert
-        expect(result, 'Added to Watchlist');
-      },
-    );
 
-    test(
-      'should throw DatabaseException when insert to database is failed',
-      () async {
-        // arrange
+        expect(result, 'Added to Watchlist');
+        verify(mockDatabaseHelper.insertWatchlist(testMovieTable));
+      });
+
+      test('should throw DatabaseException when insert fails', () async {
         when(
           mockDatabaseHelper.insertWatchlist(testMovieTable),
-        ).thenThrow(Exception());
-        // act
-        final call = dataSource.insertWatchlist(testMovieTable);
-        // assert
-        expect(() => call, throwsA(isA<DatabaseException>()));
-      },
-    );
-  });
+        ).thenThrow(Exception('Database error'));
 
-  group('remove watchlist', () {
-    test(
-      'should return success message when remove from database is success',
-      () async {
-        // arrange
+        final call = dataSource.insertWatchlist(testMovieTable);
+
+        await expectLater(() => call, throwsA(isA<DatabaseException>()));
+        verify(mockDatabaseHelper.insertWatchlist(testMovieTable));
+      });
+    });
+
+    group('removeWatchlist', () {
+      test('should return success message when remove succeeds', () async {
         when(
           mockDatabaseHelper.removeWatchlist(testMovieTable),
         ).thenAnswer((_) async => 1);
-        // act
-        final result = await dataSource.removeWatchlist(testMovieTable);
-        // assert
-        expect(result, 'Removed from Watchlist');
-      },
-    );
 
-    test(
-      'should throw DatabaseException when remove from database is failed',
-      () async {
-        // arrange
+        final result = await dataSource.removeWatchlist(testMovieTable);
+
+        expect(result, 'Removed from Watchlist');
+        verify(mockDatabaseHelper.removeWatchlist(testMovieTable));
+      });
+
+      test('should throw DatabaseException when remove fails', () async {
         when(
           mockDatabaseHelper.removeWatchlist(testMovieTable),
-        ).thenThrow(Exception());
-        // act
+        ).thenThrow(Exception('Database error'));
+
         final call = dataSource.removeWatchlist(testMovieTable);
-        // assert
-        expect(() => call, throwsA(isA<DatabaseException>()));
-      },
-    );
-  });
 
-  group('Get Movie Detail By Id', () {
-    final tId = 1;
-
-    test('should return Movie Detail Table when data is found', () async {
-      // arrange
-      when(
-        mockDatabaseHelper.getMovieById(tId),
-      ).thenAnswer((_) async => testMovieMap);
-      // act
-      final result = await dataSource.getMovieById(tId);
-      // assert
-      expect(result, testMovieTable);
+        await expectLater(() => call, throwsA(isA<DatabaseException>()));
+        verify(mockDatabaseHelper.removeWatchlist(testMovieTable));
+      });
     });
 
-    test('should return null when data is not found', () async {
-      // arrange
-      when(mockDatabaseHelper.getMovieById(tId)).thenAnswer((_) async => null);
-      // act
-      final result = await dataSource.getMovieById(tId);
-      // assert
-      expect(result, null);
-    });
-  });
+    group('getMovieById', () {
+      const tId = 1;
 
-  group('get watchlist movies', () {
-    test('should return list of MovieTable from database', () async {
-      // arrange
-      when(
-        mockDatabaseHelper.getWatchlistMovies(),
-      ).thenAnswer((_) async => [testMovieMap]);
-      // act
-      final result = await dataSource.getWatchlistMovies();
-      // assert
-      expect(result, [testMovieTable]);
-    });
-  });
-
-  group('cache now playing movies', () {
-    test('should call DatabaseHelper to clear and insert cache', () async {
-      // arrange
-      when(
-        mockDatabaseHelper.clearCache('now playing'),
-      ).thenAnswer((_) async => 1);
-      when(
-        mockDatabaseHelper.insertCacheTransaction([
-          testMovieTable,
-        ], 'now playing'),
-      ).thenAnswer((_) async {});
-      // act
-      await dataSource.cacheNowPlayingMovies([testMovieTable]);
-      // assert
-      verify(mockDatabaseHelper.clearCache('now playing'));
-      verify(
-        mockDatabaseHelper.insertCacheTransaction([
-          testMovieTable,
-        ], 'now playing'),
-      );
-    });
-  });
-
-  group('get cached now playing movies', () {
-    test(
-      'should return list of MovieTable when cache data is present',
-      () async {
-        // arrange
+      test('should return MovieTable when data exists', () async {
         when(
-          mockDatabaseHelper.getCacheMovies('now playing'),
-        ).thenAnswer((_) async => [testMovieMap]);
-        // act
-        final result = await dataSource.getCachedNowPlayingMovies();
-        // assert
-        expect(result, [testMovieTable]);
-      },
-    );
+          mockDatabaseHelper.getMovieById(tId),
+        ).thenAnswer((_) async => testMovieMap);
 
-    test('should throw CacheException when cache data is empty', () async {
-      // arrange
-      when(
-        mockDatabaseHelper.getCacheMovies('now playing'),
-      ).thenAnswer((_) async => []);
-      // act
-      final call = dataSource.getCachedNowPlayingMovies();
-      // assert
-      expect(() => call, throwsA(isA<CacheException>()));
-    });
-  });
+        final result = await dataSource.getMovieById(tId);
 
-  group('cache popular movies', () {
-    test('should call DatabaseHelper to clear and insert cache', () async {
-      // arrange
-      when(mockDatabaseHelper.clearCache('popular')).thenAnswer((_) async => 1);
-      when(
-        mockDatabaseHelper.insertCacheTransaction([testMovieTable], 'popular'),
-      ).thenAnswer((_) async {});
-      // act
-      await dataSource.cachePopularMovies([testMovieTable]);
-      // assert
-      verify(mockDatabaseHelper.clearCache('popular'));
-      verify(
-        mockDatabaseHelper.insertCacheTransaction([testMovieTable], 'popular'),
-      );
-    });
-  });
+        expect(result, testMovieTable);
+        verify(mockDatabaseHelper.getMovieById(tId));
+      });
 
-  group('get cached popular movies', () {
-    test(
-      'should return list of MovieTable when cache data is present',
-      () async {
-        // arrange
+      test('should return null when data does not exist', () async {
         when(
-          mockDatabaseHelper.getCacheMovies('popular'),
-        ).thenAnswer((_) async => [testMovieMap]);
-        // act
-        final result = await dataSource.getCachedPopularMovies();
-        // assert
-        expect(result, [testMovieTable]);
-      },
-    );
+          mockDatabaseHelper.getMovieById(tId),
+        ).thenAnswer((_) async => null);
 
-    test('should throw CacheException when cache data is empty', () async {
-      // arrange
-      when(
-        mockDatabaseHelper.getCacheMovies('popular'),
-      ).thenAnswer((_) async => []);
-      // act
-      final call = dataSource.getCachedPopularMovies();
-      // assert
-      expect(() => call, throwsA(isA<CacheException>()));
-    });
-  });
+        final result = await dataSource.getMovieById(tId);
 
-  group('cache top rated movies', () {
-    test('should call DatabaseHelper to clear and insert cache', () async {
-      // arrange
-      when(
-        mockDatabaseHelper.clearCache('top rated'),
-      ).thenAnswer((_) async => 1);
-      when(
-        mockDatabaseHelper.insertCacheTransaction([
-          testMovieTable,
-        ], 'top rated'),
-      ).thenAnswer((_) async {});
-      // act
-      await dataSource.cacheTopRatedMovies([testMovieTable]);
-      // assert
-      verify(mockDatabaseHelper.clearCache('top rated'));
-      verify(
-        mockDatabaseHelper.insertCacheTransaction([
-          testMovieTable,
-        ], 'top rated'),
-      );
-    });
-  });
+        expect(result, null);
+        verify(mockDatabaseHelper.getMovieById(tId));
+      });
 
-  group('get cached top rated movies', () {
-    test(
-      'should return list of MovieTable when cache data is present',
-      () async {
-        // arrange
+      test('should throw DatabaseException when query fails', () async {
         when(
-          mockDatabaseHelper.getCacheMovies('top rated'),
-        ).thenAnswer((_) async => [testMovieMap]);
-        // act
-        final result = await dataSource.getCachedTopRatedMovies();
-        // assert
-        expect(result, [testMovieTable]);
-      },
-    );
+          mockDatabaseHelper.getMovieById(tId),
+        ).thenThrow(DatabaseException('Database error'));
 
-    test('should throw CacheException when cache data is empty', () async {
-      // arrange
-      when(
-        mockDatabaseHelper.getCacheMovies('top rated'),
-      ).thenAnswer((_) async => []);
-      // act
-      final call = dataSource.getCachedTopRatedMovies();
-      // assert
-      expect(() => call, throwsA(isA<CacheException>()));
+        final call = dataSource.getMovieById(tId);
+
+        await expectLater(() => call, throwsA(isA<DatabaseException>()));
+      });
     });
-  });
 
-  group('cache upcoming movies', () {
-    test('should call DatabaseHelper to clear and insert cache', () async {
-      // arrange
-      when(
-        mockDatabaseHelper.clearCache('up coming'),
-      ).thenAnswer((_) async => 1);
-      when(
-        mockDatabaseHelper.insertCacheTransaction([
-          testMovieTable,
-        ], 'up coming'),
-      ).thenAnswer((_) async {});
-      // act
-      await dataSource.cacheUpComingMovies([testMovieTable]);
-      // assert
-      verify(mockDatabaseHelper.clearCache('up coming'));
-      verify(
-        mockDatabaseHelper.insertCacheTransaction([
-          testMovieTable,
-        ], 'up coming'),
-      );
-    });
-  });
-
-  group('get cached upcoming movies', () {
-    test(
-      'should return list of MovieTable when cache data is present',
-      () async {
-        // arrange
+    group('getWatchlistMovies', () {
+      test('should return list of MovieTable when data exists', () async {
         when(
-          mockDatabaseHelper.getCacheMovies('up coming'),
+          mockDatabaseHelper.getWatchlistMovies(),
         ).thenAnswer((_) async => [testMovieMap]);
-        // act
-        final result = await dataSource.getCachedUpComingMovies();
-        // assert
+
+        final result = await dataSource.getWatchlistMovies();
+
         expect(result, [testMovieTable]);
-      },
+        verify(mockDatabaseHelper.getWatchlistMovies());
+      });
+
+      test('should return empty list when no data exists', () async {
+        when(
+          mockDatabaseHelper.getWatchlistMovies(),
+        ).thenAnswer((_) async => []);
+
+        final result = await dataSource.getWatchlistMovies();
+
+        expect(result, isEmpty);
+        verify(mockDatabaseHelper.getWatchlistMovies());
+      });
+
+      test('should throw DatabaseException when query fails', () async {
+        when(
+          mockDatabaseHelper.getWatchlistMovies(),
+        ).thenThrow(DatabaseException('Database error'));
+
+        final call = dataSource.getWatchlistMovies();
+
+        await expectLater(() => call, throwsA(isA<DatabaseException>()));
+      });
+    });
+  });
+
+  group('Cache Operations', () {
+    final tMovies = [testMovieTable];
+
+    void verifyCacheOperations(
+      String category,
+      Future<void> Function(List<MovieTable>) cacheFunction,
+      Future<List<MovieTable>> Function() getCacheFunction,
+    ) {
+      group('$category movies', () {
+        test('should clear and insert cache successfully', () async {
+          when(
+            mockDatabaseHelper.clearCache(category),
+          ).thenAnswer((_) async => 1);
+          when(
+            mockDatabaseHelper.insertCacheTransaction(tMovies, category),
+          ).thenAnswer((_) async {});
+
+          await cacheFunction(tMovies);
+
+          verifyInOrder([
+            mockDatabaseHelper.clearCache(category),
+            mockDatabaseHelper.insertCacheTransaction(tMovies, category),
+          ]);
+        });
+
+        test('should throw DatabaseException when clearCache fails', () async {
+          when(
+            mockDatabaseHelper.clearCache(category),
+          ).thenThrow(Exception('Database error'));
+
+          final call = cacheFunction(tMovies);
+
+          await expectLater(() => call, throwsA(isA<DatabaseException>()));
+        });
+
+        test('should throw DatabaseException when insertCache fails', () async {
+          when(
+            mockDatabaseHelper.clearCache(category),
+          ).thenAnswer((_) async => 1);
+          when(
+            mockDatabaseHelper.insertCacheTransaction(tMovies, category),
+          ).thenThrow(Exception('Database error'));
+
+          final call = cacheFunction(tMovies);
+
+          await expectLater(() => call, throwsA(isA<DatabaseException>()));
+        });
+
+        test('should return cached movies when data exists', () async {
+          when(
+            mockDatabaseHelper.getCacheMovies(category),
+          ).thenAnswer((_) async => [testMovieMap]);
+
+          final result = await getCacheFunction();
+
+          expect(result, [testMovieTable]);
+          verify(mockDatabaseHelper.getCacheMovies(category));
+        });
+
+        test('should throw CacheException when cache is empty', () async {
+          when(
+            mockDatabaseHelper.getCacheMovies(category),
+          ).thenAnswer((_) async => []);
+
+          final call = getCacheFunction();
+
+          await expectLater(() => call, throwsA(isA<CacheException>()));
+          verify(mockDatabaseHelper.getCacheMovies(category));
+        });
+
+        test('should throw DatabaseException when getCache fails', () async {
+          when(
+            mockDatabaseHelper.getCacheMovies(category),
+          ).thenThrow(Exception('Database error'));
+
+          final call = getCacheFunction();
+
+          await expectLater(() => call, throwsA(isA<DatabaseException>()));
+        });
+      });
+    }
+
+    verifyCacheOperations(
+      'now playing',
+      (movies) => dataSource.cacheNowPlayingMovies(movies),
+      () => dataSource.getCachedNowPlayingMovies(),
     );
 
-    test('should throw CacheException when cache data is empty', () async {
-      // arrange
-      when(
-        mockDatabaseHelper.getCacheMovies('up coming'),
-      ).thenAnswer((_) async => []);
-      // act
-      final call = dataSource.getCachedUpComingMovies();
-      // assert
-      expect(() => call, throwsA(isA<CacheException>()));
-    });
+    verifyCacheOperations(
+      'popular',
+      (movies) => dataSource.cachePopularMovies(movies),
+      () => dataSource.getCachedPopularMovies(),
+    );
+
+    verifyCacheOperations(
+      'top rated',
+      (movies) => dataSource.cacheTopRatedMovies(movies),
+      () => dataSource.getCachedTopRatedMovies(),
+    );
+
+    verifyCacheOperations(
+      'up coming',
+      (movies) => dataSource.cacheUpComingMovies(movies),
+      () => dataSource.getCachedUpComingMovies(),
+    );
   });
 }

@@ -44,7 +44,7 @@ class TvDetailResponse extends Equatable {
   final List<CreatedByModel>? createdBy;
   final List<int>? episodeRunTime;
   final String? firstAirDate;
-  final List<GenreModel>? genres;
+  final List<GenreModel> genres;
   final String? homepage;
   final int? id;
   final bool? inProduction;
@@ -84,11 +84,8 @@ class TvDetailResponse extends Equatable {
                 ? []
                 : List<int>.from(json["episode_run_time"]!.map((x) => x)),
         firstAirDate: json["first_air_date"],
-        genres:
-            json["genres"] == null
-                ? []
-                : List<GenreModel>.from(
-                  json["genres"]!.map((x) => GenreModel.fromJson(x)),
+        genres: List<GenreModel>.from(
+                  json["genres"].map((x) => GenreModel.fromJson(x)),
                 ),
         homepage: json["homepage"],
         id: json["id"],
@@ -159,10 +156,7 @@ class TvDetailResponse extends Equatable {
             ? []
             : List<dynamic>.from(episodeRunTime!.map((x) => x)),
     "first_air_date": firstAirDate,
-    "genres":
-        genres == null
-            ? []
-            : List<dynamic>.from(genres!.map((x) => x.toJson())),
+    "genres": List<dynamic>.from(genres.map((x) => x.toJson())),
     "homepage": homepage,
     "id": id,
     "in_production": inProduction,
@@ -208,7 +202,7 @@ class TvDetailResponse extends Equatable {
       createdBy: createdBy?.map((createdBy) => createdBy.toEntity()).toList(),
       episodeRunTime: episodeRunTime,
       firstAirDate: firstAirDate,
-      genres: this.genres?.map((genre) => genre.toEntity()).toList(),
+      genres: this.genres.map((genre) => genre.toEntity()).toList(),
       homepage: homepage,
       id: id,
       inProduction: inProduction,

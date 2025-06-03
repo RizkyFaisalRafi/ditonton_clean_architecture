@@ -8,6 +8,15 @@ Repository ini merupakan project awal dan akhir submission kelas Flutter Expert 
 
 ---
 
+Run in Git Bash for Coverage
+Coverage App:
+flutter clean
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+flutter test --machine > tests.output
+flutter test --coverage
+genhtml coverage/lcov.info -o coverage/html --legend -t "Clean Architecture Submission Awal Expert" --function-coverage
+
 ## Tips Submission Awal
 
 Pastikan untuk memeriksa kembali seluruh hasil testing pada submissionmu sebelum dikirimkan. Karena kriteria pada submission ini akan diperiksa setelah seluruh berkas testing berhasil dijalankan.
