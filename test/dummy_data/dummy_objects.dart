@@ -1,4 +1,5 @@
 import 'package:ditonton_clean_architecture/data/models/movies/movie_table.dart';
+import 'package:ditonton_clean_architecture/data/models/tv_series/created_by_model.dart';
 import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart';
 import 'package:ditonton_clean_architecture/domain/entities/genre.dart';
 import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
@@ -17,7 +18,7 @@ final testMovie = Movie(
   id: 557,
   originalTitle: 'Spider-Man',
   overview:
-      'After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.',
+  'After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.',
   popularity: 60.441,
   posterPath: '/rweIrveL43TaxUN0akQEaAXL6x0.jpg',
   releaseDate: '2002-05-01',
@@ -36,7 +37,7 @@ final testTvSeries = TvSeries(
   originalLanguage: "de",
   originalName: "Gute Zeiten, schlechte Zeiten",
   overview:
-      "Gute Zeiten, schlechte Zeiten is a long-running German television soap opera, first broadcast on RTL in 1992. The programme concerns the lives of a fictional neighborhood in Germany's capital city Berlin. Over the years the soap opera tends to have an overhaul of young people in their late teens and early twenties; targeting a young viewership.",
+  "Gute Zeiten, schlechte Zeiten is a long-running German television soap opera, first broadcast on RTL in 1992. The programme concerns the lives of a fictional neighborhood in Germany's capital city Berlin. Over the years the soap opera tends to have an overhaul of young people in their late teens and early twenties; targeting a young viewership.",
   popularity: 677.2062,
   posterPath: "/qujVFLAlBnPU9mZElV4NZgL8iXT.jpg",
   firstAirDate: "1992-05-11",
@@ -147,7 +148,7 @@ final testTvDetail = TvDetail(
 final testMovieCache = MovieTable(
   id: 557,
   overview:
-      'After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.',
+  'After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.',
   posterPath: '/rweIrveL43TaxUN0akQEaAXL6x0.jpg',
   title: 'Spider-Man',
 );
@@ -155,7 +156,7 @@ final testMovieCache = MovieTable(
 final testTvCache = TvSeriesTable(
   id: 13945,
   overview:
-      "Gute Zeiten, schlechte Zeiten is a long-running German television soap opera, first broadcast on RTL in 1992. The programme concerns the lives of a fictional neighborhood in Germany's capital city Berlin. Over the years the soap opera tends to have an overhaul of young people in their late teens and early twenties; targeting a young viewership.",
+  "Gute Zeiten, schlechte Zeiten is a long-running German television soap opera, first broadcast on RTL in 1992. The programme concerns the lives of a fictional neighborhood in Germany's capital city Berlin. Over the years the soap opera tends to have an overhaul of young people in their late teens and early twenties; targeting a young viewership.",
   posterPath: '/qujVFLAlBnPU9mZElV4NZgL8iXT.jpg',
   name: 'Gute Zeiten, schlechte Zeiten',
 );
@@ -163,7 +164,7 @@ final testTvCache = TvSeriesTable(
 final testMovieCacheMap = {
   'id': 557,
   'overview':
-      'After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.',
+  'After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.',
   'posterPath': '/rweIrveL43TaxUN0akQEaAXL6x0.jpg',
   'title': 'Spider-Man',
 };
@@ -171,7 +172,7 @@ final testMovieCacheMap = {
 final testTvCacheMap = {
   'id': 13945,
   'overview':
-      "Gute Zeiten, schlechte Zeiten is a long-running German television soap opera, first broadcast on RTL in 1992. The programme concerns the lives of a fictional neighborhood in Germany's capital city Berlin. Over the years the soap opera tends to have an overhaul of young people in their late teens and early twenties; targeting a young viewership.",
+  "Gute Zeiten, schlechte Zeiten is a long-running German television soap opera, first broadcast on RTL in 1992. The programme concerns the lives of a fictional neighborhood in Germany's capital city Berlin. Over the years the soap opera tends to have an overhaul of young people in their late teens and early twenties; targeting a young viewership.",
   'posterPath': '/qujVFLAlBnPU9mZElV4NZgL8iXT.jpg',
   'name': 'Gute Zeiten, schlechte Zeiten',
 };
@@ -179,7 +180,7 @@ final testTvCacheMap = {
 final testMovieFromCache = Movie.watchlist(
   id: 557,
   overview:
-      'After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.',
+  'After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.',
   posterPath: '/rweIrveL43TaxUN0akQEaAXL6x0.jpg',
   title: 'Spider-Man',
 );
@@ -187,7 +188,7 @@ final testMovieFromCache = Movie.watchlist(
 final testTvFromCache = TvSeries.watchlist(
   id: 13945,
   overview:
-      "Gute Zeiten, schlechte Zeiten is a long-running German television soap opera, first broadcast on RTL in 1992. The programme concerns the lives of a fictional neighborhood in Germany's capital city Berlin. Over the years the soap opera tends to have an overhaul of young people in their late teens and early twenties; targeting a young viewership.",
+  "Gute Zeiten, schlechte Zeiten is a long-running German television soap opera, first broadcast on RTL in 1992. The programme concerns the lives of a fictional neighborhood in Germany's capital city Berlin. Over the years the soap opera tends to have an overhaul of young people in their late teens and early twenties; targeting a young viewership.",
   posterPath: '/qujVFLAlBnPU9mZElV4NZgL8iXT.jpg',
   name: 'Gute Zeiten, schlechte Zeiten',
 );
@@ -233,3 +234,12 @@ final testTvMap = {
   'posterPath': 'posterPath',
   'name': 'name',
 };
+
+final testCreatedByModel = CreatedByModel(
+  id: 1,
+  creditId: 'creditId',
+  name: 'Creator Name',
+  gender: 1,
+  profilePath: 'profilePath.jpg',
+);
+

@@ -32,87 +32,120 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
 
   @override
   Future<List<TvModel>> getAiringToday() async {
-    final response = await client.get(
-      Uri.parse('$BASE_URL/tv/airing_today?$API_KEY'),
-    );
+    try {
+      final response = await client.get(
+        Uri.parse('$BASE_URL/tv/airing_today?$API_KEY'),
+      );
 
-    if (response.statusCode == 200) {
-      return TvResponse.fromJson(json.decode(response.body)).tvList;
-    } else {
+      if (response.statusCode == 200) {
+        return TvResponse.fromJson(json.decode(response.body)).tvList;
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }
 
   @override
   Future<List<TvModel>> getOnTheAir() async {
-    final response = await client.get(
-      Uri.parse('$BASE_URL/tv/on_the_air?$API_KEY'),
-    );
+    try {
+      final response = await client.get(
+        Uri.parse('$BASE_URL/tv/on_the_air?$API_KEY'),
+      );
 
-    if (response.statusCode == 200) {
-      return TvResponse.fromJson(json.decode(response.body)).tvList;
-    } else {
+      if (response.statusCode == 200) {
+        return TvResponse.fromJson(json.decode(response.body)).tvList;
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }
 
   @override
   Future<List<TvModel>> getPopularTv() async {
-    final response = await client.get(Uri.parse('$BASE_URL/tv/popular?$API_KEY'));
+    try {
+      final response = await client.get(
+        Uri.parse('$BASE_URL/tv/popular?$API_KEY'),
+      );
 
-    if(response.statusCode == 200) {
-      return TvResponse.fromJson(jsonDecode(response.body)).tvList;
-    } else {
+      if (response.statusCode == 200) {
+        return TvResponse.fromJson(jsonDecode(response.body)).tvList;
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }
 
   @override
   Future<List<TvModel>> getTopRatedTv() async {
-    final response = await client.get(Uri.parse('$BASE_URL/tv/top_rated?$API_KEY'));
+    try {
+      final response = await client.get(
+        Uri.parse('$BASE_URL/tv/top_rated?$API_KEY'),
+      );
 
-    if(response.statusCode == 200) {
-      return TvResponse.fromJson(jsonDecode(response.body)).tvList;
-    } else {
+      if (response.statusCode == 200) {
+        return TvResponse.fromJson(jsonDecode(response.body)).tvList;
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }
 
   @override
   Future<TvDetailResponse> getTvDetail(int id) async {
-    final response = await client.get(Uri.parse('$BASE_URL/tv/$id?$API_KEY'));
+    final url = Uri.parse('$BASE_URL/tv/$id?$API_KEY');
 
-    if (response.statusCode == 200) {
-      return TvDetailResponse.fromJson(json.decode(response.body));
-    } else {
+    try {
+      final response = await client.get(url);
+
+      if (response.statusCode == 200) {
+        return TvDetailResponse.fromJson(json.decode(response.body));
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }
 
   @override
   Future<List<TvModel>> getTvRecommendations(int id) async {
-    final response = await client.get(
-      Uri.parse('$BASE_URL/tv/$id/recommendations?$API_KEY'),
-    );
+    try {
+      final response = await client.get(
+        Uri.parse('$BASE_URL/tv/$id/recommendations?$API_KEY'),
+      );
 
-    if (response.statusCode == 200) {
-      return TvResponse.fromJson(json.decode(response.body)).tvList;
-    } else {
+      if (response.statusCode == 200) {
+        return TvResponse.fromJson(json.decode(response.body)).tvList;
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }
 
   @override
   Future<List<TvModel>> searchTvSeries(String query) async {
-    final response = await client.get(
-      Uri.parse('$BASE_URL/search/tv?$API_KEY&query=$query'),
-    );
+    try {
+      final response = await client.get(
+        Uri.parse('$BASE_URL/search/tv?$API_KEY&query=$query'),
+      );
 
-    if (response.statusCode == 200) {
-      return TvResponse.fromJson(json.decode(response.body)).tvList;
-    } else {
+      if (response.statusCode == 200) {
+        return TvResponse.fromJson(json.decode(response.body)).tvList;
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }
-
 }

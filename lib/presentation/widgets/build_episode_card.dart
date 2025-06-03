@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-
 import '../../common/constants.dart';
 import '../../common/utils.dart';
 
+String formatAirDate(String? airDate) {
+  return 'Air Date: ${airDate ?? 'Air Date Is Not Available'}';
+}
+
 Widget buildEpisodeCard(
-    BuildContext context, {
-      required String title,
-      required String? name,
-      required String? airDate,
-      required String? overview,
-      required String? imagePath,
-      required int? runtime,
-    }) {
+  BuildContext context, {
+  required String title,
+  required String? name,
+  required String? airDate,
+  required String? overview,
+  required String? imagePath,
+  required int? runtime,
+}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -46,7 +49,7 @@ Widget buildEpisodeCard(
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Air Date: ${airDate ?? ' Air Date Is Not Available'}',
+                      formatAirDate(airDate),
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     const SizedBox(height: 4),

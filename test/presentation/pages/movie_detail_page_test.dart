@@ -7,7 +7,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-
 import '../../dummy_data/dummy_objects.dart';
 import 'movie_detail_page_test.mocks.dart';
 
@@ -70,7 +69,7 @@ void main() {
         when(mockNotifier.isAddedToWatchlist).thenReturn(false);
         when(mockNotifier.watchlistMessage).thenReturn('Added to Watchlist');
 
-        final watchlistButton = find.byType(ElevatedButton);
+        final watchlistButton = find.byType(FilledButton);
 
         await tester.pumpWidget(_makeTestableWidget(MovieDetailPage(id: 1)));
 
@@ -93,7 +92,7 @@ void main() {
         when(mockNotifier.isAddedToWatchlist).thenReturn(false);
         when(mockNotifier.watchlistMessage).thenReturn('Failed');
 
-        final watchlistButton = find.byType(ElevatedButton);
+        final watchlistButton = find.byType(FilledButton);
 
         await tester.pumpWidget(_makeTestableWidget(MovieDetailPage(id: 1)));
 

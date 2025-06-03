@@ -119,7 +119,11 @@ class DatabaseHelper {
 
   Future<int> insertWatchlist(MovieTable movie) async {
     final db = await database;
-    return await db!.insert(_tblWatchlist, movie.toJson());
+    return await db!.insert(
+      _tblWatchlist,
+      movie.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace, // Data lama diganti baru
+    );
   }
 
   Future<int> removeWatchlist(MovieTable movie) async {
@@ -179,7 +183,11 @@ class DatabaseHelper {
   // untuk insert TV Series ke watchlist
   Future<int> insertWatchlistTv(TvSeriesTable tvTable) async {
     final db = await database;
-    return await db!.insert(_tblWatchlistTv, tvTable.toJson());
+    return await db!.insert(
+      _tblWatchlistTv,
+      tvTable.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace, // Data lama diganti baru
+    );
   }
 
   // untuk menghapus TV Series dari watchlist
