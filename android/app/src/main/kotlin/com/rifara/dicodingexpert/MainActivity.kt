@@ -1,4 +1,4 @@
-package com.example.ditonton_clean_architecture
+package com.rifara.dicodingexpert
 
 import io.flutter.embedding.android.FlutterActivity
 

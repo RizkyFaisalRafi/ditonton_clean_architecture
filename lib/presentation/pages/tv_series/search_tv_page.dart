@@ -1,6 +1,8 @@
 import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_search_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/widgets/error_state_widget.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/tv_card.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../../common/constants.dart';
 import '../../../common/state_enum.dart';
@@ -41,17 +43,25 @@ class SearchTvPage extends StatelessWidget {
               child: Consumer<TvSearchNotifier>(
                 builder: (context, data, child) {
                   if (data.state == RequestState.Loading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (data.state == RequestState.Error) {
                     return Center(
-                      child: Text(
-                        data.message,
-                        style: TextStyle(color: Colors.red),
+                      child: Lottie.asset(
+                        'assets/image_lottie/loading_elephant.json',
+                        width: 300,
+                        height: 300,
+                        fit: BoxFit.fill,
                       ),
+                    );
+                  } else if (data.state == RequestState.Error) {
+                    return ErrorStateWidget(
+                      message: data.message,
+                      title: 'Tv Series',
                     );
                   } else if (data.state == RequestState.Loaded) {
                     if (data.searchResult.isEmpty) {
-                      return const Center(child: Text('No results found'));
+                      return ErrorStateWidget(
+                        message: 'No results found',
+                        title: 'Tv Series',
+                      );
                     }
                     return ListView.builder(
                       padding: const EdgeInsets.all(8),
@@ -62,9 +72,22 @@ class SearchTvPage extends StatelessWidget {
                       itemCount: data.searchResult.length,
                     );
                   } else {
-                    // Initial state before searching
-                    return const Center(
-                      child: Text('Enter a TV series title to search'),
+                    // Initial state
+                    return Center(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Lottie.asset(
+                              'assets/image_lottie/search_tv.json',
+                              width: 300,
+                              height: 300,
+                              fit: BoxFit.fill,
+                            ),
+                            Text('Search TV Series', style: kHeading6),
+                          ],
+                        ),
+                      ),
                     );
                   }
                 },

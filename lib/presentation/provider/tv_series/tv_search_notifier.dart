@@ -20,18 +20,25 @@ class TvSearchNotifier extends ChangeNotifier {
 
   String get message => _message;
 
-  Future<void> fetchTvSearch(String query) async {
+  bool _isQueryValid(String query) {
     // Validasi Empty
-    if (query.isEmpty) {
-      _state = RequestState.Error;
+    if (query.trim().isEmpty) {
       _message = 'Query cannot be empty';
-      notifyListeners();
-      return;
+      return false;
     }
     // Validasi karakter khusus
-    if (RegExp(r'[!@#\$%^&*(),.?":{}|<>]').hasMatch(query)) {
-      _state = RequestState.Error;
+    if (RegExp(r'[!@#$%^&*(),.?"{}|<>]').hasMatch(query)) {
       _message = 'Query contains invalid characters';
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<void> fetchTvSearch(String query) async {
+    // Validasi
+    if (!_isQueryValid(query)) {
+      _state = RequestState.Error;
       notifyListeners();
       return;
     }
@@ -43,8 +50,8 @@ class TvSearchNotifier extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        _message = failure.message;
         _state = RequestState.Error;
+        _message = failure.message;
         notifyListeners();
       },
       (data) {

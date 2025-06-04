@@ -7,15 +7,33 @@
 Repository ini merupakan project awal dan akhir submission kelas Flutter Expert Dicoding Indonesia 2025.
 
 ---
+Negative Case:
+Search
+- When Loading Data Add Lottie (Movie Tv) Done TV Movie
+- When Search Query Not Found (Movie, Tv) Done TV Movie
+- When Search Empty Query (Movie, Tv) Done TV Movie
+- When Search Invalid Characters Query (Movie, Tv) Done TV Movie
+- When Search No Internet (Movie, Tv) Done TV Movie
+- When Search Error All Status Code (Movie, Tv) Done TV Movie
+
+Load Data Movie and TV Series
+- When Load Data Failed Error No Connection
+- When Load Data Failed Error Empty Data
+- When Load Data Failed Error API
+
+Watchlist
+- When Watchlist Data Empty Add Lottie Animation (Movie, TV)
+- When Watchlist Data Error Database (Movie,TV)
+
 
 Run in Git Bash for Coverage
 Coverage App:
-flutter clean
-flutter pub get
-dart run build_runner build --delete-conflicting-outputs
-flutter test --machine > tests.output
-flutter test --coverage
-genhtml coverage/lcov.info -o coverage/html --legend -t "Clean Architecture Submission Awal Expert" --function-coverage
+- flutter clean
+- flutter pub get
+- dart run build_runner build --delete-conflicting-outputs
+- flutter test --machine > tests.output
+- flutter test --coverage
+- genhtml coverage/lcov.info -o coverage/html --legend -t "Clean Architecture Submission Awal Expert" --function-coverage
 
 ## Tips Submission Awal
 
