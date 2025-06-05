@@ -31,11 +31,11 @@ SeeMore Movies
 - When Load Data Failed Error API/Cached Error (Done Popular, Top Rated, Up Coming)
 
 SeeMore TV Series
-- Refresh Page ()
-- Pagination / Infinite Scrolling ()
-- When Load Data Failed Error Empty Data ()
+- Refresh Page (Done On The Air, Popular, Top Rated)
+- Pagination / Infinite Scrolling (Done On The Air, Popular, Top Rated)
+- When Load Data Failed Error Empty Data (Done On The Air, Popular, Top Rated)
 - When Load Data Failed Error No Connection (Handle di Cache)
-- When Load Data Failed Error API/Cached Error ()
+- When Load Data Failed Error API/Cached Error (Done On The Air, Popular, Top Rated)
 
 DetailPage
 - Refresh Page ()

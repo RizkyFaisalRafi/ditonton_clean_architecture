@@ -1,26 +1,26 @@
-import 'package:ditonton_clean_architecture/presentation/provider/tv_series/popular_tv_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/tv_series/on_the_air_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/widgets/tv_card.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../common/state_enum.dart';
 import '../../widgets/error_state_widget.dart';
-import '../../widgets/tv_card.dart';
 
-class PopularTvPage extends StatelessWidget {
-  static const ROUTE_NAME = '/popular-tv';
+class OnTheAirTvPage extends StatelessWidget {
+  static const ROUTE_NAME = '/on-the-air-tv';
 
-  const PopularTvPage({super.key});
+  const OnTheAirTvPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<PopularTvNotifier>(context);
+    final provider = Provider.of<OnTheAirNotifier>(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Popular Tv Series')),
+      appBar: AppBar(title: Text('On The Air Tv Series')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer<PopularTvNotifier>(
+        child: Consumer<OnTheAirNotifier>(
           builder: (context, data, child) {
             if (data.state == RequestState.Loading) {
               return Center(
@@ -37,6 +37,7 @@ class PopularTvPage extends StatelessWidget {
                   message: 'No tv series available.',
                 );
               }
+
               return SmartRefresher(
                 controller: provider.refreshC,
                 enablePullDown: true,
@@ -81,10 +82,10 @@ class PopularTvPage extends StatelessWidget {
                   },
                 ),
                 child: ListView.builder(
-                  controller: provider.scrollController,
+                  controller: data.scrollController,
                   itemBuilder: (context, index) {
-                    final popularTv = data.tvSeriesList[index];
-                    return TvCard(tv: popularTv);
+                    final onTheAirTv = data.tvSeriesList[index];
+                    return TvCard(tv: onTheAirTv);
                   },
                   itemCount: data.tvSeriesList.length,
                 ),
@@ -94,6 +95,10 @@ class PopularTvPage extends StatelessWidget {
                 message: data.message,
                 onRetry: () => data.onRefresh(),
               );
+              // return Center(
+              //   key: Key('error_message'),
+              //   child: Text(data.message),
+              // );
             }
           },
         ),

@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
-import 'package:ditonton_clean_architecture/presentation/pages/tv_series/on_the_air_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/popular_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/search_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/top_rated_tv_page.dart';
@@ -13,6 +12,7 @@ import '../../../common/constants.dart';
 import '../../../common/state_enum.dart';
 import '../../provider/tv_series/tv_list_notifier.dart';
 import '../../widgets/error_state_widget.dart';
+import 'on_the_air_tv_page.dart';
 
 class TvSeriesPage extends StatelessWidget {
   static const ROUTE_NAME = '/tv-series';
@@ -133,7 +133,7 @@ class TvSeriesPage extends StatelessWidget {
                   onTap: () {
                     return Navigator.pushNamed(
                       context,
-                      OnTheAirPage.ROUTE_NAME,
+                      OnTheAirTvPage.ROUTE_NAME,
                     );
                   },
                 ),
