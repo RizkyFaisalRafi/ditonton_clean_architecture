@@ -5,8 +5,10 @@ import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
 import 'package:ditonton_clean_architecture/domain/entities/movies/movie_detail.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
+import 'package:ditonton_clean_architecture/presentation/widgets/error_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class MovieDetailPage extends StatefulWidget {
@@ -42,7 +44,14 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
       body: Consumer<MovieDetailNotifier>(
         builder: (context, provider, child) {
           if (provider.movieState == RequestState.Loading) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: Lottie.asset(
+                'assets/image_lottie/loading_bar.json',
+                width: 100,
+                height: 100,
+                fit: BoxFit.fill,
+              ),
+            );
           } else if (provider.movieState == RequestState.Loaded) {
             final movie = provider.movie;
             return SafeArea(
@@ -53,7 +62,12 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               ),
             );
           } else {
-            return Text(provider.message);
+            return Center(
+              child: ErrorStateWidget2(
+                message: provider.message,
+                onRetry: () => provider.fetchMovieDetail(widget.id),
+              ),
+            );
           }
         },
       ),
@@ -107,7 +121,6 @@ class DetailContent extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
                             Text(movie.title, style: kHeading5),
 
                             FilledButton(

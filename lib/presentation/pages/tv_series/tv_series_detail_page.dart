@@ -4,11 +4,13 @@ import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_detail_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../../common/constants.dart';
 import '../../../common/state_enum.dart';
 import '../../../common/utils.dart';
 import '../../widgets/build_episode_card.dart';
+import '../../widgets/error_state_widget.dart';
 
 class TvSeriesDetailPage extends StatefulWidget {
   static const ROUTE_NAME = '/detail-tv-series';
@@ -43,7 +45,14 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
       body: Consumer<TvDetailNotifier>(
         builder: (context, provider, child) {
           if (provider.tvState == RequestState.Loading) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: Lottie.asset(
+                'assets/image_lottie/loading_bar.json',
+                width: 100,
+                height: 100,
+                fit: BoxFit.fill,
+              ),
+            );
           } else if (provider.tvState == RequestState.Loaded) {
             final tvDetail = provider.tvDetail;
             return SafeArea(
@@ -54,7 +63,12 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
               ),
             );
           } else {
-            return Text(provider.message);
+            return Center(
+              child: ErrorStateWidget2(
+                message: provider.message,
+                onRetry: () => provider.fetchTvDetail(widget.id),
+              ),
+            );
           }
         },
       ),
