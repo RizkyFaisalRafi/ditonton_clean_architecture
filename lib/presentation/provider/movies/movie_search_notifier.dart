@@ -17,7 +17,29 @@ class MovieSearchNotifier extends ChangeNotifier {
   String _message = '';
   String get message => _message;
 
+  bool _isQueryValid(String query) {
+    // Validasi Empty
+    if (query.trim().isEmpty) {
+      _message = 'Query cannot be empty';
+      return false;
+    }
+    // Validasi karakter khusus
+    if (RegExp(r'[!@#$%^&*(),.?"{}|<>]').hasMatch(query)) {
+      _message = 'Query contains invalid characters';
+      return false;
+    }
+
+    return true;
+  }
+
   Future<void> fetchMovieSearch(String query) async {
+    // Validasi
+    if (!_isQueryValid(query)) {
+      _state = RequestState.Error;
+      notifyListeners();
+      return;
+    }
+
     _state = RequestState.Loading;
     notifyListeners();
 

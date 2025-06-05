@@ -8,7 +8,7 @@ class GetOnTheAirTv {
 
   GetOnTheAirTv(this.repository);
 
-  Future<Either<Failure, List<TvSeries>>> execute() {
-    return repository.getOnTheAir();
+  Future<Either<Failure, List<TvSeries>>> execute(int page) {
+    return repository.getOnTheAir(page: page);
   }
 }

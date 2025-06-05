@@ -6,13 +6,13 @@ import 'package:ditonton_clean_architecture/common/exception.dart';
 import 'package:http/http.dart' as http;
 
 abstract class MovieRemoteDataSource {
-  Future<List<MovieModel>> getNowPlayingMovies();
+  Future<List<MovieModel>> getNowPlayingMovies({required int page});
 
-  Future<List<MovieModel>> getPopularMovies();
+  Future<List<MovieModel>> getPopularMovies({required int page});
 
-  Future<List<MovieModel>> getTopRatedMovies();
+  Future<List<MovieModel>> getTopRatedMovies({required int page});
 
-  Future<List<MovieModel>> getUpComingMovies();
+  Future<List<MovieModel>> getUpComingMovies({required int page});
 
   Future<MovieDetailResponse> getMovieDetail(int id);
 
@@ -30,10 +30,12 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   MovieRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<MovieModel>> getNowPlayingMovies() async {
+  Future<List<MovieModel>> getNowPlayingMovies({
+    int page = 1, // Default value
+  }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/movie/now_playing?$API_KEY'),
+        Uri.parse('$BASE_URL/movie/now_playing?$API_KEY&page=$page'),
       );
 
       if (response.statusCode == 200) {
@@ -81,10 +83,12 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }
 
   @override
-  Future<List<MovieModel>> getPopularMovies() async {
+  Future<List<MovieModel>> getPopularMovies({
+    int page = 1, // Default value
+  }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/movie/popular?$API_KEY'),
+        Uri.parse('$BASE_URL/movie/popular?$API_KEY&page=$page'),
       );
 
       if (response.statusCode == 200) {
@@ -98,10 +102,12 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }
 
   @override
-  Future<List<MovieModel>> getTopRatedMovies() async {
+  Future<List<MovieModel>> getTopRatedMovies({
+    int page = 1, // Default value
+  }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/movie/top_rated?$API_KEY'),
+        Uri.parse('$BASE_URL/movie/top_rated?$API_KEY&page=$page'),
       );
 
       if (response.statusCode == 200) {
@@ -115,10 +121,12 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }
 
   @override
-  Future<List<MovieModel>> getUpComingMovies() async {
+  Future<List<MovieModel>> getUpComingMovies({
+    int page = 1, // Default value
+  }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/movie/upcoming?$API_KEY'),
+        Uri.parse('$BASE_URL/movie/upcoming?$API_KEY&page=$page'),
       );
 
       if (response.statusCode == 200) {

@@ -4,13 +4,13 @@ import 'package:ditonton_clean_architecture/domain/entities/tv/tv_detail.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 
 abstract class TvSeriesRepository {
-  Future<Either<Failure, List<TvSeries>>> getAiringToday();
+  Future<Either<Failure, List<TvSeries>>> getAiringToday({required int page});
 
-  Future<Either<Failure, List<TvSeries>>> getOnTheAir();
+  Future<Either<Failure, List<TvSeries>>> getOnTheAir({required int page});
 
-  Future<Either<Failure, List<TvSeries>>> getPopularTv();
+  Future<Either<Failure, List<TvSeries>>> getPopularTv({required int page});
 
-  Future<Either<Failure, List<TvSeries>>> getTopRatedTv();
+  Future<Either<Failure, List<TvSeries>>> getTopRatedTv({required int page});
 
   Future<Either<Failure, TvDetail>> getTvDetail(int id);
 
@@ -25,5 +25,4 @@ abstract class TvSeriesRepository {
   Future<bool> isAddedToWatchlist(int id);
 
   Future<Either<Failure, List<TvSeries>>> getWatchlistTv();
-
 }

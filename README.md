@@ -7,15 +7,55 @@
 Repository ini merupakan project awal dan akhir submission kelas Flutter Expert Dicoding Indonesia 2025.
 
 ---
+Negative Case:
+Search
+- When Loading Data Add Lottie (Movie Tv) Done TV Movie
+- When Search Query Not Found (Movie, Tv) Done TV Movie
+- When Search Empty Query (Movie, Tv) Done TV Movie
+- When Search Invalid Characters Query (Movie, Tv) Done TV Movie
+- When Search No Internet (Movie, Tv) Done TV Movie
+- When Search Error All Status Code (Movie, Tv) Done TV Movie
+
+Load Data Movie and TV Series
+- Refresh Page (Done Movie, TV)
+- Pagination / Infinite Scrolling (Done Movie TV)
+- When Load Data Failed Error No Connection (Done Movie TV)
+- When Load Data Failed Error Empty Data (Done Movie TV)
+- When Load Data Failed Error API/Cached Error (Done Movie TV)
+
+SeeMore Movies
+- Refresh Page (Done Popular, Top Rated, Up Coming)
+- Pagination / Infinite Scrolling (Done Popular, Top Rated, Up Coming)
+- When Load Data Failed Error Empty Data (Done Popular, Top Rated, Up Coming)
+- When Load Data Failed Error No Connection (Handle di Cache)
+- When Load Data Failed Error API/Cached Error (Done Popular, Top Rated, Up Coming)
+
+SeeMore TV Series
+- Refresh Page (Done On The Air, Popular, Top Rated)
+- Pagination / Infinite Scrolling (Done On The Air, Popular, Top Rated)
+- When Load Data Failed Error Empty Data (Done On The Air, Popular, Top Rated)
+- When Load Data Failed Error No Connection (Handle di Cache)
+- When Load Data Failed Error API/Cached Error (Done On The Air, Popular, Top Rated)
+
+DetailPage
+- Refresh Page ()
+- Pagination / Infinite Scrolling ()
+- When Load Data Failed Error No Connection ()
+- When Load Data Failed Error API/Cached Error ()
+
+Watchlist
+- When Watchlist Data Empty Add Lottie Animation (Movie, TV)
+- When Watchlist Data Error Database (Movie,TV)
+
 
 Run in Git Bash for Coverage
 Coverage App:
-flutter clean
-flutter pub get
-dart run build_runner build --delete-conflicting-outputs
-flutter test --machine > tests.output
-flutter test --coverage
-genhtml coverage/lcov.info -o coverage/html --legend -t "Clean Architecture Submission Awal Expert" --function-coverage
+- flutter clean
+- flutter pub get
+- dart run build_runner build --delete-conflicting-outputs
+- flutter test --machine > tests.output
+- flutter test --coverage
+- genhtml coverage/lcov.info -o coverage/html --legend -t "Clean Architecture Submission Awal Expert" --function-coverage
 
 ## Tips Submission Awal
 

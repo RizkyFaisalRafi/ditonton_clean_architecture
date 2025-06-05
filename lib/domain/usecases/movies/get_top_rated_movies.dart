@@ -8,7 +8,7 @@ class GetTopRatedMovies {
 
   GetTopRatedMovies(this.repository);
 
-  Future<Either<Failure, List<Movie>>> execute() {
-    return repository.getTopRatedMovies();
+  Future<Either<Failure, List<Movie>>> execute(int page) {
+    return repository.getTopRatedMovies(page: page);
   }
 }
