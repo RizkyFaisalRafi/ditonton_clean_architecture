@@ -77,7 +77,6 @@ class PopularMoviesNotifier extends ChangeNotifier {
       // Clear data lama
       _movies.clear();
 
-      // Jalankan semua secara paralel
       await fetchPopularMovies();
 
       refreshC.refreshCompleted(); // Beritahu UI Bahwa Refresh Completed

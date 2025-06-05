@@ -140,13 +140,14 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
 
   @override
   Future<Either<Failure, TvDetail>> getTvDetail(int id) async {
-    networkInfo.isConnected;
-    try {
-      final result = await remoteDataSource.getTvDetail(id);
-      return Right(result.toEntity());
-    } on ServerException {
-      return Left(ServerFailure(''));
-    } on SocketException {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getTvDetail(id);
+        return Right(result.toEntity());
+      } on ServerException {
+        return Left(ServerFailure(''));
+      }
+    } else {
       return Left(ConnectionFailure('Failed to connect to the network'));
     }
   }

@@ -81,13 +81,14 @@ class MovieRepositoryImpl implements MovieRepository {
 
   @override
   Future<Either<Failure, MovieDetail>> getMovieDetail(int id) async {
-    networkInfo.isConnected;
-    try {
-      final result = await remoteDataSource.getMovieDetail(id);
-      return Right(result.toEntity());
-    } on ServerException {
-      return Left(ServerFailure(''));
-    } on SocketException {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getMovieDetail(id);
+        return Right(result.toEntity());
+      } on ServerException {
+        return Left(ServerFailure(''));
+      }
+    } else {
       return Left(ConnectionFailure('Failed to connect to the network'));
     }
   }

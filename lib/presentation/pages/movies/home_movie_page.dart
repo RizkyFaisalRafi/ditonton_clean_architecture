@@ -59,10 +59,10 @@ class HomeMoviePage extends StatelessWidget {
               },
             ),
 
-            /// Watchlist Navigation Drawer
+            /// Watchlist Movie Navigation Drawer
             ListTile(
               leading: Icon(Icons.save_alt),
-              title: Text('Watchlist'),
+              title: Text('Watchlist Movie'),
               onTap: () {
                 Navigator.pushNamed(context, WatchlistMoviesPage.ROUTE_NAME);
               },

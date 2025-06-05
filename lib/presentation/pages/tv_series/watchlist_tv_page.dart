@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../common/constants.dart';
 import '../../provider/tv_series/watchlist_tv_notifier.dart';
+import '../../widgets/error_state_widget.dart';
 
 class WatchlistTvPage extends StatefulWidget {
   static const ROUTE_NAME = '/watchlist-tv';
@@ -58,6 +59,9 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
             if (data.watchlistState == RequestState.Loading) {
               return Center(child: CircularProgressIndicator());
             } else if (data.watchlistState == RequestState.Loaded) {
+              if(data.watchlistTv.isEmpty) {
+                return const EmptyStateWidget(message: 'No Watchlist Available.');
+              }
               return ListView.builder(
                 itemBuilder: (context, index) {
                   final tv = data.watchlistTv[index];
@@ -66,10 +70,11 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
                 itemCount: data.watchlistTv.length,
               );
             } else {
-              return Center(
-                key: Key('error_message'),
-                child: Text(data.message),
-              );
+              return EmptyStateWidget(message: data.message);
+              // return Center(
+              //   key: Key('error_message'),
+              //   child: Text(data.message),
+              // );
             }
           },
         ),

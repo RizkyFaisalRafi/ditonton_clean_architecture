@@ -38,14 +38,13 @@ SeeMore TV Series
 - When Load Data Failed Error API/Cached Error (Done On The Air, Popular, Top Rated)
 
 DetailPage
-- Refresh Page ()
-- Pagination / Infinite Scrolling ()
-- When Load Data Failed Error No Connection ()
-- When Load Data Failed Error API/Cached Error ()
+- Refresh Page (Done Movie TV)
+- When Load Data Failed Error No Connection (Done Movie TV)
+- When Load Data Failed Error Other Status Code (Done Movie TV)
 
-Watchlist
-- When Watchlist Data Empty Add Lottie Animation (Movie, TV)
-- When Watchlist Data Error Database (Movie,TV)
+Watchlist Movie TV
+- When Watchlist Data Empty Add Lottie Animation (Done Movie TV)
+- When Watchlist Data Error Database (Done Movie TV)
 
 
 Run in Git Bash for Coverage
