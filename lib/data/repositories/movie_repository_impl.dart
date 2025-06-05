@@ -53,10 +53,12 @@ class MovieRepositoryImpl implements MovieRepository {
    * terdeteksi pada NetworkInfo. Kita bisa menghapusnya untuk mengurangi duplikasi.
    */
   @override
-  Future<Either<Failure, List<Movie>>> getNowPlayingMovies() async {
+  Future<Either<Failure, List<Movie>>> getNowPlayingMovies({
+    required int page,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getNowPlayingMovies();
+        final result = await remoteDataSource.getNowPlayingMovies(page: page);
         // Memanggil cacheNowPlayingMovies
         localDataSource.cacheNowPlayingMovies(
           result.map((movie) => MovieTable.fromDTO(movie)).toList(),
@@ -116,10 +118,12 @@ class MovieRepositoryImpl implements MovieRepository {
   // }
 
   @override
-  Future<Either<Failure, List<Movie>>> getPopularMovies() async {
+  Future<Either<Failure, List<Movie>>> getPopularMovies({
+    required int page,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getPopularMovies();
+        final result = await remoteDataSource.getPopularMovies(page: page);
         // Memanggil cachePopularMovies
         localDataSource.cachePopularMovies(
           result.map((movie) => MovieTable.fromDTO(movie)).toList(),
@@ -141,10 +145,12 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getTopRatedMovies() async {
+  Future<Either<Failure, List<Movie>>> getTopRatedMovies({
+    required int page,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getTopRatedMovies();
+        final result = await remoteDataSource.getTopRatedMovies(page: page);
         // Memanggil cacheTopRatedMovies
         localDataSource.cacheTopRatedMovies(
           result.map((movie) => MovieTable.fromDTO(movie)).toList(),
@@ -166,10 +172,12 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> getUpComingMovies() async {
+  Future<Either<Failure, List<Movie>>> getUpComingMovies({
+    required int page,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getUpComingMovies();
+        final result = await remoteDataSource.getUpComingMovies(page: page);
         // Memanggil cacheUpComingMovies
         localDataSource.cacheUpComingMovies(
           result.map((movie) => MovieTable.fromDTO(movie)).toList(),

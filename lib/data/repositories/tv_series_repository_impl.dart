@@ -23,10 +23,12 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
   });
 
   @override
-  Future<Either<Failure, List<TvSeries>>> getAiringToday() async {
+  Future<Either<Failure, List<TvSeries>>> getAiringToday({
+    required int page,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getAiringToday();
+        final result = await remoteDataSource.getAiringToday(page: page);
 
         // Memanggil cacheAiringTodayTvSeries
         localDataSource.cacheAiringTodayTvSeries(
@@ -50,10 +52,12 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
   }
 
   @override
-  Future<Either<Failure, List<TvSeries>>> getOnTheAir() async {
+  Future<Either<Failure, List<TvSeries>>> getOnTheAir({
+    required int page,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getOnTheAir();
+        final result = await remoteDataSource.getOnTheAir(page: page);
 
         // Memanggil cacheOnTheAirTvSeries
         localDataSource.cacheOnTheAirTvSeries(
@@ -77,10 +81,12 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
   }
 
   @override
-  Future<Either<Failure, List<TvSeries>>> getPopularTv() async {
+  Future<Either<Failure, List<TvSeries>>> getPopularTv({
+    required int page,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getPopularTv();
+        final result = await remoteDataSource.getPopularTv(page: page);
 
         // Memanggil cachePopularTvSeries
         localDataSource.cachePopularTvSeries(
@@ -104,10 +110,12 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
   }
 
   @override
-  Future<Either<Failure, List<TvSeries>>> getTopRatedTv() async {
+  Future<Either<Failure, List<TvSeries>>> getTopRatedTv({
+    required int page,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getTopRatedTv();
+        final result = await remoteDataSource.getTopRatedTv(page: page);
 
         // Memanggil cacheTopRatedTvSeries
         localDataSource.cacheTopRatedTvSeries(

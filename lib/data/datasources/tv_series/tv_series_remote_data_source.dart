@@ -7,13 +7,13 @@ import 'package:http/http.dart' as http;
 import '../../models/tv_series/tv_response.dart';
 
 abstract class TvSeriesRemoteDataSource {
-  Future<List<TvModel>> getAiringToday();
+  Future<List<TvModel>> getAiringToday({required int page});
 
-  Future<List<TvModel>> getOnTheAir();
+  Future<List<TvModel>> getOnTheAir({required int page});
 
-  Future<List<TvModel>> getPopularTv();
+  Future<List<TvModel>> getPopularTv({required int page});
 
-  Future<List<TvModel>> getTopRatedTv();
+  Future<List<TvModel>> getTopRatedTv({required int page});
 
   Future<TvDetailResponse> getTvDetail(int id);
 
@@ -31,10 +31,12 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
   TvSeriesRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<TvModel>> getAiringToday() async {
+  Future<List<TvModel>> getAiringToday({
+    int page = 1, // Default value
+  }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/tv/airing_today?$API_KEY'),
+        Uri.parse('$BASE_URL/tv/airing_today?$API_KEY&page=$page'),
       );
 
       if (response.statusCode == 200) {
@@ -48,10 +50,12 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
   }
 
   @override
-  Future<List<TvModel>> getOnTheAir() async {
+  Future<List<TvModel>> getOnTheAir({
+    int page = 1, // Default value
+  }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/tv/on_the_air?$API_KEY'),
+        Uri.parse('$BASE_URL/tv/on_the_air?$API_KEY&page=$page'),
       );
 
       if (response.statusCode == 200) {
@@ -65,10 +69,12 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
   }
 
   @override
-  Future<List<TvModel>> getPopularTv() async {
+  Future<List<TvModel>> getPopularTv({
+    int page = 1, // Default value
+  }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/tv/popular?$API_KEY'),
+        Uri.parse('$BASE_URL/tv/popular?$API_KEY&page=$page'),
       );
 
       if (response.statusCode == 200) {
@@ -82,10 +88,12 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
   }
 
   @override
-  Future<List<TvModel>> getTopRatedTv() async {
+  Future<List<TvModel>> getTopRatedTv({
+    int page = 1, // Default value
+  }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/tv/top_rated?$API_KEY'),
+        Uri.parse('$BASE_URL/tv/top_rated?$API_KEY&page=$page'),
       );
 
       if (response.statusCode == 200) {

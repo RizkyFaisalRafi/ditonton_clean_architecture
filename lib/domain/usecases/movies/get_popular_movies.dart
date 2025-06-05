@@ -8,7 +8,7 @@ class GetPopularMovies {
 
   GetPopularMovies(this.repository);
 
-  Future<Either<Failure, List<Movie>>> execute() {
-    return repository.getPopularMovies();
+  Future<Either<Failure, List<Movie>>> execute(int page) {
+    return repository.getPopularMovies(page: page);
   }
 }

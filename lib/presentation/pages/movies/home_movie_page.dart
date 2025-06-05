@@ -13,33 +13,20 @@ import 'package:ditonton_clean_architecture/presentation/pages/movies/watchlist_
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class HomeMoviePage extends StatefulWidget {
+import '../../widgets/error_state_widget.dart';
+
+class HomeMoviePage extends StatelessWidget {
   const HomeMoviePage({super.key});
 
   @override
-  _HomeMoviePageState createState() => _HomeMoviePageState();
-}
-
-class _HomeMoviePageState extends State<HomeMoviePage> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(
-          () =>
-      Provider.of<MovieListNotifier>(context, listen: false)
-        ..fetchNowPlayingMovies()
-        ..fetchPopularMovies()
-        ..fetchTopRatedMovies()
-        ..fetchUpComingMovies(),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final provider = Provider.of<MovieListNotifier>(context);
 
+    return Scaffold(
       /// Navigation Drawer
       drawer: Drawer(
         child: Column(
@@ -69,7 +56,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               title: Text('TV Series'),
               onTap: () {
                 Navigator.pushNamed(context, TvSeriesPage.ROUTE_NAME);
-              }
+              },
             ),
 
             /// Watchlist Navigation Drawer
@@ -115,96 +102,197 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// Now Playing
-              Text('Now Playing', style: kHeading6),
-              Consumer<MovieListNotifier>(
-                builder: (context, data, child) {
-                  final state = data.nowPlayingState;
-                  if (state == RequestState.Loading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (state == RequestState.Loaded) {
-                    return MovieList(data.nowPlayingMovies);
-                  } else {
-                    return Text('Failed');
-                  }
-                },
-              ),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+        child: SmartRefresher(
+          controller: provider.refreshC,
+          enablePullDown: true,
+          onRefresh: provider.onRefresh,
+          header: const WaterDropHeader(
+            complete: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.check_circle_outline_rounded),
+                Text('Refresh Complete'),
+              ],
+            ),
+            failed: Text('Refresh Failed'),
+            refresh: CircularProgressIndicator(),
+            waterDropColor: Colors.orange,
+            idleIcon: Icon(
+              Icons.refresh_rounded,
+              size: 20,
+              color: Colors.white,
+            ),
+          ),
 
-              /// Popular
-              _buildSubHeading(
-                title: 'Popular',
-                onTap:
-                    () =>
-                    Navigator.pushNamed(
-                      context,
-                      PopularMoviesPage.ROUTE_NAME,
-                    ),
-              ),
-              Consumer<MovieListNotifier>(
-                builder: (context, data, child) {
-                  final state = data.popularMoviesState;
-                  if (state == RequestState.Loading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (state == RequestState.Loaded) {
-                    return MovieList(data.popularMovies);
-                  } else {
-                    return Text('Failed');
-                  }
-                },
-              ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// Now Playing
+                Text('Now Playing', style: kHeading6),
+                Consumer<MovieListNotifier>(
+                  builder: (context, data, child) {
+                    final state = data.nowPlayingState;
+                    if (state == RequestState.Loading) {
+                      return Center(
+                        child: Lottie.asset(
+                          'assets/image_lottie/loading_bar.json',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fill,
+                        ),
+                      );
+                    } else if (state == RequestState.Error) {
+                      if (data.message.contains(
+                        'Failed to connect to the network',
+                      )) {
+                        return Center(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Lottie.asset(
+                                  'assets/image_lottie/no_connection.json',
+                                  width: 300,
+                                  height: 300,
+                                ),
+                                Text(
+                                  'No Internet Connection!',
+                                  // AppLocalizations.of(context)!.noInternetConnection,
+                                  style: kSubtitle,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      } else {
+                        // Error
+                        return ErrorStateWidget2(
+                          message: data.message,
+                          onRetry: () => provider.onRefresh(),
+                        );
+                      }
+                    } else if (state == RequestState.Loaded) {
+                      // Empty Data
+                      if (data.nowPlayingMovies.isEmpty) {
+                        return const EmptyStateWidget(
+                          message: 'No movies available.',
+                        );
+                      }
+                      return MovieList(
+                        data.nowPlayingMovies,
+                        data.nowPlayingController,
+                      );
+                    } else {
+                      // Initial State
+                      return EmptyStateWidget(message: 'Failed');
+                    }
+                  },
+                ),
 
-              /// Top Rated
-              _buildSubHeading(
-                title: 'Top Rated',
-                onTap:
-                    () =>
-                    Navigator.pushNamed(
-                      context,
-                      TopRatedMoviesPage.ROUTE_NAME,
-                    ),
-              ),
-              Consumer<MovieListNotifier>(
-                builder: (context, data, child) {
-                  final state = data.topRatedMoviesState;
-                  if (state == RequestState.Loading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (state == RequestState.Loaded) {
-                    return MovieList(data.topRatedMovies);
-                  } else {
-                    return Text('Failed');
-                  }
-                },
-              ),
+                /// Popular
+                _buildSubHeading(
+                  title: 'Popular',
+                  onTap:
+                      () => Navigator.pushNamed(
+                        context,
+                        PopularMoviesPage.ROUTE_NAME,
+                      ),
+                ),
 
-              /// Up Coming
-              _buildSubHeading(
-                title: 'Up Coming',
-                onTap:
-                    () =>
-                    Navigator.pushNamed(
-                      context,
-                      UpComingMoviesPage.ROUTE_NAME,
-                    ),
-              ),
+                Consumer<MovieListNotifier>(
+                  builder: (context, data, child) {
+                    final state = data.popularMoviesState;
+                    if (state == RequestState.Loading) {
+                      return Center(
+                        child: Lottie.asset(
+                          'assets/image_lottie/loading_bar.json',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fill,
+                        ),
+                      );
+                    } else if (state == RequestState.Loaded) {
+                      return MovieList(
+                        data.popularMovies,
+                        data.popularController,
+                      );
+                    } else {
+                      return EmptyStateWidget(
+                        message:
+                            "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
+                      );
+                    }
+                  },
+                ),
 
-              Consumer<MovieListNotifier>(
-                builder: (context, data, child) {
-                  final state = data.upComingMoviesState;
-                  if (state == RequestState.Loading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (state == RequestState.Loaded) {
-                    return MovieList(data.upComingMovies);
-                  } else {
-                    return Text('Failed');
-                  }
-                },
-              ),
-            ],
+                /// Top Rated
+                _buildSubHeading(
+                  title: 'Top Rated',
+                  onTap:
+                      () => Navigator.pushNamed(
+                        context,
+                        TopRatedMoviesPage.ROUTE_NAME,
+                      ),
+                ),
+                Consumer<MovieListNotifier>(
+                  builder: (context, data, child) {
+                    final state = data.topRatedMoviesState;
+                    if (state == RequestState.Loading) {
+                      return Center(
+                        child: Lottie.asset(
+                          'assets/image_lottie/loading_bar.json',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fill,
+                        ),
+                      );
+                    } else if (state == RequestState.Loaded) {
+                      return MovieList(
+                        data.topRatedMovies,
+                        data.topRatedController,
+                      );
+                    } else {
+                      return EmptyStateWidget(message: 'Failed to Load Data');
+                    }
+                  },
+                ),
+
+                /// Up Coming
+                _buildSubHeading(
+                  title: 'Up Coming',
+                  onTap:
+                      () => Navigator.pushNamed(
+                        context,
+                        UpComingMoviesPage.ROUTE_NAME,
+                      ),
+                ),
+
+                Consumer<MovieListNotifier>(
+                  builder: (context, data, child) {
+                    final state = data.upComingMoviesState;
+                    if (state == RequestState.Loading) {
+                      return Center(
+                        child: Lottie.asset(
+                          'assets/image_lottie/loading_bar.json',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fill,
+                        ),
+                      );
+                    } else if (state == RequestState.Loaded) {
+                      return MovieList(
+                        data.upComingMovies,
+                        data.upComingController,
+                      );
+                    } else {
+                      return EmptyStateWidget(message: 'Failed to Load Data');
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -221,7 +309,10 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              children: [Text('See More'), Icon(Icons.arrow_forward_ios)],
+              children: [
+                Text('See More $title'),
+                Icon(Icons.arrow_forward_ios),
+              ],
             ),
           ),
         ),
@@ -232,17 +323,20 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
 
 class MovieList extends StatelessWidget {
   final List<Movie> movies;
+  final ScrollController scrollController;
 
-  const MovieList(this.movies, {super.key});
+  const MovieList(this.movies, this.scrollController, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 200,
       child: ListView.builder(
+        controller: scrollController,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           final movie = movies[index];
+          print('Movie ID: ${movie.id}');
           return Container(
             padding: const EdgeInsets.all(8),
             child: InkWell(
@@ -260,7 +354,7 @@ class MovieList extends StatelessWidget {
                   imageUrl: '$BASE_IMAGE_URL${movie.posterPath}',
                   placeholder:
                       (context, url) =>
-                      Center(child: CircularProgressIndicator()),
+                          Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),

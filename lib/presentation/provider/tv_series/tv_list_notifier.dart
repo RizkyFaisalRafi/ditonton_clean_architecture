@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_airing_today_tv.dart';
@@ -5,6 +6,7 @@ import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_on_the
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_popular_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_top_rated_tv.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TvListNotifier extends ChangeNotifier {
   var _airingTodayTvSeries = <TvSeries>[];
@@ -43,24 +45,217 @@ class TvListNotifier extends ChangeNotifier {
 
   String get message => _message;
 
-  final GetAiringTodayTv getAiringTodayTv;
-  final GetOnTheAirTv getOnTheAirTv;
-  final GetPopularTv getPopularTv;
-  final GetTopRatedTv getTopRatedTv;
+  RefreshController refreshC = RefreshController(initialRefresh: false);
+
+  final ScrollController airingTodayController = ScrollController();
+  final ScrollController onTheAirController = ScrollController();
+  final ScrollController popularController = ScrollController();
+  final ScrollController topRatedController = ScrollController();
+
+  int _airingTodayPage = 1;
+  int _onTheAirPage = 1;
+  int _popularPage = 1;
+  int _topRatedPage = 1;
+
+  // Indikator apakah masih ada data yang bisa dimuat
+  bool _hasMoreAiringToday = true;
+  bool _hasMoreOnTheAir = true;
+  bool _hasMorePopular = true;
+  bool _hasMoreTopRated = true;
+
+  bool _isFetching = false;
+
+  bool get isFetching => _isFetching;
 
   TvListNotifier({
     required this.getAiringTodayTv,
     required this.getOnTheAirTv,
     required this.getPopularTv,
     required this.getTopRatedTv,
-  });
+  }) {
+    _init();
+  }
+
+  final GetAiringTodayTv getAiringTodayTv;
+  final GetOnTheAirTv getOnTheAirTv;
+  final GetPopularTv getPopularTv;
+  final GetTopRatedTv getTopRatedTv;
+
+  /// Inisialisasi saat objek dibuat
+  void _init() {
+    loadTvSeries(); // Load awal semua movie
+
+    airingTodayController.addListener(() {
+      if (airingTodayController.position.pixels >=
+              airingTodayController.position.maxScrollExtent &&
+          !_isFetching &&
+          _hasMoreAiringToday) {
+        loadMoreTvAiringToday(); // Trigger loadMore ketika scroll mencapai ujung
+      }
+    });
+
+    onTheAirController.addListener(() {
+      if (onTheAirController.position.pixels >=
+              onTheAirController.position.maxScrollExtent &&
+          !_isFetching &&
+          _hasMoreOnTheAir) {
+        loadMoreTvOnTheAir();
+      }
+    });
+
+    popularController.addListener(() {
+      if (popularController.position.pixels >=
+          popularController.position.maxScrollExtent &&
+          !_isFetching &&
+          _hasMorePopular) {
+        loadMoreTvPopular();
+      }
+    });
+
+    topRatedController.addListener(() {
+      if (topRatedController.position.pixels >=
+          topRatedController.position.maxScrollExtent &&
+          !_isFetching &&
+          _hasMoreTopRated) {
+        loadMoreTvTopRated();
+      }
+    });
+  }
+
+  /// Load awal saat widget pertama kali dibuka
+  Future<void> loadTvSeries() async {
+    _airingTodayState = RequestState.Loading;
+    _onTheAirState = RequestState.Loading;
+    _popularTvState = RequestState.Loading;
+    _topRatedTvState = RequestState.Loading;
+    log('Load Movies _airingTodayState: $_airingTodayState');
+    log('Load Movies _onTheAirState: $_onTheAirState');
+    log('Load Movies _popularTvState: $_popularTvState');
+    log('Load Movies _topRatedTvState: $_topRatedTvState');
+
+    notifyListeners();
+    try {
+      await onRefresh(); // Pakai fungsi refresh
+    } catch (e) {
+      // Jika gagal, tampilkan error
+      _airingTodayState = RequestState.Error;
+      _onTheAirState = RequestState.Error;
+      _popularTvState = RequestState.Error;
+      _topRatedTvState = RequestState.Error;
+      _message = e.toString();
+      notifyListeners();
+    }
+  }
+
+  /// Menangani infinite scroll
+  Future<void> loadMoreTvAiringToday() async {
+    if (_isFetching || !_hasMoreAiringToday) return;
+    _isFetching = true;
+
+    try {
+      // Tambahkan data baru
+      await fetchTvSeriesAiringToday();
+    } catch (e) {
+      _message = e.toString();
+    } finally {
+      _isFetching = false;
+    }
+  }
+
+  /// Menangani infinite scroll
+  Future<void> loadMoreTvOnTheAir() async {
+    if (_isFetching || !_hasMoreOnTheAir) return;
+    _isFetching = true;
+
+    try {
+      // Tambahkan data baru
+      await fetchTvSeriesOnTheAir();
+    } catch (e) {
+      _message = e.toString();
+    } finally {
+      _isFetching = false;
+    }
+  }
+
+  /// Menangani infinite scroll
+  Future<void> loadMoreTvPopular() async {
+    if (_isFetching || !_hasMorePopular) return;
+    _isFetching = true;
+
+    try {
+      // Tambahkan data baru
+      await fetchTvSeriesPopularTv();
+    } catch (e) {
+      _message = e.toString();
+    } finally {
+      _isFetching = false;
+    }
+  }
+
+  /// Menangani infinite scroll
+  Future<void> loadMoreTvTopRated() async {
+    if (_isFetching || !_hasMoreTopRated) return;
+    _isFetching = true;
+
+    try {
+      // Tambahkan data baru
+      await fetchTvSeriesTopRatedTv();
+    } catch (e) {
+      _message = e.toString();
+    } finally {
+      _isFetching = false;
+    }
+  }
+
+  // Handle Refresh
+  Future<void> onRefresh() async {
+    log('Calling onRefresh (clears list)');
+    try {
+      _airingTodayPage = 1;
+      _onTheAirPage = 1;
+      _popularPage = 1;
+      _topRatedPage = 1;
+
+      _hasMoreAiringToday = true;
+      _hasMoreOnTheAir = true;
+      _hasMorePopular = true;
+      _hasMoreTopRated = true;
+
+      // Clear data lama
+      _airingTodayTvSeries.clear();
+      _popularTvSeries.clear();
+      _popularTvSeries.clear();
+      _topRatedTvSeries.clear();
+
+      // Set loading state
+      _airingTodayState = RequestState.Loading;
+      _onTheAirState = RequestState.Loading;
+      _popularTvState = RequestState.Loading;
+      _topRatedTvState = RequestState.Loading;
+      notifyListeners();
+
+      // Jalankan semua secara paralel
+      await Future.wait([
+        fetchTvSeriesAiringToday(),
+        fetchTvSeriesOnTheAir(),
+        fetchTvSeriesPopularTv(),
+        fetchTvSeriesTopRatedTv(),
+      ]);
+
+      refreshC.refreshCompleted(); // Beritahu UI Bahwa Refresh Completed
+    } catch (e) {
+      _message = e.toString();
+      log('Catch onRefresh: $_message');
+      refreshC.refreshFailed(); // Beritahu UI Bahwa Refresh Gagal
+    }
+  }
 
   /// Fetch Airing Today
   Future<void> fetchTvSeriesAiringToday() async {
-    _airingTodayState = RequestState.Loading;
-    notifyListeners();
+    // _airingTodayState = RequestState.Loading;
+    // notifyListeners();
 
-    final result = await getAiringTodayTv.execute();
+    final result = await getAiringTodayTv.execute(_airingTodayPage);
     result.fold(
       (failure) {
         _airingTodayState = RequestState.Error;
@@ -69,7 +264,19 @@ class TvListNotifier extends ChangeNotifier {
       },
       (tvSeriesData) {
         _airingTodayState = RequestState.Loaded;
-        _airingTodayTvSeries = tvSeriesData;
+        // _airingTodayTvSeries = tvSeriesData;
+
+        if (tvSeriesData.isNotEmpty) {
+          if (_airingTodayPage == 1) {
+            _airingTodayTvSeries = tvSeriesData; // reset di page 1
+          } else {
+            _airingTodayTvSeries.addAll(tvSeriesData);
+          }
+          _airingTodayPage++;
+        } else {
+          _hasMoreAiringToday = false;
+        }
+
         notifyListeners();
       },
     );
@@ -77,10 +284,10 @@ class TvListNotifier extends ChangeNotifier {
 
   /// Fetch On The Air
   Future<void> fetchTvSeriesOnTheAir() async {
-    _onTheAirState = RequestState.Loading;
-    notifyListeners();
+    // _onTheAirState = RequestState.Loading;
+    // notifyListeners();
 
-    final result = await getOnTheAirTv.execute();
+    final result = await getOnTheAirTv.execute(_onTheAirPage);
     result.fold(
       (failure) {
         _onTheAirState = RequestState.Error;
@@ -88,8 +295,19 @@ class TvListNotifier extends ChangeNotifier {
         notifyListeners();
       },
       (tvSeriesData) {
-        _onTheAirTvSeries = tvSeriesData;
         _onTheAirState = RequestState.Loaded;
+        // _onTheAirTvSeries = tvSeriesData;
+        if (tvSeriesData.isNotEmpty) {
+          if (_onTheAirPage == 1) {
+            _onTheAirTvSeries = tvSeriesData; // reset di page 1
+          } else {
+            _onTheAirTvSeries.addAll(tvSeriesData);
+          }
+          _onTheAirPage++;
+        } else {
+          _hasMoreOnTheAir = false;
+        }
+
         notifyListeners();
       },
     );
@@ -97,10 +315,10 @@ class TvListNotifier extends ChangeNotifier {
 
   /// Fetch Popular Tv
   Future<void> fetchTvSeriesPopularTv() async {
-    _popularTvState = RequestState.Loading;
-    notifyListeners();
+    // _popularTvState = RequestState.Loading;
+    // notifyListeners();
 
-    final result = await getPopularTv.execute();
+    final result = await getPopularTv.execute(_popularPage);
     result.fold(
       (failure) {
         _popularTvState = RequestState.Error;
@@ -109,7 +327,19 @@ class TvListNotifier extends ChangeNotifier {
       },
       (tvSeriesData) {
         _popularTvState = RequestState.Loaded;
-        _popularTvSeries = tvSeriesData;
+        // _popularTvSeries = tvSeriesData;
+
+        if (tvSeriesData.isNotEmpty) {
+          if (_popularPage == 1) {
+            _popularTvSeries = tvSeriesData; // reset di page 1
+          } else {
+            _popularTvSeries.addAll(tvSeriesData);
+          }
+          _popularPage++;
+        } else {
+          _hasMorePopular = false;
+        }
+
         notifyListeners();
       },
     );
@@ -117,10 +347,10 @@ class TvListNotifier extends ChangeNotifier {
 
   /// Fetch Top Rated Tv
   Future<void> fetchTvSeriesTopRatedTv() async {
-    _topRatedTvState = RequestState.Loading;
-    notifyListeners();
+    // _topRatedTvState = RequestState.Loading;
+    // notifyListeners();
 
-    final result = await getTopRatedTv.execute();
+    final result = await getTopRatedTv.execute(_topRatedPage);
     result.fold(
       (failure) {
         _topRatedTvState = RequestState.Error;
@@ -129,7 +359,19 @@ class TvListNotifier extends ChangeNotifier {
       },
       (tvSeriesData) {
         _topRatedTvState = RequestState.Loaded;
-        _topRatedTvSeries = tvSeriesData;
+        // _topRatedTvSeries = tvSeriesData;
+
+        if (tvSeriesData.isNotEmpty) {
+          if (_topRatedPage == 1) {
+            _topRatedTvSeries = tvSeriesData; // reset di page 1
+          } else {
+            _topRatedTvSeries.addAll(tvSeriesData);
+          }
+          _topRatedPage++;
+        } else {
+          _hasMoreTopRated = false;
+        }
+
         notifyListeners();
       },
     );

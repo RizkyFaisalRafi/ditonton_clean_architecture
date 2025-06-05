@@ -17,9 +17,31 @@ Search
 - When Search Error All Status Code (Movie, Tv) Done TV Movie
 
 Load Data Movie and TV Series
-- When Load Data Failed Error No Connection
-- When Load Data Failed Error Empty Data
-- When Load Data Failed Error API
+- Refresh Page (Done Movie, TV)
+- Pagination / Infinite Scrolling (Done Movie TV)
+- When Load Data Failed Error No Connection (Done Movie TV)
+- When Load Data Failed Error Empty Data (Done Movie TV)
+- When Load Data Failed Error API/Cached Error (Done Movie TV)
+
+SeeMore Movies
+- Refresh Page (Done Popular, Top Rated, Up Coming)
+- Pagination / Infinite Scrolling (Done Popular, Top Rated, Up Coming)
+- When Load Data Failed Error Empty Data (Done Popular, Top Rated, Up Coming)
+- When Load Data Failed Error No Connection (Handle di Cache)
+- When Load Data Failed Error API/Cached Error (Done Popular, Top Rated, Up Coming)
+
+SeeMore TV Series
+- Refresh Page ()
+- Pagination / Infinite Scrolling ()
+- When Load Data Failed Error Empty Data ()
+- When Load Data Failed Error No Connection (Handle di Cache)
+- When Load Data Failed Error API/Cached Error ()
+
+DetailPage
+- Refresh Page ()
+- Pagination / Infinite Scrolling ()
+- When Load Data Failed Error No Connection ()
+- When Load Data Failed Error API/Cached Error ()
 
 Watchlist
 - When Watchlist Data Empty Add Lottie Animation (Movie, TV)

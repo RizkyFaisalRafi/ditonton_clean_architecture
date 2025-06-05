@@ -6,37 +6,23 @@ import 'package:ditonton_clean_architecture/presentation/pages/tv_series/search_
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/top_rated_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../common/constants.dart';
 import '../../../common/state_enum.dart';
 import '../../provider/tv_series/tv_list_notifier.dart';
+import '../../widgets/error_state_widget.dart';
 
-class TvSeriesPage extends StatefulWidget {
+class TvSeriesPage extends StatelessWidget {
   static const ROUTE_NAME = '/tv-series';
 
   const TvSeriesPage({super.key});
 
   @override
-  State<TvSeriesPage> createState() => _TvSeriesPageState();
-}
-
-class _TvSeriesPageState extends State<TvSeriesPage> {
-  @override
-  void initState() {
-    super.initState();
-
-    Future.microtask(
-      () =>
-          Provider.of<TvListNotifier>(context, listen: false)
-            ..fetchTvSeriesAiringToday()
-            ..fetchTvSeriesOnTheAir()
-            ..fetchTvSeriesPopularTv()
-            ..fetchTvSeriesTopRatedTv(),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<TvListNotifier>(context);
+
     return Scaffold(
       /// Home Content
       appBar: AppBar(
@@ -53,85 +39,197 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
 
       body: Padding(
         padding: EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// Now Playing / Airing Today
-              Text('Airing Today', style: kHeading6),
-              Consumer<TvListNotifier>(
-                builder: (context, data, child) {
-                  final state = data.airingTodayState;
-                  if (state == RequestState.Loading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (state == RequestState.Loaded) {
-                    return TvSeriesList(data.airingTodayTvSeries);
-                  } else {
-                    return Text('Failed');
-                  }
-                },
-              ),
+        child: SmartRefresher(
+          controller: provider.refreshC,
+          enablePullDown: true,
+          onRefresh: provider.onRefresh,
+          header: const WaterDropHeader(
+            complete: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.check_circle_outline_rounded),
+                Text('Refresh Complete'),
+              ],
+            ),
+            failed: Text('Refresh Failed'),
+            refresh: CircularProgressIndicator(),
+            waterDropColor: Colors.orange,
+            idleIcon: Icon(
+              Icons.refresh_rounded,
+              size: 20,
+              color: Colors.white,
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// Now Playing / Airing Today
+                Text('Airing Today', style: kHeading6),
+                Consumer<TvListNotifier>(
+                  builder: (context, data, child) {
+                    final state = data.airingTodayState;
+                    if (state == RequestState.Loading) {
+                      return Center(
+                        child: Lottie.asset(
+                          'assets/image_lottie/loading_bar.json',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fill,
+                        ),
+                      );
+                    } else if (state == RequestState.Error) {
+                      if (data.message.contains(
+                        'Failed to connect to the network',
+                      )) {
+                        return Center(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Lottie.asset(
+                                  'assets/image_lottie/no_connection.json',
+                                  width: 300,
+                                  height: 300,
+                                ),
+                                Text(
+                                  'No Internet Connection!',
+                                  // AppLocalizations.of(context)!.noInternetConnection,
+                                  style: kSubtitle,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      } else {
+                        // Error
+                        return ErrorStateWidget2(
+                          message: data.message,
+                          onRetry: () => provider.onRefresh(),
+                        );
+                      }
+                    } else if (state == RequestState.Loaded) {
+                      // Empty Data
+                      if (data.airingTodayTvSeries.isEmpty) {
+                        return const EmptyStateWidget(
+                          message: 'No movies available.',
+                        );
+                      }
 
-              /// On The Air
-              _buildSubHeading(
-                title: 'On The Air',
-                onTap: () {
-                  return Navigator.pushNamed(context, OnTheAirPage.ROUTE_NAME);
-                },
-              ),
-              Consumer<TvListNotifier>(
-                builder: (context, data, child) {
-                  final state = data.onTheAirState;
-                  if (state == RequestState.Loading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (state == RequestState.Loaded) {
-                    return TvSeriesList(data.onTheAirTvSeries);
-                  } else {
-                    return Text('Failed');
-                  }
-                },
-              ),
+                      return TvSeriesList(
+                        data.airingTodayTvSeries,
+                        data.airingTodayController,
+                      );
+                    } else {
+                      // Initial State
+                      return EmptyStateWidget(message: 'Failed');
+                    }
+                  },
+                ),
 
-              /// Popular Tv Series
-              _buildSubHeading(
-                title: 'Popular',
-                onTap: () {
-                  return Navigator.pushNamed(context, PopularTvPage.ROUTE_NAME);
-                },
-              ),
-              Consumer<TvListNotifier>(
-                builder: (context, data, child) {
-                  final state = data.popularTvState;
-                  if (state == RequestState.Loading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (state == RequestState.Loaded) {
-                    return TvSeriesList(data.popularTvSeries);
-                  } else {
-                    return Text('Failed');
-                  }
-                },
-              ),
+                /// On The Air
+                _buildSubHeading(
+                  title: 'On The Air',
+                  onTap: () {
+                    return Navigator.pushNamed(
+                      context,
+                      OnTheAirPage.ROUTE_NAME,
+                    );
+                  },
+                ),
+                Consumer<TvListNotifier>(
+                  builder: (context, data, child) {
+                    final state = data.onTheAirState;
+                    if (state == RequestState.Loading) {
+                      return Center(
+                        child: Lottie.asset(
+                          'assets/image_lottie/loading_bar.json',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fill,
+                        ),
+                      );
+                    } else if (state == RequestState.Loaded) {
+                      return TvSeriesList(
+                        data.onTheAirTvSeries,
+                        data.onTheAirController,
+                      );
+                    } else {
+                      return EmptyStateWidget(
+                        message:
+                            "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
+                      );
+                    }
+                  },
+                ),
 
-              /// Popular Top Rated
-              _buildSubHeading(
-                title: 'Top Rated',
-                onTap: () {
-                  return Navigator.pushNamed(context, TopRatedTvPage.ROUTE_NAME);
-                },
-              ),
-              Consumer<TvListNotifier>(
-                builder: (context, data, child) {
-                  final state = data.topRatedTvState;
-                  if (state == RequestState.Loading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (state == RequestState.Loaded) {
-                    return TvSeriesList(data.topRatedTvSeries);
-                  } else {
-                    return Text('Failed');
-                  }
-                },
-              ),
-            ],
+                /// Popular Tv Series
+                _buildSubHeading(
+                  title: 'Popular',
+                  onTap: () {
+                    return Navigator.pushNamed(
+                      context,
+                      PopularTvPage.ROUTE_NAME,
+                    );
+                  },
+                ),
+                Consumer<TvListNotifier>(
+                  builder: (context, data, child) {
+                    final state = data.popularTvState;
+                    if (state == RequestState.Loading) {
+                      return Center(
+                        child: Lottie.asset(
+                          'assets/image_lottie/loading_bar.json',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fill,
+                        ),
+                      );
+                    } else if (state == RequestState.Loaded) {
+                      return TvSeriesList(
+                        data.popularTvSeries,
+                        data.popularController,
+                      );
+                    } else {
+                      return EmptyStateWidget(message: "Failed to Load Data");
+                    }
+                  },
+                ),
+
+                /// Popular Top Rated
+                _buildSubHeading(
+                  title: 'Top Rated',
+                  onTap: () {
+                    return Navigator.pushNamed(
+                      context,
+                      TopRatedTvPage.ROUTE_NAME,
+                    );
+                  },
+                ),
+                Consumer<TvListNotifier>(
+                  builder: (context, data, child) {
+                    final state = data.topRatedTvState;
+                    if (state == RequestState.Loading) {
+                      return Center(
+                        child: Lottie.asset(
+                          'assets/image_lottie/loading_bar.json',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fill,
+                        ),
+                      );
+                    } else if (state == RequestState.Loaded) {
+                      return TvSeriesList(
+                        data.topRatedTvSeries,
+                        data.topRatedController,
+                      );
+                    } else {
+                      return EmptyStateWidget(message: 'Failed to Load Data');
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -162,14 +260,16 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
 
 class TvSeriesList extends StatelessWidget {
   final List<TvSeries> tvSeries;
+  final ScrollController scrollController;
 
-  const TvSeriesList(this.tvSeries, {super.key});
+  const TvSeriesList(this.tvSeries, this.scrollController, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
       child: ListView.builder(
+        controller: scrollController,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           final tvSeriesData = tvSeries[index];

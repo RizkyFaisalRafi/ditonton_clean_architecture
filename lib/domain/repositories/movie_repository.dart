@@ -21,16 +21,25 @@ import 'package:ditonton_clean_architecture/domain/entities/movies/movie_detail.
  */
 
 abstract class MovieRepository {
-  Future<Either<Failure, List<Movie>>> getNowPlayingMovies();
-  Future<Either<Failure, List<Movie>>> getPopularMovies();
-  Future<Either<Failure, List<Movie>>> getTopRatedMovies();
-  Future<Either<Failure, List<Movie>>> getUpComingMovies();
-  Future<Either<Failure, MovieDetail>> getMovieDetail(int id);
-  Future<Either<Failure, List<Movie>>> getMovieRecommendations(int id);
-  Future<Either<Failure, List<Movie>>> searchMovies(String query);
-  Future<Either<Failure, String>> saveWatchlist(MovieDetail movie);
-  Future<Either<Failure, String>> removeWatchlist(MovieDetail movie);
-  Future<bool> isAddedToWatchlist(int id);
-  Future<Either<Failure, List<Movie>>> getWatchlistMovies();
+  Future<Either<Failure, List<Movie>>> getNowPlayingMovies({required int page});
 
+  Future<Either<Failure, List<Movie>>> getPopularMovies({required int page});
+
+  Future<Either<Failure, List<Movie>>> getTopRatedMovies({required int page});
+
+  Future<Either<Failure, List<Movie>>> getUpComingMovies({required int page});
+
+  Future<Either<Failure, MovieDetail>> getMovieDetail(int id);
+
+  Future<Either<Failure, List<Movie>>> getMovieRecommendations(int id);
+
+  Future<Either<Failure, List<Movie>>> searchMovies(String query);
+
+  Future<Either<Failure, String>> saveWatchlist(MovieDetail movie);
+
+  Future<Either<Failure, String>> removeWatchlist(MovieDetail movie);
+
+  Future<bool> isAddedToWatchlist(int id);
+
+  Future<Either<Failure, List<Movie>>> getWatchlistMovies();
 }
