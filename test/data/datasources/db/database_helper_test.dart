@@ -2,7 +2,7 @@ import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_tabl
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:ditonton_clean_architecture/data/datasources/db/database_helper.dart';
-import 'package:ditonton_clean_architecture/data/models/movies/movie_table.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/cache/movie_table.dart';
 
 void main() {
   late DatabaseHelper databaseHelper;
@@ -57,13 +57,13 @@ void main() {
     group('Watchlist Operations', () {
       group('Movies', () {
         test('insertWatchlist should return row id on success', () async {
-          final result = await databaseHelper.insertWatchlist(tMovieTable);
+          final result = await databaseHelper.insertWatchlistMovie(tMovieTable);
           expect(result, isPositive);
         });
 
         // Memastikan data berhasil disimpan dan diambil byId (Movies)
         test('getMovieById should return correct movie when exists', () async {
-          await databaseHelper.insertWatchlist(tMovieTable);
+          await databaseHelper.insertWatchlistMovie(tMovieTable);
           final movie = await databaseHelper.getMovieById(tMovieTable.id);
           expect(movie, isNotNull);
           expect(movie!['title'], tMovieTable.title);
@@ -79,13 +79,13 @@ void main() {
 
         // Data dihapus (Movies)
         test('removeWatchlist should return 1 when movie is deleted', () async {
-          await databaseHelper.insertWatchlist(tMovieTable);
-          final result = await databaseHelper.removeWatchlist(tMovieTable);
+          await databaseHelper.insertWatchlistMovie(tMovieTable);
+          final result = await databaseHelper.removeWatchlistMovie(tMovieTable);
           expect(result, 1);
         });
 
         test('removeWatchlist should return 0 when movie not exists', () async {
-          final result = await databaseHelper.removeWatchlist(tMovieTable);
+          final result = await databaseHelper.removeWatchlistMovie(tMovieTable);
           expect(result, 0);
         });
 
@@ -99,8 +99,8 @@ void main() {
 
         // Semua data watchlist berhasil diambil (Movies)
         test('getWatchlistMovies should return all inserted movies', () async {
-          await databaseHelper.insertWatchlist(tMovieTable);
-          await databaseHelper.insertWatchlist(anotherTMovieTable);
+          await databaseHelper.insertWatchlistMovie(tMovieTable);
+          await databaseHelper.insertWatchlistMovie(anotherTMovieTable);
           final result = await databaseHelper.getWatchlistMovies();
           expect(result.length, 2);
           expect(result[0]['title'], tMovieTable.title);
@@ -108,8 +108,8 @@ void main() {
         });
 
         test('should not allow duplicate movie entries', () async {
-          final firstInsert = await databaseHelper.insertWatchlist(tMovieTable);
-          final secondInsert = await databaseHelper.insertWatchlist(
+          final firstInsert = await databaseHelper.insertWatchlistMovie(tMovieTable);
+          final secondInsert = await databaseHelper.insertWatchlistMovie(
             tMovieTable,
           );
           expect(firstInsert, isPositive);

@@ -17,18 +17,29 @@ class MovieDetail extends Equatable {
     required this.voteCount,
   });
 
-  final bool adult;
-  final String? backdropPath;
-  final List<Genre> genres;
-  final int id;
-  final String originalTitle;
-  final String overview;
-  final String posterPath;
-  final String releaseDate;
-  final int runtime;
-  final String title;
-  final double voteAverage;
-  final int voteCount;
+  MovieDetail.watchlist({
+    required this.id,
+    required this.overview,
+    required this.posterPath,
+    required this.title,
+    required this.runtime,
+    required this.voteAverage,
+    required this.releaseDate,
+    required this.genres,
+  });
+
+  bool? adult;
+  String? backdropPath;
+  List<Genre>? genres;
+  int id;
+  String? originalTitle;
+  String? overview;
+  String? posterPath;
+  String? releaseDate;
+  int? runtime;
+  String? title;
+  double? voteAverage;
+  int? voteCount;
 
   @override
   List<Object?> get props => [

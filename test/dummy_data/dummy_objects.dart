@@ -1,4 +1,4 @@
-import 'package:ditonton_clean_architecture/data/models/movies/movie_table.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/cache/movie_table.dart';
 import 'package:ditonton_clean_architecture/data/models/tv_series/created_by_model.dart';
 import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart';
 import 'package:ditonton_clean_architecture/domain/entities/genre.dart';

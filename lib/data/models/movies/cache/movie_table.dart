@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
-import '../../../domain/entities/movies/movie.dart';
-import '../../../domain/entities/movies/movie_detail.dart';
-import 'movie_detail_model.dart';
-import 'movie_model.dart';
+import '../../../../domain/entities/movies/movie.dart';
+import '../../../../domain/entities/movies/movie_detail.dart';
+import '../movie_detail_model.dart';
+import '../movie_model.dart';
 
 class MovieTable extends Equatable {
   final int id;

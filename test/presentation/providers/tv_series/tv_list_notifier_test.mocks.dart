@@ -66,14 +66,14 @@ class MockGetAiringTodayTv extends _i1.Mock implements _i4.GetAiringTodayTv {
           as _i2.TvSeriesRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>> execute() =>
+  _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>> execute(int? page) =>
       (super.noSuchMethod(
-            Invocation.method(#execute, []),
+            Invocation.method(#execute, [page]),
             returnValue:
                 _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>>.value(
                   _FakeEither_1<_i6.Failure, List<_i7.TvSeries>>(
                     this,
-                    Invocation.method(#execute, []),
+                    Invocation.method(#execute, [page]),
                   ),
                 ),
           )
@@ -100,14 +100,14 @@ class MockGetOnTheAirTv extends _i1.Mock implements _i8.GetOnTheAirTv {
           as _i2.TvSeriesRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>> execute() =>
+  _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>> execute(int? page) =>
       (super.noSuchMethod(
-            Invocation.method(#execute, []),
+            Invocation.method(#execute, [page]),
             returnValue:
                 _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>>.value(
                   _FakeEither_1<_i6.Failure, List<_i7.TvSeries>>(
                     this,
-                    Invocation.method(#execute, []),
+                    Invocation.method(#execute, [page]),
                   ),
                 ),
           )
@@ -134,14 +134,14 @@ class MockGetPopularTv extends _i1.Mock implements _i9.GetPopularTv {
           as _i2.TvSeriesRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>> execute() =>
+  _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>> execute(int? page) =>
       (super.noSuchMethod(
-            Invocation.method(#execute, []),
+            Invocation.method(#execute, [page]),
             returnValue:
                 _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>>.value(
                   _FakeEither_1<_i6.Failure, List<_i7.TvSeries>>(
                     this,
-                    Invocation.method(#execute, []),
+                    Invocation.method(#execute, [page]),
                   ),
                 ),
           )
@@ -168,14 +168,14 @@ class MockGetTopRatedTv extends _i1.Mock implements _i10.GetTopRatedTv {
           as _i2.TvSeriesRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>> execute() =>
+  _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>> execute(int? page) =>
       (super.noSuchMethod(
-            Invocation.method(#execute, []),
+            Invocation.method(#execute, [page]),
             returnValue:
                 _i5.Future<_i3.Either<_i6.Failure, List<_i7.TvSeries>>>.value(
                   _FakeEither_1<_i6.Failure, List<_i7.TvSeries>>(
                     this,
-                    Invocation.method(#execute, []),
+                    Invocation.method(#execute, [page]),
                   ),
                 ),
           )

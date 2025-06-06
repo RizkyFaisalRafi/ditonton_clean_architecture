@@ -3,18 +3,20 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i7;
-import 'dart:ui' as _i8;
+import 'dart:async' as _i9;
+import 'dart:ui' as _i10;
 
-import 'package:ditonton_clean_architecture/common/state_enum.dart' as _i4;
+import 'package:ditonton_clean_architecture/common/state_enum.dart' as _i6;
 import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart'
-    as _i5;
+    as _i7;
 import 'package:ditonton_clean_architecture/domain/usecases/movies/get_popular_movies.dart'
     as _i2;
 import 'package:ditonton_clean_architecture/presentation/provider/movies/popular_movies_notifier.dart'
-    as _i3;
+    as _i5;
+import 'package:flutter/material.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:mockito/src/dummies.dart' as _i8;
+import 'package:pull_to_refresh/pull_to_refresh.dart' as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -36,11 +38,23 @@ class _FakeGetPopularMovies_0 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
+class _FakeRefreshController_1 extends _i1.SmartFake
+    implements _i3.RefreshController {
+  _FakeRefreshController_1(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeScrollController_2 extends _i1.SmartFake
+    implements _i4.ScrollController {
+  _FakeScrollController_2(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
 /// A class which mocks [PopularMoviesNotifier].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPopularMoviesNotifier extends _i1.Mock
-    implements _i3.PopularMoviesNotifier {
+    implements _i5.PopularMoviesNotifier {
   MockPopularMoviesNotifier() {
     _i1.throwOnMissingStub(this);
   }
@@ -57,26 +71,48 @@ class MockPopularMoviesNotifier extends _i1.Mock
           as _i2.GetPopularMovies);
 
   @override
-  _i4.RequestState get state =>
+  _i3.RefreshController get refreshC =>
       (super.noSuchMethod(
-            Invocation.getter(#state),
-            returnValue: _i4.RequestState.Empty,
+            Invocation.getter(#refreshC),
+            returnValue: _FakeRefreshController_1(
+              this,
+              Invocation.getter(#refreshC),
+            ),
           )
-          as _i4.RequestState);
+          as _i3.RefreshController);
 
   @override
-  List<_i5.Movie> get movies =>
+  _i4.ScrollController get scrollController =>
+      (super.noSuchMethod(
+            Invocation.getter(#scrollController),
+            returnValue: _FakeScrollController_2(
+              this,
+              Invocation.getter(#scrollController),
+            ),
+          )
+          as _i4.ScrollController);
+
+  @override
+  _i6.RequestState get state =>
+      (super.noSuchMethod(
+            Invocation.getter(#state),
+            returnValue: _i6.RequestState.Empty,
+          )
+          as _i6.RequestState);
+
+  @override
+  List<_i7.Movie> get movies =>
       (super.noSuchMethod(
             Invocation.getter(#movies),
-            returnValue: <_i5.Movie>[],
+            returnValue: <_i7.Movie>[],
           )
-          as List<_i5.Movie>);
+          as List<_i7.Movie>);
 
   @override
   String get message =>
       (super.noSuchMethod(
             Invocation.getter(#message),
-            returnValue: _i6.dummyValue<String>(
+            returnValue: _i8.dummyValue<String>(
               this,
               Invocation.getter(#message),
             ),
@@ -84,27 +120,65 @@ class MockPopularMoviesNotifier extends _i1.Mock
           as String);
 
   @override
+  bool get isFetching =>
+      (super.noSuchMethod(Invocation.getter(#isFetching), returnValue: false)
+          as bool);
+
+  @override
+  set refreshC(_i3.RefreshController? _refreshC) => super.noSuchMethod(
+    Invocation.setter(#refreshC, _refreshC),
+    returnValueForMissingStub: null,
+  );
+
+  @override
   bool get hasListeners =>
       (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
           as bool);
 
   @override
-  _i7.Future<void> fetchPopularMovies() =>
+  _i9.Future<void> loadMoreMoviePopular() =>
       (super.noSuchMethod(
-            Invocation.method(#fetchPopularMovies, []),
-            returnValue: _i7.Future<void>.value(),
-            returnValueForMissingStub: _i7.Future<void>.value(),
+            Invocation.method(#loadMoreMoviePopular, []),
+            returnValue: _i9.Future<void>.value(),
+            returnValueForMissingStub: _i9.Future<void>.value(),
           )
-          as _i7.Future<void>);
+          as _i9.Future<void>);
 
   @override
-  void addListener(_i8.VoidCallback? listener) => super.noSuchMethod(
+  _i9.Future<void> onRefresh() =>
+      (super.noSuchMethod(
+            Invocation.method(#onRefresh, []),
+            returnValue: _i9.Future<void>.value(),
+            returnValueForMissingStub: _i9.Future<void>.value(),
+          )
+          as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> fetchPopularMovies() =>
+      (super.noSuchMethod(
+            Invocation.method(#fetchPopularMovies, []),
+            returnValue: _i9.Future<void>.value(),
+            returnValueForMissingStub: _i9.Future<void>.value(),
+          )
+          as _i9.Future<void>);
+
+  @override
+  _i9.Future<void> loadMovies() =>
+      (super.noSuchMethod(
+            Invocation.method(#loadMovies, []),
+            returnValue: _i9.Future<void>.value(),
+            returnValueForMissingStub: _i9.Future<void>.value(),
+          )
+          as _i9.Future<void>);
+
+  @override
+  void addListener(_i10.VoidCallback? listener) => super.noSuchMethod(
     Invocation.method(#addListener, [listener]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void removeListener(_i8.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i10.VoidCallback? listener) => super.noSuchMethod(
     Invocation.method(#removeListener, [listener]),
     returnValueForMissingStub: null,
   );

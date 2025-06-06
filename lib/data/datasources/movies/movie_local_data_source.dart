@@ -1,6 +1,7 @@
 import 'package:ditonton_clean_architecture/common/exception.dart';
 import 'package:ditonton_clean_architecture/data/datasources/db/database_helper.dart';
-import 'package:ditonton_clean_architecture/data/models/movies/movie_table.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/cache/movie_detail_table.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/cache/movie_table.dart';
 
 /*
  * Sesuai namanya, data sources merupakan sumber data yang akan digunakan di dalam aplikasi.
@@ -17,6 +18,8 @@ abstract class MovieLocalDataSource {
 
   Future<void> cacheUpComingMovies(List<MovieTable> movies);
 
+  Future<void> cacheMovieDetail(MovieDetailTable movie);
+
   Future<List<MovieTable>> getCachedNowPlayingMovies();
 
   Future<List<MovieTable>> getCachedPopularMovies();
@@ -24,6 +27,8 @@ abstract class MovieLocalDataSource {
   Future<List<MovieTable>> getCachedTopRatedMovies();
 
   Future<List<MovieTable>> getCachedUpComingMovies();
+
+  Future<MovieDetailTable> getCachedMovieDetail(int id);
 
   Future<String> insertWatchlist(MovieTable movie);
 
@@ -42,7 +47,7 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
   @override
   Future<String> insertWatchlist(MovieTable movie) async {
     try {
-      await databaseHelper.insertWatchlist(movie);
+      await databaseHelper.insertWatchlistMovie(movie);
       return 'Added to Watchlist';
     } catch (e) {
       throw DatabaseException(e.toString());
@@ -52,7 +57,7 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
   @override
   Future<String> removeWatchlist(MovieTable movie) async {
     try {
-      await databaseHelper.removeWatchlist(movie);
+      await databaseHelper.removeWatchlistMovie(movie);
       return 'Removed from Watchlist';
     } catch (e) {
       throw DatabaseException(e.toString());
@@ -199,6 +204,33 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
         return result.map((data) => MovieTable.fromMap(data)).toList();
       } else {
         throw CacheException("Can't get the data :(");
+      }
+    } catch (e) {
+      if (e is CacheException) {
+        rethrow;
+      } else {
+        throw DatabaseException(e.toString());
+      }
+    }
+  }
+
+  @override
+  Future<void> cacheMovieDetail(MovieDetailTable movieDetail) async {
+    try {
+      await databaseHelper.insertCacheMovieDetail(movieDetail);
+    } catch (e) {
+      throw DatabaseException(e.toString());
+    }
+  }
+
+  @override
+  Future<MovieDetailTable> getCachedMovieDetail(int id) async {
+    try {
+      final result = await databaseHelper.getCachedMovieDetail(id);
+      if (result != null) {
+        return MovieDetailTable.fromMap(result);
+      } else {
+        throw CacheException("Movie detail not found, Please Check your Internet");
       }
     } catch (e) {
       if (e is CacheException) {
