@@ -1,7 +1,9 @@
 import 'dart:async';
-import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart';
+import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_table.dart';
 import 'package:sqflite/sqflite.dart';
-import '../../models/movies/movie_table.dart';
+import '../../models/movies/cache/movie_detail_table.dart';
+import '../../models/movies/cache/movie_table.dart';
+import '../../models/tv_series/cache/tv_series_detail_table.dart';
 
 class DatabaseHelper {
   static DatabaseHelper? _databaseHelper;
@@ -19,10 +21,12 @@ class DatabaseHelper {
     return _database;
   }
 
-  static const String _tblWatchlist = 'watchlist';
+  static const String _tblWatchlistMovie = 'watchlist';
   static const String _tblWatchlistTv = 'watchlistTv';
-  static const String _tblCache = 'cache';
+  static const String _tblCacheMovie = 'cache';
   static const String _tblCacheTv = 'cacheTv';
+  static const String _tblCacheMovieDetail = 'cacheMovieDetail';
+  static const String _tblCacheTvDetail = 'cacheTvDetail';
 
   Future<Database> _initDb() async {
     final path = await getDatabasesPath();
@@ -34,7 +38,37 @@ class DatabaseHelper {
 
   void _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE  $_tblWatchlist (
+    CREATE TABLE $_tblCacheMovieDetail (
+      id INTEGER PRIMARY KEY,
+      title TEXT,
+      posterPath TEXT,
+      overview TEXT,
+      runtime INTEGER,
+      voteAverage REAL,
+      releaseDate TEXT,
+      genres TEXT
+    );
+  ''');
+
+    await db.execute('''
+    CREATE TABLE $_tblCacheTvDetail (
+      id INTEGER PRIMARY KEY, 
+      name TEXT,
+      posterPath TEXT,
+      backdropPath TEXT,
+      overview TEXT, 
+      voteAverage REAL,
+      genres TEXT, 
+      popularity REAL,
+      createdBy TEXT,
+      seasons TEXT,
+      lastEpisodeToAir TEXT,
+      nextEpisodeToAir TEXT
+    );
+  ''');
+
+    await db.execute('''
+      CREATE TABLE  $_tblWatchlistMovie (
         id INTEGER PRIMARY KEY,
         title TEXT,
         overview TEXT,
@@ -43,7 +77,7 @@ class DatabaseHelper {
     ''');
 
     await db.execute('''
-      CREATE TABLE  $_tblCache (
+      CREATE TABLE  $_tblCacheMovie (
         id INTEGER PRIMARY KEY,
         title TEXT,
         overview TEXT,
@@ -89,7 +123,7 @@ class DatabaseHelper {
         // Data baru akan mengganti data lama jika memiliki id yang sama (sesuai ConflictAlgorithm.replace).
         // Aplikasi lebih stabil dan aman saat caching ulang.
         txn.insert(
-          _tblCache,
+          _tblCacheMovie,
           movieJson,
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
@@ -97,10 +131,62 @@ class DatabaseHelper {
     });
   }
 
+  // Insert cache MovieDetail
+  Future<void> insertCacheMovieDetail(MovieDetailTable movieDetail) async {
+    final db = await database;
+    await db!.insert(
+      _tblCacheMovieDetail,
+      movieDetail.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  // Ambil cache MovieDetail by id
+  Future<Map<String, dynamic>?> getCachedMovieDetail(int id) async {
+    final db = await database;
+    final results = await db!.query(
+      _tblCacheMovieDetail,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (results.isNotEmpty) {
+      return results.first;
+    } else {
+      return null;
+    }
+  }
+
+  // Insert cache TvDetail
+  Future<void> insertCacheTvDetail(TvSeriesDetailTable tvDetail) async {
+    final db = await database;
+    await db!.insert(
+      _tblCacheTvDetail,
+      tvDetail.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  // Ambil cache TvDetail by id
+  Future<Map<String, dynamic>?> getCachedTvDetail(int id) async {
+    final db = await database;
+    final results = await db!.query(
+      _tblCacheTvDetail,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (results.isNotEmpty) {
+      return results.first;
+    } else {
+      return null;
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getCacheMovies(String category) async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db!.query(
-      _tblCache,
+      _tblCacheMovie,
       where: 'category = ?',
       whereArgs: [category],
     );
@@ -111,28 +197,52 @@ class DatabaseHelper {
   Future<int> clearCache(String category) async {
     final db = await database;
     return await db!.delete(
-      _tblCache,
+      _tblCacheMovie,
       where: 'category = ?',
       whereArgs: [category],
     );
   }
 
-  Future<int> insertWatchlist(MovieTable movie) async {
+  Future<int> insertWatchlistMovie(MovieTable movie) async {
     final db = await database;
     return await db!.insert(
-      _tblWatchlist,
+      _tblWatchlistMovie,
       movie.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace, // Data lama diganti baru
     );
   }
 
-  Future<int> removeWatchlist(MovieTable movie) async {
+  Future<int> removeWatchlistMovie(MovieTable movie) async {
     final db = await database;
     return await db!.delete(
-      _tblWatchlist,
+      _tblWatchlistMovie,
       where: 'id = ?',
       whereArgs: [movie.id],
     );
+  }
+
+  Future<Map<String, dynamic>?> getMovieById(int id) async {
+    final db = await database;
+    final results = await db!.query(
+      _tblWatchlistMovie,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (results.isNotEmpty) {
+      return results.first;
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getWatchlistMovies() async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db!.query(
+      _tblWatchlistMovie,
+    );
+
+    return results;
   }
 
   /// TV Series
@@ -214,28 +324,6 @@ class DatabaseHelper {
     } else {
       return null;
     }
-  }
-
-  Future<Map<String, dynamic>?> getMovieById(int id) async {
-    final db = await database;
-    final results = await db!.query(
-      _tblWatchlist,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-
-    if (results.isNotEmpty) {
-      return results.first;
-    } else {
-      return null;
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> getWatchlistMovies() async {
-    final db = await database;
-    final List<Map<String, dynamic>> results = await db!.query(_tblWatchlist);
-
-    return results;
   }
 
   // untuk mengambil semua data watchlist TV Series

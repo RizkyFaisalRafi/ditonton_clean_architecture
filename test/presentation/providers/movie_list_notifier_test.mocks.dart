@@ -67,14 +67,14 @@ class MockGetNowPlayingMovies extends _i1.Mock
           as _i2.MovieRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>> execute() =>
+  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>> execute(int? page) =>
       (super.noSuchMethod(
-            Invocation.method(#execute, []),
+            Invocation.method(#execute, [page]),
             returnValue:
                 _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>>.value(
                   _FakeEither_1<_i6.Failure, List<_i7.Movie>>(
                     this,
-                    Invocation.method(#execute, []),
+                    Invocation.method(#execute, [page]),
                   ),
                 ),
           )
@@ -101,14 +101,14 @@ class MockGetPopularMovies extends _i1.Mock implements _i8.GetPopularMovies {
           as _i2.MovieRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>> execute() =>
+  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>> execute(int? page) =>
       (super.noSuchMethod(
-            Invocation.method(#execute, []),
+            Invocation.method(#execute, [page]),
             returnValue:
                 _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>>.value(
                   _FakeEither_1<_i6.Failure, List<_i7.Movie>>(
                     this,
-                    Invocation.method(#execute, []),
+                    Invocation.method(#execute, [page]),
                   ),
                 ),
           )
@@ -135,14 +135,14 @@ class MockGetTopRatedMovies extends _i1.Mock implements _i9.GetTopRatedMovies {
           as _i2.MovieRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>> execute() =>
+  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>> execute(int? page) =>
       (super.noSuchMethod(
-            Invocation.method(#execute, []),
+            Invocation.method(#execute, [page]),
             returnValue:
                 _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>>.value(
                   _FakeEither_1<_i6.Failure, List<_i7.Movie>>(
                     this,
-                    Invocation.method(#execute, []),
+                    Invocation.method(#execute, [page]),
                   ),
                 ),
           )
@@ -169,14 +169,14 @@ class MockGetUpComingMovies extends _i1.Mock implements _i10.GetUpComingMovies {
           as _i2.MovieRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>> execute() =>
+  _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>> execute(int? page) =>
       (super.noSuchMethod(
-            Invocation.method(#execute, []),
+            Invocation.method(#execute, [page]),
             returnValue:
                 _i5.Future<_i3.Either<_i6.Failure, List<_i7.Movie>>>.value(
                   _FakeEither_1<_i6.Failure, List<_i7.Movie>>(
                     this,
-                    Invocation.method(#execute, []),
+                    Invocation.method(#execute, [page]),
                   ),
                 ),
           )

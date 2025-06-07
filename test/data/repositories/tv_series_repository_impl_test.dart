@@ -10,7 +10,7 @@ import 'package:ditonton_clean_architecture/data/models/tv_series/production_com
 import 'package:ditonton_clean_architecture/data/models/tv_series/season_model.dart';
 import 'package:ditonton_clean_architecture/data/models/tv_series/tv_detail_model.dart';
 import 'package:ditonton_clean_architecture/data/models/tv_series/tv_model.dart';
-import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart';
+import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_table.dart';
 import 'package:ditonton_clean_architecture/data/repositories/tv_series_repository_impl.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:flutter_test/flutter_test.dart';

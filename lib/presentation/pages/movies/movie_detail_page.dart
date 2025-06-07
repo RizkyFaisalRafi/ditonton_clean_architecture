@@ -121,7 +121,7 @@ class DetailContent extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(movie.title, style: kHeading5),
+                            Text(movie.title ?? 'Title Null', style: kHeading5),
 
                             FilledButton(
                               onPressed: () async {
@@ -173,12 +173,12 @@ class DetailContent extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Text(_showGenres(movie.genres)),
-                            Text(_showDuration(movie.runtime)),
+                            Text(_showGenres(movie.genres!)),
+                            Text(_showDuration(movie.runtime!)),
                             Row(
                               children: [
                                 RatingBarIndicator(
-                                  rating: movie.voteAverage / 2,
+                                  rating: movie.voteAverage! / 2,
                                   itemCount: 5,
                                   itemBuilder:
                                       (context, index) => Icon(
@@ -192,7 +192,7 @@ class DetailContent extends StatelessWidget {
                             ),
                             SizedBox(height: 16),
                             Text('Overview', style: kHeading6),
-                            Text(movie.overview),
+                            Text(movie.overview ?? 'Overview Null'),
                             SizedBox(height: 16),
                             Text('Recommendations', style: kHeading6),
                             Consumer<MovieDetailNotifier>(
@@ -287,6 +287,10 @@ class DetailContent extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String _showGenres2(List<Genre> genres) {
+    return genres.map((g) => g.name).join(', ');
   }
 
   String _showGenres(List<Genre> genres) {

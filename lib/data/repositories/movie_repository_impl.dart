@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:ditonton_clean_architecture/data/datasources/movies/movie_local_data_source.dart';
-import 'package:ditonton_clean_architecture/data/models/movies/movie_table.dart';
+import 'package:ditonton_clean_architecture/data/models/movies/cache/movie_table.dart';
 import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
 import 'package:ditonton_clean_architecture/domain/entities/movies/movie_detail.dart';
 import 'package:ditonton_clean_architecture/domain/repositories/movie_repository.dart';
@@ -10,6 +10,7 @@ import 'package:ditonton_clean_architecture/common/failure.dart';
 
 import '../../common/network_info.dart';
 import '../datasources/movies/movie_remote_data_source.dart';
+import '../models/movies/cache/movie_detail_table.dart';
 
 /**
  * Repository pada data layer merupakan implementasi dari kontrak yang dibuat sebelumnya.
@@ -84,12 +85,25 @@ class MovieRepositoryImpl implements MovieRepository {
     if (await networkInfo.isConnected) {
       try {
         final result = await remoteDataSource.getMovieDetail(id);
+
+        // Simpan ke cache
+        await localDataSource.cacheMovieDetail(
+          MovieDetailTable.fromEntity(result.toEntity()),
+        );
+
         return Right(result.toEntity());
       } on ServerException {
-        return Left(ServerFailure(''));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
-      return Left(ConnectionFailure('Failed to connect to the network'));
+      try {
+        final cachedResult = await localDataSource.getCachedMovieDetail(id);
+        return Right(cachedResult.toEntity());
+      } on CacheException catch (e) {
+        return Left(CacheFailure(e.message));
+      } on SocketException {
+        return Left(ConnectionFailure('Failed to connect to the network'));
+      }
     }
   }
 
@@ -243,9 +257,13 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<bool> isAddedToWatchlist(int id) async {
-    final result = await localDataSource.getMovieById(id);
-    return result != null;
+  Future<Either<Failure, bool>> isAddedToWatchlist(int id) async {
+    try {
+      final result = await localDataSource.getMovieById(id);
+      return Right(result != null);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    }
   }
 
   @override

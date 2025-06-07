@@ -1,4 +1,5 @@
-import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart';
+import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_detail_table.dart';
+import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_table.dart';
 import '../../../common/exception.dart';
 import '../db/database_helper.dart';
 
@@ -11,6 +12,8 @@ abstract class TvSeriesLocalDatasource {
 
   Future<void> cacheTopRatedTvSeries(List<TvSeriesTable> tv);
 
+  Future<void> cacheTvDetail(TvSeriesDetailTable tv);
+
   Future<List<TvSeriesTable>> getCachedAiringTodayTv();
 
   Future<List<TvSeriesTable>> getCachedOnTheAirTv();
@@ -18,6 +21,8 @@ abstract class TvSeriesLocalDatasource {
   Future<List<TvSeriesTable>> getCachedPopularTv();
 
   Future<List<TvSeriesTable>> getCachedTopRatedTv();
+
+  Future<TvSeriesDetailTable> getCachedTvDetail(int id);
 
   Future<String> insertWatchlist(TvSeriesTable tv);
 
@@ -179,6 +184,33 @@ class TvSeriesLocalDatasourceImpl implements TvSeriesLocalDatasource {
         return result.map((data) => TvSeriesTable.fromMap(data)).toList();
       } else {
         throw CacheException("Can't get the data :(");
+      }
+    } catch (e) {
+      if (e is CacheException) {
+        rethrow;
+      } else {
+        throw DatabaseException(e.toString());
+      }
+    }
+  }
+
+  @override
+  Future<void> cacheTvDetail(TvSeriesDetailTable tv) async {
+    try {
+      await databaseHelper.insertCacheTvDetail(tv);
+    } catch (e) {
+      throw DatabaseException(e.toString());
+    }
+  }
+
+  @override
+  Future<TvSeriesDetailTable> getCachedTvDetail(int id) async {
+    try {
+      final result = await databaseHelper.getCachedTvDetail(id);
+      if (result != null) {
+        return TvSeriesDetailTable.fromMap(result);
+      } else {
+        throw CacheException("Tv detail not found, Please Check your Internet");
       }
     } catch (e) {
       if (e is CacheException) {

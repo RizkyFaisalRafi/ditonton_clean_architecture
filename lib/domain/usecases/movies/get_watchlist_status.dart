@@ -1,3 +1,7 @@
+import 'package:dartz/dartz.dart';
+
+import 'package:ditonton_clean_architecture/common/failure.dart';
+
 import '../../repositories/movie_repository.dart';
 
 class GetWatchListStatus {
@@ -5,7 +9,7 @@ class GetWatchListStatus {
 
   GetWatchListStatus(this.repository);
 
-  Future<bool> execute(int id) async {
+  Future<Either<Failure, bool>> execute(int id) {
     return repository.isAddedToWatchlist(id);
   }
 }

@@ -1,14 +1,16 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:ditonton_clean_architecture/common/failure.dart';
 import 'package:ditonton_clean_architecture/data/datasources/tv_series/tv_series_local_data_source.dart';
 import 'package:ditonton_clean_architecture/data/datasources/tv_series/tv_series_remote_data_source.dart';
+import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_detail_table.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_detail.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import '../../common/exception.dart';
 import '../../common/network_info.dart';
 import '../../domain/repositories/tv_series_repository.dart';
-import '../models/tv_series/tv_series_table.dart';
+import '../models/tv_series/cache/tv_series_table.dart';
 
 class TvSeriesRepositoryImpl implements TvSeriesRepository {
   final TvSeriesRemoteDataSource remoteDataSource;
@@ -143,12 +145,25 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
     if (await networkInfo.isConnected) {
       try {
         final result = await remoteDataSource.getTvDetail(id);
+
+        // Simpan ke cache
+        await localDataSource.cacheTvDetail(
+          TvSeriesDetailTable.fromEntity(result.toEntity()),
+        );
+
         return Right(result.toEntity());
       } on ServerException {
-        return Left(ServerFailure(''));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
-      return Left(ConnectionFailure('Failed to connect to the network'));
+      try {
+        final cachedResult = await localDataSource.getCachedTvDetail(id);
+        return Right(cachedResult.toEntity());
+      } on CacheException catch (e) {
+        return Left(CacheFailure(e.message));
+      } on SocketException {
+        return Left(ConnectionFailure('Failed to connect to the network'));
+      }
     }
   }
 
@@ -204,9 +219,13 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
   }
 
   @override
-  Future<bool> isAddedToWatchlist(int id) async {
-    final result = await localDataSource.getTvSeriesById(id);
-    return result != null;
+  Future<Either<Failure, bool>> isAddedToWatchlist(int id) async {
+    try {
+      final result = await localDataSource.getTvSeriesById(id);
+      return Right(result != null);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    }
   }
 
   @override
