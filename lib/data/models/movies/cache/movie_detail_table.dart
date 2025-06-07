@@ -10,6 +10,10 @@ import '../movie_detail_model.dart';
  * Model ini menjembatani antara:
  * - Data dari/dan ke SQLite (database lokal)
  * - Data entity MovieDetail yang digunakan di domain layer
+ *
+ * Karena SQLite tidak mendukung tipe ARRAY atau OBJECT, gunakan:
+ * - jsonEncode() untuk menyimpan
+ * - jsonDecode() untuk membaca kembali ke bentuk asli
  */
 
 class MovieDetailTable extends Equatable {
