@@ -123,7 +123,18 @@ class TvDetailNotifier extends ChangeNotifier {
 
   Future<void> loadWatchlistStatus(int id) async {
     final result = await getWatchListStatus.execute(id);
-    _isAddedtoWatchlist = result;
+
+    result.fold(
+      (failure) {
+        // fallback jika gagal
+        _isAddedtoWatchlist = false;
+      },
+      (isAdded) {
+        _isAddedtoWatchlist = isAdded;
+      },
+    );
+
+    // _isAddedtoWatchlist = result;
     notifyListeners();
   }
 }

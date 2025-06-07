@@ -46,6 +46,11 @@ Watchlist Movie TV
 - When Watchlist Data Empty Add Lottie Animation (Done Movie TV)
 - When Watchlist Data Error Database (Done Movie TV)
 
+Data Local / Cache SQFLite
+- List Movie and TV (Done)
+- Watchlist Movie and TV (Done)
+- Detail Page Movie And TV (Movie Done, TV Not Yet)
+
 
 Run in Git Bash for Coverage
 Coverage App:

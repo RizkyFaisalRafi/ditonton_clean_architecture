@@ -32,7 +32,7 @@ import 'package:ditonton_clean_architecture/data/models/tv_series/tv_detail_mode
     as _i5;
 import 'package:ditonton_clean_architecture/data/models/tv_series/tv_model.dart'
     as _i25;
-import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart'
+import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_table.dart'
     as _i19;
 import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart'
     as _i10;

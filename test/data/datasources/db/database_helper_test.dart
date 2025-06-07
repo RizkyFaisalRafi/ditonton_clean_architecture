@@ -1,4 +1,4 @@
-import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart';
+import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_table.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:ditonton_clean_architecture/data/datasources/db/database_helper.dart';

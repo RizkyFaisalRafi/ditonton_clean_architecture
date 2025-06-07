@@ -6,31 +6,31 @@ import '../genre.dart';
 import 'created_by.dart';
 
 class TvDetail extends Equatable {
-  final bool? adult;
-  final String? backdropPath;
-  final List<CreatedBy>? createdBy;
-  final List<int>? episodeRunTime;
-  final String? firstAirDate;
-  final List<Genre>? genres;
-  final String? homepage;
-  final int? id;
-  final bool? inProduction;
-  final String? lastAirDate;
-  final EpisodeToAir? lastEpisodeToAir;
-  final String? name;
-  final EpisodeToAir? nextEpisodeToAir;
-  final int? numberOfEpisodes;
-  final int? numberOfSeasons;
-  final String? overview;
-  final double? popularity;
-  final String? posterPath;
-  final List<ProductionCompanies>? productionCompanies;
-  final List<Season>? seasons;
-  final String? status;
-  final double? voteAverage;
-  final int? voteCount;
+  bool? adult;
+  String? backdropPath;
+  List<CreatedBy>? createdBy;
+  List<int>? episodeRunTime;
+  String? firstAirDate;
+  List<Genre>? genres;
+  String? homepage;
+  int? id;
+  bool? inProduction;
+  String? lastAirDate;
+  EpisodeToAir? lastEpisodeToAir;
+  String? name;
+  EpisodeToAir? nextEpisodeToAir;
+  int? numberOfEpisodes;
+  int? numberOfSeasons;
+  String? overview;
+  double? popularity;
+  String? posterPath;
+  List<ProductionCompanies>? productionCompanies;
+  List<Season>? seasons;
+  String? status;
+  double? voteAverage;
+  int? voteCount;
 
-  const TvDetail({
+  TvDetail({
     required this.adult,
     required this.backdropPath,
     required this.createdBy,
@@ -55,6 +55,21 @@ class TvDetail extends Equatable {
     required this.voteAverage,
     required this.voteCount,
   });
+
+  TvDetail.watchlist({
+    required this.id,
+    required this.name,
+    required this.posterPath,
+    required this.backdropPath,
+    required this.overview,
+    required this.voteAverage,
+    required this.genres,
+    required this.popularity,
+    required this.createdBy,
+    required this.seasons,
+    required this.lastEpisodeToAir,
+    required this.nextEpisodeToAir,
+});
 
   @override
   List<Object?> get props => [

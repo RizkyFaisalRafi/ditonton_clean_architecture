@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart';
+import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_table.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../models/movies/cache/movie_detail_table.dart';
 import '../../models/movies/cache/movie_table.dart';
+import '../../models/tv_series/cache/tv_series_detail_table.dart';
 
 class DatabaseHelper {
   static DatabaseHelper? _databaseHelper;
@@ -25,6 +26,7 @@ class DatabaseHelper {
   static const String _tblCacheMovie = 'cache';
   static const String _tblCacheTv = 'cacheTv';
   static const String _tblCacheMovieDetail = 'cacheMovieDetail';
+  static const String _tblCacheTvDetail = 'cacheTvDetail';
 
   Future<Database> _initDb() async {
     final path = await getDatabasesPath();
@@ -45,6 +47,23 @@ class DatabaseHelper {
       voteAverage REAL,
       releaseDate TEXT,
       genres TEXT
+    );
+  ''');
+
+    await db.execute('''
+    CREATE TABLE $_tblCacheTvDetail (
+      id INTEGER PRIMARY KEY, 
+      name TEXT,
+      posterPath TEXT,
+      backdropPath TEXT,
+      overview TEXT, 
+      voteAverage REAL,
+      genres TEXT, 
+      popularity REAL,
+      createdBy TEXT,
+      seasons TEXT,
+      lastEpisodeToAir TEXT,
+      nextEpisodeToAir TEXT
     );
   ''');
 
@@ -85,7 +104,6 @@ class DatabaseHelper {
         category TEXT
       );
     ''');
-
   }
 
   // Movies
@@ -113,8 +131,7 @@ class DatabaseHelper {
     });
   }
 
-
-// Insert cache MovieDetail
+  // Insert cache MovieDetail
   Future<void> insertCacheMovieDetail(MovieDetailTable movieDetail) async {
     final db = await database;
     await db!.insert(
@@ -124,11 +141,37 @@ class DatabaseHelper {
     );
   }
 
-// Ambil cache MovieDetail by id
+  // Ambil cache MovieDetail by id
   Future<Map<String, dynamic>?> getCachedMovieDetail(int id) async {
     final db = await database;
     final results = await db!.query(
       _tblCacheMovieDetail,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (results.isNotEmpty) {
+      return results.first;
+    } else {
+      return null;
+    }
+  }
+
+  // Insert cache TvDetail
+  Future<void> insertCacheTvDetail(TvSeriesDetailTable tvDetail) async {
+    final db = await database;
+    await db!.insert(
+      _tblCacheTvDetail,
+      tvDetail.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  // Ambil cache TvDetail by id
+  Future<Map<String, dynamic>?> getCachedTvDetail(int id) async {
+    final db = await database;
+    final results = await db!.query(
+      _tblCacheTvDetail,
       where: 'id = ?',
       whereArgs: [id],
     );
@@ -195,11 +238,12 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getWatchlistMovies() async {
     final db = await database;
-    final List<Map<String, dynamic>> results = await db!.query(_tblWatchlistMovie);
+    final List<Map<String, dynamic>> results = await db!.query(
+      _tblWatchlistMovie,
+    );
 
     return results;
   }
-
 
   /// TV Series
   Future<void> insertCacheTransactionTvSeries(

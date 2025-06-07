@@ -1,6 +1,6 @@
 import 'package:ditonton_clean_architecture/common/exception.dart';
 import 'package:ditonton_clean_architecture/data/datasources/tv_series/tv_series_local_data_source.dart';
-import 'package:ditonton_clean_architecture/data/models/tv_series/tv_series_table.dart';
+import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_table.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import '../../../dummy_data/dummy_objects.dart';
