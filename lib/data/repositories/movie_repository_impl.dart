@@ -66,7 +66,7 @@ class MovieRepositoryImpl implements MovieRepository {
         );
         return Right(result.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure(''));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
       try {
@@ -113,7 +113,7 @@ class MovieRepositoryImpl implements MovieRepository {
       final result = await remoteDataSource.getMovieRecommendations(id);
       return Right(result.map((model) => model.toEntity()).toList());
     } on ServerException {
-      return Left(ServerFailure(''));
+      return Left(ServerFailure('Server Failure'));
     } on SocketException {
       return Left(ConnectionFailure('Failed to connect to the network'));
     }
@@ -145,7 +145,7 @@ class MovieRepositoryImpl implements MovieRepository {
         );
         return Right(result.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure(''));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
       try {
@@ -172,9 +172,7 @@ class MovieRepositoryImpl implements MovieRepository {
         );
         return Right(result.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure(''));
-      } on SocketException {
-        return Left(ConnectionFailure('Failed to connect to the network'));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
       try {
@@ -182,6 +180,8 @@ class MovieRepositoryImpl implements MovieRepository {
         return Right(result.map((model) => model.toEntity()).toList());
       } on CacheException catch (e) {
         return Left(CacheFailure(e.message));
+      } on SocketException {
+        return Left(ConnectionFailure('Failed to connect to the network'));
       }
     }
   }
@@ -199,9 +199,7 @@ class MovieRepositoryImpl implements MovieRepository {
         );
         return Right(result.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure(''));
-      } on SocketException {
-        return Left(ConnectionFailure('Failed to connect to the network'));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
       try {
@@ -209,6 +207,8 @@ class MovieRepositoryImpl implements MovieRepository {
         return Right(result.map((model) => model.toEntity()).toList());
       } on CacheException catch (e) {
         return Left(CacheFailure(e.message));
+      } on SocketException {
+        return Left(ConnectionFailure('Failed to connect to the network'));
       }
     }
   }
@@ -220,7 +220,7 @@ class MovieRepositoryImpl implements MovieRepository {
         final result = await remoteDataSource.searchMovies(query);
         return Right(result.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure(''));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
       return Left(ConnectionFailure('Failed to connect to the network'));

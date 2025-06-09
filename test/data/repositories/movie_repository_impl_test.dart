@@ -73,6 +73,7 @@ void main() {
     voteCount: 1,
   );
 
+
   final tMovieDetail = MovieDetail.watchlist(
     id: 1,
     title: 'Spider-Man: No Way Home',
@@ -88,7 +89,7 @@ void main() {
 
   // Fungsi untuk menjalankan pengujian saat online
   void runTestsOnline(Function body) {
-    group('when device is offline', () {
+    group('when device is online', () {
       setUp(() {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       });
@@ -183,11 +184,7 @@ void main() {
     Future<List<MovieTable>> Function() getCacheFunction,
   ) {
     group(description, () {
-      group('when device is online', () {
-        setUp(
-          () => when(mockNetworkInfo.isConnected).thenAnswer((_) async => true),
-        );
-
+      runTestsOnline(() {
         test('should check if the device is online', () async {
           when(remoteFunction(tPage)).thenAnswer((_) async => []);
           await repositoryFunction(tPage);
@@ -223,7 +220,7 @@ void main() {
           () async {
             when(remoteFunction(tPage)).thenThrow(ServerException());
             final result = await repositoryFunction(tPage);
-            expect(result, Left(ServerFailure('')));
+            expect(result, Left(ServerFailure('Server Failure')));
           },
         );
 
@@ -234,12 +231,7 @@ void main() {
         });
       });
 
-      group('when device is offline', () {
-        setUp(
-          () =>
-              when(mockNetworkInfo.isConnected).thenAnswer((_) async => false),
-        );
-
+      runTestsOffline(() {
         test('should return cached data when available', () async {
           when(getCacheFunction()).thenAnswer((_) async => [testMovieCache]);
           final result = await repositoryFunction(tPage);
@@ -275,7 +267,7 @@ void main() {
     });
   }
 
-  // Test cache operations for different movie types
+  /// Test cache operations for different movie types
   testCacheOperations(
     'now playing',
     (movies) => MovieLocalDataSourceImpl(
@@ -358,11 +350,7 @@ void main() {
   );
 
   group('Get Movie Detail', () {
-    group('when device is online', () {
-      setUp(
-        () => when(mockNetworkInfo.isConnected).thenAnswer((_) async => true),
-      );
-
+    runTestsOnline(() {
       test('should check if the device is online', () async {
         when(
           mockRemoteDataSource.getMovieDetail(tId),
@@ -371,7 +359,7 @@ void main() {
         verify(mockNetworkInfo.isConnected);
       });
 
-      test('should return Movie data when call is successful', () async {
+      test('should return MovieDetail data when the call to remote data source is successful', () async {
         when(
           mockRemoteDataSource.getMovieDetail(tId),
         ).thenAnswer((_) async => tMovieResponse);
@@ -380,7 +368,7 @@ void main() {
         expect(result, Right(testMovieDetail));
       });
 
-      test('should return Server Failure when call is unsuccessful', () async {
+      test('should return Server Failure when the call to remote data source is unsuccessful', () async {
         when(
           mockRemoteDataSource.getMovieDetail(tId),
         ).thenThrow(ServerException());
@@ -506,7 +494,7 @@ void main() {
       ).thenThrow(ServerException());
       final result = await repository.getMovieRecommendations(tId);
       verify(mockRemoteDataSource.getMovieRecommendations(tId));
-      expect(result, Left(ServerFailure('')));
+      expect(result, Left(ServerFailure('Server Failure')));
     });
 
     test('should return connection failure when no internet', () async {
@@ -529,12 +517,12 @@ void main() {
       expect(result.getOrElse(() => []), isEmpty);
     });
 
-    test('should handle invalid movie ID', () async {
+    test('should handle invalid movie recommendation ID', () async {
       when(
         mockRemoteDataSource.getMovieRecommendations(-1),
       ).thenThrow(ServerException());
       final result = await repository.getMovieRecommendations(-1);
-      expect(result, Left(ServerFailure('')));
+      expect(result, Left(ServerFailure('Server Failure')));
     });
 
     test('should handle partial recommendation data', () async {
@@ -568,88 +556,86 @@ void main() {
     final tLongQuery = 'a' * 1000;
     const tNonEnglishQuery = '蜘蛛侠'; // Chinese for Spider-Man
 
-    test('should return movie list when call is successful', () async {
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(
-        mockRemoteDataSource.searchMovies(tQuery),
-      ).thenAnswer((_) async => tMovieModelList);
-      final result = await repository.searchMovies(tQuery);
-      expect(result.getOrElse(() => []), tMovieList);
-    });
+    runTestsOnline(() {
+      test('should return movie list when call is successful', () async {
+        when(
+          mockRemoteDataSource.searchMovies(tQuery),
+        ).thenAnswer((_) async => tMovieModelList);
+        final result = await repository.searchMovies(tQuery);
+        expect(result.getOrElse(() => []), tMovieList);
+      });
 
-    test('should return ServerFailure when call is unsuccessful', () async {
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(
-        mockRemoteDataSource.searchMovies(tQuery),
-      ).thenThrow(ServerException());
-      final result = await repository.searchMovies(tQuery);
-      expect(result, Left(ServerFailure('')));
-    });
+      test('should return ServerFailure when call is unsuccessful', () async {
+        when(
+          mockRemoteDataSource.searchMovies(tQuery),
+        ).thenThrow(ServerException());
+        final result = await repository.searchMovies(tQuery);
+        expect(result, Left(ServerFailure('Server Failure')));
+      });
 
-    test('should return ConnectionFailure when no internet', () async {
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-      when(
-        mockRemoteDataSource.searchMovies(tQuery),
-      ).thenThrow(SocketException('Failed to connect to the network'));
-      final result = await repository.searchMovies(tQuery);
-      expect(
-        result,
-        Left(ConnectionFailure('Failed to connect to the network')),
+      test('should handle empty query', () async {
+        when(
+          mockRemoteDataSource.searchMovies(tEmptyQuery),
+        ).thenAnswer((_) async => []);
+        final result = await repository.searchMovies(tEmptyQuery);
+        expect(result.getOrElse(() => []), isEmpty);
+      });
+
+      test('should handle special characters in query', () async {
+        when(
+          mockRemoteDataSource.searchMovies(tSpecialCharQuery),
+        ).thenAnswer((_) async => tMovieModelList);
+        final result = await repository.searchMovies(tSpecialCharQuery);
+        expect(result.getOrElse(() => []), isNotEmpty);
+      });
+
+      test('should handle very long queries', () async {
+        when(
+          mockRemoteDataSource.searchMovies(tLongQuery),
+        ).thenAnswer((_) async => tMovieModelList);
+        final result = await repository.searchMovies(tLongQuery);
+        expect(result.getOrElse(() => []), isNotEmpty);
+      });
+
+      test('should handle non-English queries', () async {
+        when(
+          mockRemoteDataSource.searchMovies(tNonEnglishQuery),
+        ).thenAnswer((_) async => tMovieModelList);
+        final result = await repository.searchMovies(tNonEnglishQuery);
+        expect(result.getOrElse(() => []), isNotEmpty);
+      });
+
+      test('should handle whitespace-only queries', () async {
+        when(
+          mockRemoteDataSource.searchMovies('   '),
+        ).thenAnswer((_) async => []);
+        final result = await repository.searchMovies('   ');
+        expect(result.getOrElse(() => []), isEmpty);
+      });
+
+      test(
+        'searchMovies should return same results regardless of query case',
+        () async {
+          when(
+            mockRemoteDataSource.searchMovies('SPIDERMAN'),
+          ).thenAnswer((_) async => tMovieModelList);
+          final result = await repository.searchMovies('SPIDERMAN');
+          expect(result.getOrElse(() => []), isNotEmpty);
+        },
       );
     });
 
-    test('should handle empty query', () async {
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(
-        mockRemoteDataSource.searchMovies(tEmptyQuery),
-      ).thenAnswer((_) async => []);
-      final result = await repository.searchMovies(tEmptyQuery);
-      expect(result.getOrElse(() => []), isEmpty);
-    });
-
-    test('should handle special characters in query', () async {
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(
-        mockRemoteDataSource.searchMovies(tSpecialCharQuery),
-      ).thenAnswer((_) async => tMovieModelList);
-      final result = await repository.searchMovies(tSpecialCharQuery);
-      expect(result.getOrElse(() => []), isNotEmpty);
-    });
-
-    test('should handle very long queries', () async {
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(
-        mockRemoteDataSource.searchMovies(tLongQuery),
-      ).thenAnswer((_) async => tMovieModelList);
-      final result = await repository.searchMovies(tLongQuery);
-      expect(result.getOrElse(() => []), isNotEmpty);
-    });
-
-    test('should handle non-English queries', () async {
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(
-        mockRemoteDataSource.searchMovies(tNonEnglishQuery),
-      ).thenAnswer((_) async => tMovieModelList);
-      final result = await repository.searchMovies(tNonEnglishQuery);
-      expect(result.getOrElse(() => []), isNotEmpty);
-    });
-
-    test('should handle whitespace-only queries', () async {
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(
-        mockRemoteDataSource.searchMovies('   '),
-      ).thenAnswer((_) async => []);
-      final result = await repository.searchMovies('   ');
-      expect(result.getOrElse(() => []), isEmpty);
-    });
-
-    test('should handle case-insensitive queries', () async {
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(
-        mockRemoteDataSource.searchMovies('SPIDERMAN'),
-      ).thenAnswer((_) async => tMovieModelList);
-      final result = await repository.searchMovies('SPIDERMAN');
-      expect(result.getOrElse(() => []), isNotEmpty);
+    runTestsOffline(() {
+      test('should return ConnectionFailure when no internet', () async {
+        when(
+          mockRemoteDataSource.searchMovies(tQuery),
+        ).thenThrow(SocketException('Failed to connect to the network'));
+        final result = await repository.searchMovies(tQuery);
+        expect(
+          result,
+          Left(ConnectionFailure('Failed to connect to the network')),
+        );
+      });
     });
   });
 
@@ -710,6 +696,7 @@ void main() {
 
       test('should handle null movie detail', () async {
         final result = await repository.saveWatchlist(null);
+        expect(result, isA<Left<Failure, String>>());
         expect(result, Left(DatabaseFailure("Can not be null")));
       });
 

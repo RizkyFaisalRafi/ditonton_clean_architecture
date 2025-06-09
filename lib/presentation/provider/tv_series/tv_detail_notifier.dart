@@ -27,9 +27,9 @@ class TvDetailNotifier extends ChangeNotifier {
     required this.getTvRecommendations,
   });
 
-  late TvDetail _tvDetail;
+  TvDetail? _tvDetail;
 
-  TvDetail get tvDetail => _tvDetail;
+  TvDetail? get tvDetail => _tvDetail;
 
   RequestState _tvState = RequestState.Empty;
 

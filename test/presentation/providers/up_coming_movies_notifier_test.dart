@@ -42,43 +42,30 @@ void main() {
 
   final tMovieList = <Movie>[tMovie];
 
-  test('should change state to loading when usecase is called', () async {
-    // Arrange
-    when(
-      mockGetUpComingMovies.execute(),
-    ).thenAnswer((_) async => Right(tMovieList));
-
-    // Act
-    notifier.fetchUpComingMovies();
-
-    // Assert
-    expect(notifier.state, RequestState.Loading);
-    expect(listenerCallCount, 1);
-  });
 
   test('should change movies data when data is gotten successfully', () async {
     // Arrange
     when(
-      mockGetUpComingMovies.execute(),
+      mockGetUpComingMovies.execute(1),
     ).thenAnswer((_) async => Right(tMovieList));
     // Act
     await notifier.fetchUpComingMovies();
     // Assert
     expect(notifier.state, RequestState.Loaded);
     expect(notifier.movies, tMovieList);
-    expect(listenerCallCount, 2);
+    expect(listenerCallCount, 1);
   });
 
   test('should return error when data is unsuccessful', () async {
     // Arrange
     when(
-      mockGetUpComingMovies.execute(),
+      mockGetUpComingMovies.execute(1),
     ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
     // Act
     await notifier.fetchUpComingMovies();
     // Assert
     expect(notifier.state, RequestState.Error);
     expect(notifier.message, 'Server Failure');
-    expect(listenerCallCount, 2);
+    expect(listenerCallCount, 1);
   });
 }

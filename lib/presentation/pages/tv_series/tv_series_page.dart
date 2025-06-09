@@ -72,6 +72,7 @@ class TvSeriesPage extends StatelessWidget {
                     if (state == RequestState.Loading) {
                       return Center(
                         child: Lottie.asset(
+                          key: Key('loading_bar_airing_lottie'),
                           'assets/image_lottie/loading_bar.json',
                           width: 100,
                           height: 100,
@@ -196,7 +197,7 @@ class TvSeriesPage extends StatelessWidget {
                   },
                 ),
 
-                /// Popular Top Rated
+                /// Top Rated
                 _buildSubHeading(
                   title: 'Top Rated',
                   onTap: () {

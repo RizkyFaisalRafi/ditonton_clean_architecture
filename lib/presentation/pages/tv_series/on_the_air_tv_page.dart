@@ -25,6 +25,7 @@ class OnTheAirTvPage extends StatelessWidget {
             if (data.state == RequestState.Loading) {
               return Center(
                 child: Lottie.asset(
+                  key: Key('loading_on_the_air_tv'),
                   'assets/image_lottie/loading_bar.json',
                   width: 100,
                   height: 100,
@@ -82,6 +83,7 @@ class OnTheAirTvPage extends StatelessWidget {
                   },
                 ),
                 child: ListView.builder(
+                  key: Key('loaded_on_the_air'),
                   controller: data.scrollController,
                   itemBuilder: (context, index) {
                     final onTheAirTv = data.tvSeriesList[index];
@@ -92,13 +94,10 @@ class OnTheAirTvPage extends StatelessWidget {
               );
             } else {
               return ErrorStateWidget2(
+                key: Key('error_message'),
                 message: data.message,
                 onRetry: () => data.onRefresh(),
               );
-              // return Center(
-              //   key: Key('error_message'),
-              //   child: Text(data.message),
-              // );
             }
           },
         ),

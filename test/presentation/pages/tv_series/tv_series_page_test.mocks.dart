@@ -264,6 +264,19 @@ class MockTvListNotifier extends _i1.Mock implements _i9.TvListNotifier {
           as String);
 
   @override
+  int get airingTodayPage =>
+      (super.noSuchMethod(Invocation.getter(#airingTodayPage), returnValue: 0)
+          as int);
+
+  @override
+  bool get hasMoreAiringToday =>
+      (super.noSuchMethod(
+            Invocation.getter(#hasMoreAiringToday),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
   bool get isFetching =>
       (super.noSuchMethod(Invocation.getter(#isFetching), returnValue: false)
           as bool);
@@ -275,9 +288,39 @@ class MockTvListNotifier extends _i1.Mock implements _i9.TvListNotifier {
   );
 
   @override
+  set airingTodayTvSeries(List<_i10.TvSeries>? value) => super.noSuchMethod(
+    Invocation.setter(#airingTodayTvSeries, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  set airingTodayPage(int? value) => super.noSuchMethod(
+    Invocation.setter(#airingTodayPage, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  set hasMoreAiringToday(bool? value) => super.noSuchMethod(
+    Invocation.setter(#hasMoreAiringToday, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  set isFetching(bool? value) => super.noSuchMethod(
+    Invocation.setter(#isFetching, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
   bool get hasListeners =>
       (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
           as bool);
+
+  @override
+  void init() => super.noSuchMethod(
+    Invocation.method(#init, []),
+    returnValueForMissingStub: null,
+  );
 
   @override
   _i13.Future<void> loadTvSeries() =>

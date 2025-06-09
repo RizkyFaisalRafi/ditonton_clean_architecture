@@ -13,6 +13,8 @@ import '../../../helpers/test_helper.mocks.dart';
 void main() {
   const API_KEY = 'api_key=2174d146bb9c0eab47529b2e77d6b526';
   const BASE_URL = 'https://api.themoviedb.org/3';
+  const int tPage = 1;
+  const PAGE = '&page=';
 
   late MovieRemoteDataSourceImpl dataSource;
   late MockHttpClient mockHttpClient;
@@ -25,7 +27,7 @@ void main() {
   // Helper function to test movie list endpoints
   void testMovieListEndpoint(
     String description,
-    Future<List<MovieModel>> Function() methodUnderTest,
+    Future<List<MovieModel>> Function(int) methodUnderTest,
     String endpointPath,
     String jsonFile,
   ) {
@@ -36,14 +38,14 @@ void main() {
       test('should return list of movies when response code is 200', () async {
         // arrange
         when(
-          mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY')),
+          mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY$PAGE$tPage')),
         ).thenAnswer((_) async => http.Response(readJson(jsonFile), 200));
         // act
-        final result = await methodUnderTest();
+        final result = await methodUnderTest(tPage);
         // assert
         expect(result, equals(tMovieList));
         verify(
-          mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY')),
+          mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY$PAGE$tPage')),
         );
       });
 
@@ -52,14 +54,14 @@ void main() {
         () async {
           // arrange
           when(
-            mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY')),
+            mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY$PAGE$tPage')),
           ).thenAnswer((_) async => http.Response('Not Found', 404));
           // act
-          final call = methodUnderTest();
+          final call = methodUnderTest(tPage);
           // assert
           expect(() => call, throwsA(isA<ServerException>()));
           verify(
-            mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY')),
+            mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY$PAGE$tPage')),
           );
         },
       );
@@ -67,10 +69,10 @@ void main() {
       test('should throw ServerException on network error', () async {
         // arrange
         when(
-          mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY')),
+          mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY$PAGE$tPage')),
         ).thenThrow(http.ClientException('Network Error'));
         // act
-        final call = methodUnderTest();
+        final call = methodUnderTest(tPage);
         // assert
         expect(() => call, throwsA(isA<ServerException>()));
       });
@@ -78,10 +80,10 @@ void main() {
       test('should throw ServerException on malformed JSON', () async {
         // arrange
         when(
-          mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY')),
+          mockHttpClient.get(Uri.parse('$BASE_URL$endpointPath?$API_KEY$PAGE$tPage')),
         ).thenAnswer((_) async => http.Response('{"invalid": "json"', 200));
         // act
-        final call = methodUnderTest();
+        final call = methodUnderTest(tPage);
         // assert
         expect(() => call, throwsA(isA<ServerException>()));
       });
@@ -91,28 +93,28 @@ void main() {
   // Test all movie list endpoints using the helper
   testMovieListEndpoint(
     'get Now Playing Movies',
-    () => dataSource.getNowPlayingMovies(),
+    (page) => dataSource.getNowPlayingMovies(page: page),
     '/movie/now_playing',
     'dummy_data/now_playing.json',
   );
 
   testMovieListEndpoint(
     'get Popular Movies',
-    () => dataSource.getPopularMovies(),
+    (page) => dataSource.getPopularMovies(page: page),
     '/movie/popular',
     'dummy_data/popular.json',
   );
 
   testMovieListEndpoint(
     'get Top Rated Movies',
-    () => dataSource.getTopRatedMovies(),
+    (page) => dataSource.getTopRatedMovies(page: page),
     '/movie/top_rated',
     'dummy_data/top_rated.json',
   );
 
   testMovieListEndpoint(
     'get Upcoming Movies',
-    () => dataSource.getUpComingMovies(),
+    (page) => dataSource.getUpComingMovies(page: page),
     '/movie/upcoming',
     'dummy_data/upcoming.json',
   );

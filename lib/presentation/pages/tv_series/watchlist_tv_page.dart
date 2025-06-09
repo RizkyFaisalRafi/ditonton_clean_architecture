@@ -59,8 +59,10 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
             if (data.watchlistState == RequestState.Loading) {
               return Center(child: CircularProgressIndicator());
             } else if (data.watchlistState == RequestState.Loaded) {
-              if(data.watchlistTv.isEmpty) {
-                return const EmptyStateWidget(message: 'No Watchlist Available.');
+              if (data.watchlistTv.isEmpty) {
+                return const EmptyStateWidget(
+                  message: 'No Watchlist Available.',
+                );
               }
               return ListView.builder(
                 itemBuilder: (context, index) {
@@ -70,11 +72,7 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
                 itemCount: data.watchlistTv.length,
               );
             } else {
-              return EmptyStateWidget(message: data.message);
-              // return Center(
-              //   key: Key('error_message'),
-              //   child: Text(data.message),
-              // );
+              return EmptyStateWidget(key: Key('error_message'), message: data.message);
             }
           },
         ),

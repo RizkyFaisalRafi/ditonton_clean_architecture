@@ -36,6 +36,7 @@ class SearchTvPage extends StatelessWidget {
               textInputAction: TextInputAction.search,
             ),
             SizedBox(height: 16),
+
             Text('Search Result', style: kHeading6),
 
             /// Result List
@@ -45,6 +46,7 @@ class SearchTvPage extends StatelessWidget {
                   if (data.state == RequestState.Loading) {
                     return Center(
                       child: Lottie.asset(
+                        key: Key('loading_state_lottie'),
                         'assets/image_lottie/loading_elephant.json',
                         width: 300,
                         height: 300,
@@ -53,12 +55,14 @@ class SearchTvPage extends StatelessWidget {
                     );
                   } else if (data.state == RequestState.Error) {
                     return ErrorStateWidget(
+                      key: Key('error_state'),
                       message: data.message,
                       title: 'Tv Series',
                     );
                   } else if (data.state == RequestState.Loaded) {
                     if (data.searchResult.isEmpty) {
                       return ErrorStateWidget(
+                        key: Key('loaded_state_empty_search'),
                         message: 'No results found',
                         title: 'Tv Series',
                       );

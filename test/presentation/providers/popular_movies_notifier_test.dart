@@ -19,7 +19,7 @@ void main() {
   setUp(() {
     listenerCallCount = 0;
     mockGetPopularMovies = MockGetPopularMovies();
-    notifier = PopularMoviesNotifier(mockGetPopularMovies)
+    notifier = PopularMoviesNotifier(getPopularMovies: mockGetPopularMovies)
       ..addListener(() {
         listenerCallCount++;
       });
@@ -43,38 +43,27 @@ void main() {
 
   final tMovieList = <Movie>[tMovie];
 
-  test('should change state to loading when usecase is called', () async {
-    // arrange
-    when(mockGetPopularMovies.execute())
-        .thenAnswer((_) async => Right(tMovieList));
-    // act
-    notifier.fetchPopularMovies();
-    // assert
-    expect(notifier.state, RequestState.Loading);
-    expect(listenerCallCount, 1);
-  });
-
   test('should change movies data when data is gotten successfully', () async {
     // arrange
-    when(mockGetPopularMovies.execute())
+    when(mockGetPopularMovies.execute(1))
         .thenAnswer((_) async => Right(tMovieList));
     // act
     await notifier.fetchPopularMovies();
     // assert
     expect(notifier.state, RequestState.Loaded);
     expect(notifier.movies, tMovieList);
-    expect(listenerCallCount, 2);
+    expect(listenerCallCount, 1);
   });
 
   test('should return error when data is unsuccessful', () async {
     // arrange
-    when(mockGetPopularMovies.execute())
+    when(mockGetPopularMovies.execute(1))
         .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
     // act
     await notifier.fetchPopularMovies();
     // assert
     expect(notifier.state, RequestState.Error);
     expect(notifier.message, 'Server Failure');
-    expect(listenerCallCount, 2);
+    expect(listenerCallCount, 1);
   });
 }

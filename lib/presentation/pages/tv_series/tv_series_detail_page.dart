@@ -47,6 +47,7 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
           if (provider.tvState == RequestState.Loading) {
             return Center(
               child: Lottie.asset(
+                key: Key('loading_tv_detail'),
                 'assets/image_lottie/loading_bar.json',
                 width: 100,
                 height: 100,
@@ -57,7 +58,7 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
             final tvDetail = provider.tvDetail;
             return SafeArea(
               child: DetailContents(
-                tvDetail,
+                tvDetail!,
                 provider.tvRecommendations,
                 provider.isAddedToWatchlist,
               ),

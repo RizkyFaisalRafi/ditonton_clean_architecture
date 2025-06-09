@@ -32,9 +32,9 @@ class MovieDetailNotifier extends ChangeNotifier {
     required this.removeWatchlist,
   });
 
-  late MovieDetail _movie;
+  MovieDetail? _movie;
 
-  MovieDetail get movie => _movie;
+  MovieDetail? get movie => _movie;
 
   RequestState _movieState = RequestState.Empty;
 

@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_watchlist_status_tv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -17,10 +18,10 @@ void main() {
 
   test('should get watchlist status from repository', () async {
     // arrange
-    when(repository.isAddedToWatchlist(tId)).thenAnswer((_) async => true);
+    when(repository.isAddedToWatchlist(tId)).thenAnswer((_) async => Right(true));
     // act
     final result = await usecase.execute(tId);
     // assert
-    expect(result, true);
+    expect(result, Right(true));
   });
 }

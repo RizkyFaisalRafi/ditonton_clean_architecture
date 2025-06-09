@@ -97,7 +97,9 @@ class ErrorStateWidget2 extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 16),
-            ElevatedButton(onPressed: onRetry, child: Text('Retry')),
+            ElevatedButton(
+              key: Key('elevated_button_ErrorStateWidget2'),
+                onPressed: onRetry, child: Text('Retry')),
           ],
         ),
       ),
