@@ -11,7 +11,6 @@ import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_d
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-
 import '../../../dummy_data/dummy_objects.dart';
 import 'tv_detail_notifier_test.mocks.dart';
 
@@ -30,6 +29,10 @@ void main() {
   late MockSaveWatchlistTv mockSaveWatchlistTv;
   late MockRemoveWatchlistTv mockRemoveWatchlistTv;
   late int listenerCallCount;
+
+  const tId = 1;
+  final tTvSeries = <TvSeries>[testTvSeries];
+
   setUp(() {
     listenerCallCount = 0;
     mockGetTvDetail = MockGetTvDetail();
@@ -37,6 +40,7 @@ void main() {
     mockGetWatchListStatusTv = MockGetWatchListStatusTv();
     mockSaveWatchlistTv = MockSaveWatchlistTv();
     mockRemoveWatchlistTv = MockRemoveWatchlistTv();
+
     provider = TvDetailNotifier(
       getTvDetail: mockGetTvDetail,
       getWatchListStatus: mockGetWatchListStatusTv,
@@ -48,29 +52,15 @@ void main() {
     });
   });
 
-  final tId = 1;
+  tearDown(() {
+    reset(mockGetTvDetail);
+    reset(mockGetTvRecommendations);
+    reset(mockGetWatchListStatusTv);
+    reset(mockSaveWatchlistTv);
+    reset(mockRemoveWatchlistTv);
+  });
 
-  // final tTv = TvSeries(
-  //   adult: false,
-  //   backdropPath: '/ottT2Yt0OfHiHp3PHJTLNVV8JPE.jpg',
-  //   genreIds: [18, 10766],
-  //   id: 13945,
-  //   originCountry: ["DE"],
-  //   originalLanguage: "de",
-  //   originalName: "Gute Zeiten, schlechte Zeiten",
-  //   overview:
-  //   "Gute Zeiten, schlechte Zeiten is a long-running German television soap opera, first broadcast on RTL in 1992. The programme concerns the lives of a fictional neighborhood in Germany's capital city Berlin. Over the years the soap opera tends to have an overhaul of young people in their late teens and early twenties; targeting a young viewership.",
-  //   popularity: 677.2062,
-  //   posterPath: "/qujVFLAlBnPU9mZElV4NZgL8iXT.jpg",
-  //   firstAirDate: "1992-05-11",
-  //   name: "Gute Zeiten, schlechte Zeiten",
-  //   voteAverage: 5.769,
-  //   voteCount: 39,
-  // );
-
-  final tTvSeries = <TvSeries>[testTvSeries];
-
-  void arrangeUsecase() {
+  void arrangeUsecasesSuccess() {
     when(
       mockGetTvDetail.execute(tId),
     ).thenAnswer((_) async => Right(testTvDetail));
@@ -79,178 +69,197 @@ void main() {
     ).thenAnswer((_) async => Right(tTvSeries));
   }
 
-  group('Get Tv Detail', () {
-    test('should get data from the usecase', () async {
-      // arrange
-      arrangeUsecase();
-      // act
+  group('Fetch TV Detail', () {
+    test('should initialize with empty state', () {
+      expect(provider.tvState, RequestState.Empty);
+      expect(provider.recommendationState, RequestState.Empty);
+      expect(provider.tvDetail, isNull);
+      expect(provider.tvRecommendations, isEmpty);
+    });
+
+    test('should call correct usecases', () async {
+      // Arrange
+      arrangeUsecasesSuccess();
+
+      // Act
       await provider.fetchTvDetail(tId);
-      // assert
+
+      // Assert
       verify(mockGetTvDetail.execute(tId));
       verify(mockGetTvRecommendations.execute(tId));
     });
 
-    test('should change state to Loading when usecase is called', () {
-      // arrange
-      arrangeUsecase();
-      // act
+    test('should change state to Loading when starting', () async {
+      // Arrange
+      arrangeUsecasesSuccess();
+
+      // Act
       provider.fetchTvDetail(tId);
-      // assert
+
+      // Assert
       expect(provider.tvState, RequestState.Loading);
       expect(listenerCallCount, 1);
     });
 
-    test('should change tvDetail when data is gotten successfully', () async {
-      // arrange
-      arrangeUsecase();
-      // act
+    test('should update tv detail and recommendations when success', () async {
+      // Arrange
+      arrangeUsecasesSuccess();
+
+      // Act
       await provider.fetchTvDetail(tId);
-      // assert
+
+      // Assert
       expect(provider.tvState, RequestState.Loaded);
+      expect(provider.recommendationState, RequestState.Loaded);
       expect(provider.tvDetail, testTvDetail);
-      expect(listenerCallCount, 3);
-    });
-
-    test(
-      'should change recommendation tv series when data is gotten successfully',
-      () async {
-        // arrange
-        arrangeUsecase();
-        // act
-        await provider.fetchTvDetail(tId);
-        // assert
-        expect(provider.tvState, RequestState.Loaded);
-        expect(provider.tvRecommendations, tTvSeries);
-      },
-    );
-  });
-
-  group('Get Tv Recommendations', () {
-    test('should get data from the usecase', () async {
-      // arrange
-      arrangeUsecase();
-      // act
-      await provider.fetchTvDetail(tId);
-      // assert
-      verify(mockGetTvRecommendations.execute(tId));
       expect(provider.tvRecommendations, tTvSeries);
+      expect(
+        listenerCallCount,
+        3,
+      ); // Loading -> Detail Loaded -> Recommendations Loaded
     });
 
-    test(
-      'should update recommendation state when data is gotten successfully',
-      () async {
-        // arrange
-        arrangeUsecase();
-        // act
-        await provider.fetchTvDetail(tId);
-        // assert
-        expect(provider.recommendationState, RequestState.Loaded);
-        expect(provider.tvRecommendations, tTvSeries);
-      },
-    );
+    test('should handle error when fetching detail fails', () async {
+      // Arrange
+      when(
+        mockGetTvDetail.execute(tId),
+      ).thenAnswer((_) async => Left(ServerFailure('Server Error')));
+      when(
+        mockGetTvRecommendations.execute(tId),
+      ).thenAnswer((_) async => Right(tTvSeries));
 
-    test('should update error message when request in successful', () async {
-      // arrange
+      // Act
+      await provider.fetchTvDetail(tId);
+
+      // Assert
+      expect(provider.tvState, RequestState.Error);
+      expect(provider.message, 'Server Error');
+      expect(listenerCallCount, 2); // Loading -> Error
+    });
+
+    test('should handle error when fetching recommendations fails', () async {
+      // Arrange
       when(
         mockGetTvDetail.execute(tId),
       ).thenAnswer((_) async => Right(testTvDetail));
       when(
         mockGetTvRecommendations.execute(tId),
-      ).thenAnswer((_) async => Left(ServerFailure('Failed')));
-      // act
+      ).thenAnswer((_) async => Left(ServerFailure('Recommendation Error')));
+
+      // Act
       await provider.fetchTvDetail(tId);
-      // assert
+
+      // Assert
       expect(provider.recommendationState, RequestState.Error);
-      expect(provider.message, 'Failed');
+      expect(provider.message, 'Recommendation Error');
+      expect(provider.tvState, RequestState.Loaded); // Detail still loaded
+      expect(
+        listenerCallCount,
+        3,
+      ); // Loading -> Detail Loaded -> Recommendation Error
     });
   });
 
-  group('Watchlist', () {
-    test('should get the watchlist status', () async {
-      // arrange
-      when(mockGetWatchListStatusTv.execute(1)).thenAnswer((_) async => true);
-      // act
-      await provider.loadWatchlistStatus(1);
-      // assert
+  group('Watchlist Operations', () {
+    test('should get watchlist status correctly', () async {
+      // Arrange
+      when(
+        mockGetWatchListStatusTv.execute(tId),
+      ).thenAnswer((_) async => Right(true));
+
+      // Act
+      await provider.loadWatchlistStatus(tId);
+
+      // Assert
       expect(provider.isAddedToWatchlist, true);
+      verify(mockGetWatchListStatusTv.execute(tId));
     });
 
-    test('should execute save watchlist when function called', () async {
-      // arrange
-      when(
-        mockSaveWatchlistTv.execute(testTvDetail),
-      ).thenAnswer((_) async => Right('Success'));
-      when(
-        mockGetWatchListStatusTv.execute(testTvDetail.id),
-      ).thenAnswer((_) async => true);
-      // act
-      await provider.addWatchlist(testTvDetail);
-      // assert
-      verify(mockSaveWatchlistTv.execute(testTvDetail));
+    test('should handle watchlist status failure', () async {
+      // Arrange
+      when(mockGetWatchListStatusTv.execute(tId)).thenAnswer(
+        (_) async => Right(false),
+      ); // or throw error if your implementation does
+
+      // Act
+      await provider.loadWatchlistStatus(tId);
+
+      // Assert
+      expect(provider.isAddedToWatchlist, false);
     });
 
-    test('should execute remove watchlist when function called', () async {
-      // arrange
-      when(
-        mockRemoveWatchlistTv.execute(testTvDetail),
-      ).thenAnswer((_) async => Right('Removed'));
-      when(
-        mockGetWatchListStatusTv.execute(testTvDetail.id),
-      ).thenAnswer((_) async => false);
-      // act
-      await provider.removeFromWatchlist(testTvDetail);
-      // assert
-      verify(mockRemoveWatchlistTv.execute(testTvDetail));
-    });
-
-    test('should update watchlist status when add watchlist success', () async {
-      // arrange
+    test('should add to watchlist successfully', () async {
+      // Arrange
       when(
         mockSaveWatchlistTv.execute(testTvDetail),
       ).thenAnswer((_) async => Right('Added to Watchlist'));
       when(
-        mockGetWatchListStatusTv.execute(testTvDetail.id),
-      ).thenAnswer((_) async => true);
-      // act
+        mockGetWatchListStatusTv.execute(testTvDetail.id!),
+      ).thenAnswer((_) async => Right(true));
+
+      // Act
       await provider.addWatchlist(testTvDetail);
-      // assert
-      verify(mockGetWatchListStatusTv.execute(testTvDetail.id));
+
+      // Assert
+      verify(mockSaveWatchlistTv.execute(testTvDetail));
+      verify(mockGetWatchListStatusTv.execute(testTvDetail.id!));
       expect(provider.isAddedToWatchlist, true);
       expect(provider.watchlistMessage, 'Added to Watchlist');
       expect(listenerCallCount, 1);
     });
 
-    test('should update watchlist message when add watchlist failed', () async {
-      // arrange
+    test('should handle add watchlist failure', () async {
+      // Arrange
       when(
         mockSaveWatchlistTv.execute(testTvDetail),
-      ).thenAnswer((_) async => Left(DatabaseFailure('Failed')));
+      ).thenAnswer((_) async => Left(DatabaseFailure('Failed to add')));
       when(
-        mockGetWatchListStatusTv.execute(testTvDetail.id),
-      ).thenAnswer((_) async => false);
-      // act
+        mockGetWatchListStatusTv.execute(testTvDetail.id!),
+      ).thenAnswer((_) async => Right(false));
+
+      // Act
       await provider.addWatchlist(testTvDetail);
-      // assert
-      expect(provider.watchlistMessage, 'Failed');
+
+      // Assert
+      expect(provider.isAddedToWatchlist, false);
+      expect(provider.watchlistMessage, 'Failed to add');
+    });
+
+    test('should remove from watchlist successfully', () async {
+      // Arrange
+      when(
+        mockRemoveWatchlistTv.execute(testTvDetail),
+      ).thenAnswer((_) async => Right('Removed from Watchlist'));
+      when(
+        mockGetWatchListStatusTv.execute(testTvDetail.id!),
+      ).thenAnswer((_) async => Right(false));
+
+      // Act
+      await provider.removeFromWatchlist(testTvDetail);
+
+      // Assert
+      verify(mockRemoveWatchlistTv.execute(testTvDetail));
+      verify(mockGetWatchListStatusTv.execute(testTvDetail.id!));
+      expect(provider.isAddedToWatchlist, false);
+      expect(provider.watchlistMessage, 'Removed from Watchlist');
       expect(listenerCallCount, 1);
     });
-  });
 
-  group('on Error', () {
-    test('should return error when data is unsuccessful', () async {
-      // arrange
+    test('should handle remove watchlist failure', () async {
+      // Arrange
       when(
-        mockGetTvDetail.execute(tId),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+        mockRemoveWatchlistTv.execute(testTvDetail),
+      ).thenAnswer((_) async => Left(DatabaseFailure('Failed to remove')));
       when(
-        mockGetTvRecommendations.execute(tId),
-      ).thenAnswer((_) async => Right(tTvSeries));
-      // act
-      await provider.fetchTvDetail(tId);
-      // assert
-      expect(provider.tvState, RequestState.Error);
-      expect(provider.message, 'Server Failure');
-      expect(listenerCallCount, 2);
+        mockGetWatchListStatusTv.execute(testTvDetail.id!),
+      ).thenAnswer((_) async => Right(true));
+
+      // Act
+      await provider.removeFromWatchlist(testTvDetail);
+
+      // Assert
+      expect(provider.isAddedToWatchlist, true);
+      expect(provider.watchlistMessage, 'Failed to remove');
     });
   });
 }

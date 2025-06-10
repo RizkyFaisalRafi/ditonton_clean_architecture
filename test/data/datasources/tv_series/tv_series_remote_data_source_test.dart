@@ -15,6 +15,8 @@ import '../../../json_reader.dart';
 void main() {
   const apiKey = 'api_key=2174d146bb9c0eab47529b2e77d6b526';
   const baseUrl = 'https://api.themoviedb.org/3';
+  const int tPage = 1;
+  const PAGE = '&page=';
 
   late TvSeriesRemoteDataSourceImpl dataSource;
   late MockHttpClient mockHttpClient;
@@ -27,7 +29,7 @@ void main() {
   // Helper function to test TV series list endpoints
   void testTvListEndpoint(
     String description,
-    Future<List<TvModel>> Function() methodUnderTest,
+    Future<List<TvModel>> Function(int) methodUnderTest,
     String endpointPath,
     String jsonFile,
   ) {
@@ -40,14 +42,14 @@ void main() {
         () async {
           // arrange
           when(
-            mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey')),
+            mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey$PAGE$tPage')),
           ).thenAnswer((_) async => http.Response(readJson(jsonFile), 200));
           // act
-          final result = await methodUnderTest();
+          final result = await methodUnderTest(tPage);
           // assert
           expect(result, equals(tTvList));
           verify(
-            mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey')),
+            mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey$PAGE$tPage')),
           );
         },
       );
@@ -57,14 +59,14 @@ void main() {
         () async {
           // arrange
           when(
-            mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey')),
+            mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey$PAGE$tPage')),
           ).thenAnswer((_) async => http.Response('Not Found', 404));
           // act
-          final call = methodUnderTest();
+          final call = methodUnderTest(tPage);
           // assert
           expect(() => call, throwsA(isA<ServerException>()));
           verify(
-            mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey')),
+            mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey$PAGE$tPage')),
           );
         },
       );
@@ -72,10 +74,10 @@ void main() {
       test('should throw ServerException on network error', () async {
         // arrange
         when(
-          mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey')),
+          mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey$PAGE$tPage')),
         ).thenThrow(http.ClientException('Network Error'));
         // act
-        final call = methodUnderTest();
+        final call = methodUnderTest(tPage);
         // assert
         expect(() => call, throwsA(isA<ServerException>()));
       });
@@ -83,10 +85,10 @@ void main() {
       test('should throw ServerException on malformed JSON', () async {
         // arrange
         when(
-          mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey')),
+          mockHttpClient.get(Uri.parse('$baseUrl$endpointPath?$apiKey$PAGE$tPage')),
         ).thenAnswer((_) async => http.Response('{"invalid": "json"}', 200));
         // act
-        final call = methodUnderTest();
+        final call = methodUnderTest(tPage);
         // assert
         expect(() => call, throwsA(isA<ServerException>()));
       });
@@ -96,28 +98,28 @@ void main() {
   // Test all TV series list endpoints using the helper
   testTvListEndpoint(
     'get Airing Today TV Series',
-    () => dataSource.getAiringToday(),
+    (page) => dataSource.getAiringToday(page: page),
     '/tv/airing_today',
     'dummy_data/airing_today.json',
   );
 
   testTvListEndpoint(
     'get On The Air TV Series',
-    () => dataSource.getOnTheAir(),
+    (page) => dataSource.getOnTheAir(page: page),
     '/tv/on_the_air',
     'dummy_data/airing_today.json', // Using same file as example
   );
 
   testTvListEndpoint(
     'get Popular TV Series',
-    () => dataSource.getPopularTv(),
+    (page) => dataSource.getPopularTv(page: page),
     '/tv/popular',
     'dummy_data/airing_today.json', // Using same file as example
   );
 
   testTvListEndpoint(
     'get Top Rated TV Series',
-    () => dataSource.getTopRatedTv(),
+    (page) => dataSource.getTopRatedTv(page: page),
     '/tv/top_rated',
     'dummy_data/airing_today.json', // Using same file as example
   );

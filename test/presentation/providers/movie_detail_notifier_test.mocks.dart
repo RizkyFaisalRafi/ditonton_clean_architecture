@@ -140,20 +140,17 @@ class MockGetWatchListStatus extends _i1.Mock
           as _i2.MovieRepository);
 
   @override
-  _i5.Future<_i5.Future<_i3.Either<_i6.Failure, bool>>> execute(int? id) =>
+  _i5.Future<_i3.Either<_i6.Failure, bool>> execute(int? id) =>
       (super.noSuchMethod(
             Invocation.method(#execute, [id]),
-            returnValue:
-                _i5.Future<_i5.Future<_i3.Either<_i6.Failure, bool>>>.value(
-                  _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-                    _FakeEither_1<_i6.Failure, bool>(
-                      this,
-                      Invocation.method(#execute, [id]),
-                    ),
-                  ),
-                ),
+            returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
+              _FakeEither_1<_i6.Failure, bool>(
+                this,
+                Invocation.method(#execute, [id]),
+              ),
+            ),
           )
-          as _i5.Future<_i5.Future<_i3.Either<_i6.Failure, bool>>>);
+          as _i5.Future<_i3.Either<_i6.Failure, bool>>);
 }
 
 /// A class which mocks [SaveWatchlist].

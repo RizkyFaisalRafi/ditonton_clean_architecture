@@ -27,6 +27,35 @@ void main() {
     );
   }
 
+  testWidgets('Should display loading indicator when state is Loading', (
+      widgetTester,
+      ) async {
+    /// Arrange
+    when(mockNotifier.movieState).thenReturn(RequestState.Loading);
+
+    /// Act
+    await widgetTester.pumpWidget(
+      _makeTestableWidget(MovieDetailPage(id: 1)),
+    );
+
+    /// Assert
+    expect(find.byKey(Key('loading_movie_detail')), findsOneWidget);
+  });
+
+  testWidgets('Should display error message when state is Error', (
+      WidgetTester tester,
+      ) async {
+    /// Arrange
+    when(mockNotifier.movieState).thenReturn(RequestState.Error);
+    when(mockNotifier.message).thenReturn('Error');
+
+    /// Act
+    await tester.pumpWidget(_makeTestableWidget(MovieDetailPage(id: 1)));
+
+    /// Assert
+    expect(find.text('Error'), findsOneWidget);
+  });
+
   testWidgets(
       'Watchlist button should display add icon when movie not added to watchlist',
           (WidgetTester tester) async {

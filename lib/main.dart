@@ -15,6 +15,8 @@ import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_seri
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/watchlist_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/watchlist_movies_page.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/custom_drawer_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/provider/drawer_provider.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_search_notifier.dart';
@@ -27,6 +29,7 @@ import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_d
 import 'package:ditonton_clean_architecture/presentation/provider/movies/up_coming_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/watchlist_movie_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_search_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/widgets/custom_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +43,11 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GlobalKey<CustomDrawerState> _drawerKey =
+      GlobalKey<CustomDrawerState>();
+  final PageController _pageController = PageController();
+
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +91,17 @@ class MyApp extends StatelessWidget {
           textTheme: kTextTheme,
           drawerTheme: kDrawerTheme,
         ),
-        home: HomeMoviePage(),
+        // home: HomeMoviePage(),
+        home: Material(
+          child: CustomDrawer(key: _drawerKey, pageController: _pageController),
+        ),
         navigatorObservers: [routeObserver],
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
+            case '/custom-drawer':
+              return MaterialPageRoute(
+                builder: (_) => CustomDrawer(pageController: _pageController),
+              );
             case '/home':
               return MaterialPageRoute(builder: (_) => HomeMoviePage());
             case PopularMoviesPage.ROUTE_NAME:

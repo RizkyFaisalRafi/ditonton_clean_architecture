@@ -11,6 +11,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../common/constants.dart';
 import '../../../common/state_enum.dart';
 import '../../provider/tv_series/tv_list_notifier.dart';
+import '../../widgets/custom_drawer.dart';
 import '../../widgets/error_state_widget.dart';
 import 'on_the_air_tv_page.dart';
 
@@ -27,6 +28,14 @@ class TvSeriesPage extends StatelessWidget {
       /// Home Content
       appBar: AppBar(
         title: Text('TV Series Ditonton'),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            final customDrawerState =
+                context.findRootAncestorStateOfType<CustomDrawerState>();
+            customDrawerState?.toggle();
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -72,6 +81,7 @@ class TvSeriesPage extends StatelessWidget {
                     if (state == RequestState.Loading) {
                       return Center(
                         child: Lottie.asset(
+                          key: Key('loading_bar_airing_lottie'),
                           'assets/image_lottie/loading_bar.json',
                           width: 100,
                           height: 100,
@@ -196,7 +206,7 @@ class TvSeriesPage extends StatelessWidget {
                   },
                 ),
 
-                /// Popular Top Rated
+                /// Top Rated
                 _buildSubHeading(
                   title: 'Top Rated',
                   onTap: () {

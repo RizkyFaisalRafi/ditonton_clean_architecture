@@ -13,6 +13,11 @@ class MovieListNotifier extends ChangeNotifier {
 
   List<Movie> get nowPlayingMovies => _nowPlayingMovies;
 
+  set nowPlayingMovies(List<Movie> value) {
+    _nowPlayingMovies = value;
+    notifyListeners();
+  }
+
   RequestState _nowPlayingState = RequestState.Empty;
 
   RequestState get nowPlayingState => _nowPlayingState;
@@ -45,7 +50,7 @@ class MovieListNotifier extends ChangeNotifier {
 
   String get message => _message;
 
-  RefreshController refreshC = RefreshController(initialRefresh: true);
+  RefreshController refreshC = RefreshController(initialRefresh: false);
 
   final ScrollController nowPlayingController = ScrollController();
   final ScrollController popularController = ScrollController();
@@ -53,6 +58,14 @@ class MovieListNotifier extends ChangeNotifier {
   final ScrollController upComingController = ScrollController();
 
   int _nowPlayingPage = 1;
+
+  int get nowPlayingPage => _nowPlayingPage;
+
+  set nowPlayingPage(int value) {
+    _nowPlayingPage = value;
+    notifyListeners();
+  }
+
   int _popularPage = 1;
   int _topRatedPage = 1;
   int _upComingPage = 1;
@@ -67,13 +80,20 @@ class MovieListNotifier extends ChangeNotifier {
 
   bool get isFetching => _isFetching;
 
+  set isFetching(bool value) {
+    _isFetching = value;
+    notifyListeners();
+  }
+
   MovieListNotifier({
     required this.getNowPlayingMovies,
     required this.getPopularMovies,
     required this.getTopRatedMovies,
     required this.getUpComingMovies,
+    bool autoInit = true,
   }) {
-    _init();
+    if (autoInit) _init();
+    // _init();
   }
 
   final GetNowPlayingMovies getNowPlayingMovies;

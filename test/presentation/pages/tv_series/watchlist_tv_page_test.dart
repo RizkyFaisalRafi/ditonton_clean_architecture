@@ -137,7 +137,7 @@ void main() {
       });
 
       expect(find.byType(ListView), findsOneWidget);
-      expect(find.byType(InkWell), findsNWidgets(testTvSeries.length));
+      expect(find.byType(InkWell), findsNWidgets(3));
     });
 
     testWidgets('should navigate to detail page when tv series is tapped', (

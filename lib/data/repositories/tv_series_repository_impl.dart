@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:ditonton_clean_architecture/common/failure.dart';
@@ -39,7 +38,7 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
 
         return Right(result.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure(''));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
       try {
@@ -68,7 +67,7 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
 
         return Right(result.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure(''));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
       try {
@@ -97,7 +96,7 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
 
         return Right(result.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure(''));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
       try {
@@ -126,7 +125,7 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
 
         return Right(result.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure(''));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
       try {
@@ -173,7 +172,7 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
       final result = await remoteDataSource.getTvRecommendations(id);
       return Right(result.map((model) => model.toEntity()).toList());
     } on ServerException {
-      return Left(ServerFailure(''));
+      return Left(ServerFailure('Server Failure'));
     } on SocketException {
       return Left(ConnectionFailure('Failed to connect to the network'));
     }
@@ -235,7 +234,7 @@ class TvSeriesRepositoryImpl implements TvSeriesRepository {
         final result = await remoteDataSource.searchTvSeries(query);
         return Right(result.map((model) => model.toEntity()).toList());
       } on ServerException {
-        return Left(ServerFailure('Kesalahan tidak terduga TvSeriesRepoImpl'));
+        return Left(ServerFailure('Server Failure'));
       }
     } else {
       return Left(ConnectionFailure('Failed to connect to the network'));

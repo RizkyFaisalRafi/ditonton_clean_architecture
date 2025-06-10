@@ -29,6 +29,7 @@ class _TopRatedMoviesPageState extends State<TopRatedMoviesPage> {
             if (data.state == RequestState.Loading) {
               return Center(
                 child: Lottie.asset(
+                  key: Key('loading_top_rated_movie'),
                   'assets/image_lottie/loading_bar.json',
                   width: 100,
                   height: 100,
@@ -85,6 +86,7 @@ class _TopRatedMoviesPageState extends State<TopRatedMoviesPage> {
                 ),
 
                 child: ListView.builder(
+                  key: Key('loaded_top_rated'),
                   controller: data.scrollController,
                   itemBuilder: (context, index) {
                     final movie = data.movies[index];
@@ -95,13 +97,10 @@ class _TopRatedMoviesPageState extends State<TopRatedMoviesPage> {
               );
             } else {
               return ErrorStateWidget2(
+                key: Key('error_message'),
                 message: data.message,
                 onRetry: () => data.onRefresh(),
               );
-              // return Center(
-              //   key: Key('error_message'),
-              //   child: Text(data.message),
-              // );
             }
           },
         ),

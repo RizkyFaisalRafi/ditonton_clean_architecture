@@ -46,6 +46,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
           if (provider.movieState == RequestState.Loading) {
             return Center(
               child: Lottie.asset(
+                key: Key('loading_movie_detail'),
                 'assets/image_lottie/loading_bar.json',
                 width: 100,
                 height: 100,
@@ -56,7 +57,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
             final movie = provider.movie;
             return SafeArea(
               child: DetailContent(
-                movie,
+                movie!,
                 provider.movieRecommendations,
                 provider.isAddedToWatchlist,
               ),

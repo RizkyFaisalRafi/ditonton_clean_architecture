@@ -25,6 +25,7 @@ class PopularMoviesPage extends StatelessWidget {
             if (data.state == RequestState.Loading) {
               return Center(
                 child: Lottie.asset(
+                  key: Key('loading_popular_movie'),
                   'assets/image_lottie/loading_bar.json',
                   width: 100,
                   height: 100,
@@ -35,7 +36,6 @@ class PopularMoviesPage extends StatelessWidget {
               if (data.movies.isEmpty) {
                 return const EmptyStateWidget(message: 'No movies available.');
               }
-
               return SmartRefresher(
                 controller: provider.refreshC,
                 enablePullDown: true,
@@ -81,6 +81,7 @@ class PopularMoviesPage extends StatelessWidget {
                 ),
 
                 child: ListView.builder(
+                  key: Key('loaded_popular'),
                   controller: data.scrollController,
                   itemBuilder: (context, index) {
                     final movie = data.movies[index];
@@ -91,13 +92,10 @@ class PopularMoviesPage extends StatelessWidget {
               );
             } else {
               return ErrorStateWidget2(
+                key: Key('error_message'),
                 message: data.message,
                 onRetry: () => data.onRefresh(),
               );
-              // return Center(
-              //   key: Key('error_message'),
-              //   child: Text(data.message),
-              // );
             }
           },
         ),

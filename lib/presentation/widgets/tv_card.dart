@@ -71,15 +71,6 @@ class TvCard extends StatelessWidget {
                           height: 120,
                           child: Icon(Icons.error),
                         ),
-
-                // CachedNetworkImage(
-                //   imageUrl: '$BASE_IMAGE_URL${tv.posterPath}',
-                //   width: 80,
-                //   placeholder:
-                //       (context, url) =>
-                //           Center(child: CircularProgressIndicator()),
-                //   errorWidget: (context, url, error) => Icon(Icons.error),
-                // ),
               ),
             ),
           ],

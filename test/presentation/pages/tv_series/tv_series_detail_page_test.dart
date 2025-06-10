@@ -131,7 +131,7 @@ void main() {
       );
 
       /// Assert
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byKey(Key('loading_tv_detail')), findsOneWidget);
     });
 
     /// Test 2: Error State

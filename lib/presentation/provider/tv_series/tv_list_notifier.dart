@@ -10,8 +10,11 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TvListNotifier extends ChangeNotifier {
   var _airingTodayTvSeries = <TvSeries>[];
-
   List<TvSeries> get airingTodayTvSeries => _airingTodayTvSeries;
+  set airingTodayTvSeries(List<TvSeries> value) {
+    _airingTodayTvSeries = value;
+    notifyListeners();
+  }
 
   var _onTheAirTvSeries = <TvSeries>[];
 
@@ -53,6 +56,12 @@ class TvListNotifier extends ChangeNotifier {
   final ScrollController topRatedController = ScrollController();
 
   int _airingTodayPage = 1;
+  int get airingTodayPage => _airingTodayPage;
+  set airingTodayPage(int value) {
+    _airingTodayPage = value;
+    notifyListeners();
+  }
+
   int _onTheAirPage = 1;
   int _popularPage = 1;
   int _topRatedPage = 1;
@@ -63,17 +72,31 @@ class TvListNotifier extends ChangeNotifier {
   bool _hasMorePopular = true;
   bool _hasMoreTopRated = true;
 
+  bool get hasMoreAiringToday => _hasMoreAiringToday;
+
+  set hasMoreAiringToday(bool value) {
+    _hasMoreAiringToday = value;
+    notifyListeners();
+  }
+
   bool _isFetching = false;
 
   bool get isFetching => _isFetching;
+  set isFetching(bool value) {
+    _isFetching = value;
+    notifyListeners();
+  }
+
 
   TvListNotifier({
     required this.getAiringTodayTv,
     required this.getOnTheAirTv,
     required this.getPopularTv,
     required this.getTopRatedTv,
+    bool autoInit = true,
   }) {
-    _init();
+    if (autoInit) init(); // Jalankan init() hanya jika autoInit true
+    // init();
   }
 
   final GetAiringTodayTv getAiringTodayTv;
@@ -82,7 +105,7 @@ class TvListNotifier extends ChangeNotifier {
   final GetTopRatedTv getTopRatedTv;
 
   /// Inisialisasi saat objek dibuat
-  void _init() {
+  void init() {
     loadTvSeries(); // Load awal semua movie
 
     airingTodayController.addListener(() {
@@ -105,7 +128,7 @@ class TvListNotifier extends ChangeNotifier {
 
     popularController.addListener(() {
       if (popularController.position.pixels >=
-          popularController.position.maxScrollExtent &&
+              popularController.position.maxScrollExtent &&
           !_isFetching &&
           _hasMorePopular) {
         loadMoreTvPopular();
@@ -114,7 +137,7 @@ class TvListNotifier extends ChangeNotifier {
 
     topRatedController.addListener(() {
       if (topRatedController.position.pixels >=
-          topRatedController.position.maxScrollExtent &&
+              topRatedController.position.maxScrollExtent &&
           !_isFetching &&
           _hasMoreTopRated) {
         loadMoreTvTopRated();
@@ -223,7 +246,7 @@ class TvListNotifier extends ChangeNotifier {
 
       // Clear data lama
       _airingTodayTvSeries.clear();
-      _popularTvSeries.clear();
+      _onTheAirTvSeries.clear();
       _popularTvSeries.clear();
       _topRatedTvSeries.clear();
 
@@ -267,15 +290,23 @@ class TvListNotifier extends ChangeNotifier {
         // _airingTodayTvSeries = tvSeriesData;
 
         if (tvSeriesData.isNotEmpty) {
-          if (_airingTodayPage == 1) {
-            _airingTodayTvSeries = tvSeriesData; // reset di page 1
-          } else {
-            _airingTodayTvSeries.addAll(tvSeriesData);
-          }
+          _airingTodayTvSeries.addAll(tvSeriesData);
           _airingTodayPage++;
         } else {
           _hasMoreAiringToday = false;
+          _airingTodayState = RequestState.Empty;
         }
+
+        // if (tvSeriesData.isNotEmpty) {
+        //   if (_airingTodayPage == 1) {
+        //     _airingTodayTvSeries = tvSeriesData; // reset di page 1
+        //   } else {
+        //     _airingTodayTvSeries.addAll(tvSeriesData);
+        //   }
+        //   _airingTodayPage++;
+        // } else {
+        //   _hasMoreAiringToday = false;
+        // }
 
         notifyListeners();
       },

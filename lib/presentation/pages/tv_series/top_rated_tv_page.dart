@@ -25,6 +25,7 @@ class TopRatedTvPage extends StatelessWidget {
             if (data.state == RequestState.Loading) {
               return Center(
                 child: Lottie.asset(
+                  key: Key('loading_top_rated_tv'),
                   'assets/image_lottie/loading_bar.json',
                   width: 100,
                   height: 100,
@@ -82,6 +83,7 @@ class TopRatedTvPage extends StatelessWidget {
                   },
                 ),
                 child: ListView.builder(
+                  key: Key('loaded_top_rated_tv'),
                   controller: provider.scrollController,
                   itemBuilder: (context, index) {
                     final topRatedTv = data.tvSeriesList[index];
@@ -92,6 +94,7 @@ class TopRatedTvPage extends StatelessWidget {
               );
             } else {
               return ErrorStateWidget2(
+                key: Key('error_message'),
                 message: data.message,
                 onRetry: () => data.onRefresh(),
               );

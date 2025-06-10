@@ -51,7 +51,6 @@ Data Local / Cache SQFLite
 - Watchlist Movie and TV (Done)
 - Detail Page Movie And TV (Movie Done, TV Done)
 
-
 Run in Git Bash for Coverage
 Coverage App:
 - flutter clean
@@ -59,7 +58,21 @@ Coverage App:
 - dart run build_runner build --delete-conflicting-outputs
 - flutter test --machine > tests.output
 - flutter test --coverage
-- genhtml coverage/lcov.info -o coverage/html --legend -t "Clean Architecture Submission Awal Expert" --function-coverage
+- genhtml coverage/lcov.info -o coverage/html --legend -t "Clean Architecture Submission Awal Expert (Faisal)" --function-coverage
+
+## Ketentuaan Submission Awal
+- Menampilkan TV series populer, top rated, dan sedang tayang pada satu halaman utama.
+- Menampilkan daftar TV series populer, top rated, dan sedang tayang masing-masing pada satu halaman sendiri.
+- Aplikasi harus menampilkan detail TV Series berdasarkan item yang dipilih
+    - Halaman detail menampilkan poster, judul, rating, dan sinopsis.
+    - Halaman detail menampilkan rekomendasi TV series lainnya.
+- Fitur pencarian berdasarkan judul dengan memanfaatkan API
+- Menambahkan daftar TV series yang ingin ditonton ke dalam suatu daftar yang disimpan secara lokal. Daftar watchlist harus tetap bertahan meskipun aplikasi ditutup dan dibuka kembali.
+- Fitur yang dikembangkan harus memiliki unit testing dengan minimal testing coverage 70%.
+- Menerapkan Clean Architecture
+- Menampilkan Informasi Season & Episode
+- Menambahkan Widget & Integration Test
+
 
 ## Tips Submission Awal
 

@@ -30,6 +30,8 @@ void main() {
   late MockSaveWatchlist mockSaveWatchlist;
   late MockRemoveWatchlist mockRemoveWatchlist;
   late int listenerCallCount;
+  final tId = 1;
+  final tMovies = <Movie>[testMovie];
 
   setUp(() {
     listenerCallCount = 0;
@@ -49,26 +51,15 @@ void main() {
     });
   });
 
-  final tId = 1;
+  tearDown(() {
+    reset(mockGetMovieDetail);
+    reset(mockGetMovieRecommendations);
+    reset(mockGetWatchlistStatus);
+    reset(mockSaveWatchlist);
+    reset(mockRemoveWatchlist);
+  });
 
-  final tMovie = Movie(
-    adult: false,
-    backdropPath: 'backdropPath',
-    genreIds: [1, 2, 3],
-    id: 1,
-    originalTitle: 'originalTitle',
-    overview: 'overview',
-    popularity: 1,
-    posterPath: 'posterPath',
-    releaseDate: 'releaseDate',
-    title: 'title',
-    video: false,
-    voteAverage: 1,
-    voteCount: 1,
-  );
-  final tMovies = <Movie>[tMovie];
-
-  void arrangeUsecase() {
+  void arrangeUsecasesSuccess() {
     when(
       mockGetMovieDetail.execute(tId),
     ).thenAnswer((_) async => Right(testMovieDetail));
@@ -77,178 +68,200 @@ void main() {
     ).thenAnswer((_) async => Right(tMovies));
   }
 
-  group('Get Movie Detail', () {
-    test('should get data from the usecase', () async {
-      // arrange
-      arrangeUsecase();
-      // act
+  group('Fetch Movie Detail', () {
+    test('should initialize with empty state', () {
+      expect(provider.movieState, RequestState.Empty);
+      expect(provider.recommendationState, RequestState.Empty);
+      expect(provider.movie, isNull);
+      expect(provider.movieRecommendations, isEmpty);
+    });
+
+    test('should call correct usecases', () async {
+      // Arrange
+      arrangeUsecasesSuccess();
+
+      // Act
       await provider.fetchMovieDetail(tId);
-      // assert
+
+      // Assert
       verify(mockGetMovieDetail.execute(tId));
       verify(mockGetMovieRecommendations.execute(tId));
     });
 
-    test('should change state to Loading when usecase is called', () {
-      // arrange
-      arrangeUsecase();
-      // act
+    test('should change state to Loading when starting', () async {
+      // Arrange
+      arrangeUsecasesSuccess();
+
+      // Act
       provider.fetchMovieDetail(tId);
-      // assert
+
+      // Assert
       expect(provider.movieState, RequestState.Loading);
       expect(listenerCallCount, 1);
     });
 
-    test('should change movie when data is gotten successfully', () async {
-      // arrange
-      arrangeUsecase();
-      // act
-      await provider.fetchMovieDetail(tId);
-      // assert
-      expect(provider.movieState, RequestState.Loaded);
-      expect(provider.movie, testMovieDetail);
-      expect(listenerCallCount, 3);
-    });
-
     test(
-      'should change recommendation movies when data is gotten successfully',
+      'should update movie detail and recommendations when success',
       () async {
-        // arrange
-        arrangeUsecase();
-        // act
+        // Arrange
+        arrangeUsecasesSuccess();
+
+        // Act
         await provider.fetchMovieDetail(tId);
-        // assert
+
+        // Assert
         expect(provider.movieState, RequestState.Loaded);
+        expect(provider.recommendationState, RequestState.Loaded);
+        expect(provider.movie, testMovieDetail);
         expect(provider.movieRecommendations, tMovies);
+        expect(
+          listenerCallCount,
+          3,
+        ); // Loading -> Detail Loaded -> Recommendations Loaded
       },
     );
-  });
 
-  group('Get Movie Recommendations', () {
-    test('should get data from the usecase', () async {
-      // arrange
-      arrangeUsecase();
-      // act
+    test('should handle error when fetching detail fails', () async {
+      // Arrange
+      when(
+        mockGetMovieDetail.execute(tId),
+      ).thenAnswer((_) async => Left(ServerFailure('Server Error')));
+      when(
+        mockGetMovieRecommendations.execute(tId),
+      ).thenAnswer((_) async => Right(tMovies));
+
+      // Act
       await provider.fetchMovieDetail(tId);
-      // assert
-      verify(mockGetMovieRecommendations.execute(tId));
-      expect(provider.movieRecommendations, tMovies);
+
+      // Assert
+      expect(provider.movieState, RequestState.Error);
+      expect(provider.message, 'Server Error');
+      expect(listenerCallCount, 2); // Loading -> Error
     });
 
-    test(
-      'should update recommendation state when data is gotten successfully',
-      () async {
-        // arrange
-        arrangeUsecase();
-        // act
-        await provider.fetchMovieDetail(tId);
-        // assert
-        expect(provider.recommendationState, RequestState.Loaded);
-        expect(provider.movieRecommendations, tMovies);
-      },
-    );
-
-    test('should update error message when request in successful', () async {
-      // arrange
+    test('should handle error when fetching recommendations fails', () async {
+      // Arrange
       when(
         mockGetMovieDetail.execute(tId),
       ).thenAnswer((_) async => Right(testMovieDetail));
       when(
         mockGetMovieRecommendations.execute(tId),
-      ).thenAnswer((_) async => Left(ServerFailure('Failed')));
-      // act
+      ).thenAnswer((_) async => Left(ServerFailure('Recommendation Error')));
+
+      // Act
       await provider.fetchMovieDetail(tId);
-      // assert
+
+      // Assert
       expect(provider.recommendationState, RequestState.Error);
-      expect(provider.message, 'Failed');
+      expect(provider.message, 'Recommendation Error');
+      expect(provider.movieState, RequestState.Loaded); // Detail still loaded
+      expect(
+        listenerCallCount,
+        3,
+      ); // Loading -> Detail Loaded -> Recommendation Error
     });
   });
 
-  group('Watchlist', () {
-    test('should get the watchlist status', () async {
-      // arrange
-      when(mockGetWatchlistStatus.execute(1)).thenAnswer((_) async => true);
-      // act
-      await provider.loadWatchlistStatus(1);
-      // assert
+  group('Watchlist Operations', () {
+    test('should get watchlist status correctly', () async {
+      // Arrange
+      when(
+        mockGetWatchlistStatus.execute(tId),
+      ).thenAnswer((_) async => Right(true));
+
+      // Act
+      await provider.loadWatchlistStatus(tId);
+
+      // Assert
       expect(provider.isAddedToWatchlist, true);
+      verify(mockGetWatchlistStatus.execute(tId));
     });
 
-    test('should execute save watchlist when function called', () async {
-      // arrange
-      when(
-        mockSaveWatchlist.execute(testMovieDetail),
-      ).thenAnswer((_) async => Right('Success'));
-      when(
-        mockGetWatchlistStatus.execute(testMovieDetail.id),
-      ).thenAnswer((_) async => true);
-      // act
-      await provider.addWatchlist(testMovieDetail);
-      // assert
-      verify(mockSaveWatchlist.execute(testMovieDetail));
+    test('should handle watchlist status failure', () async {
+      // Arrange
+      when(mockGetWatchlistStatus.execute(tId)).thenAnswer(
+        (_) async => Right(false),
+      ); // or throw error if your implementation does
+
+      // Act
+      await provider.loadWatchlistStatus(tId);
+
+      // Assert
+      expect(provider.isAddedToWatchlist, false);
     });
 
-    test('should execute remove watchlist when function called', () async {
-      // arrange
-      when(
-        mockRemoveWatchlist.execute(testMovieDetail),
-      ).thenAnswer((_) async => Right('Removed'));
-      when(
-        mockGetWatchlistStatus.execute(testMovieDetail.id),
-      ).thenAnswer((_) async => false);
-      // act
-      await provider.removeFromWatchlist(testMovieDetail);
-      // assert
-      verify(mockRemoveWatchlist.execute(testMovieDetail));
-    });
-
-    test('should update watchlist status when add watchlist success', () async {
-      // arrange
+    test('should add to watchlist successfully', () async {
+      // Arrange
       when(
         mockSaveWatchlist.execute(testMovieDetail),
       ).thenAnswer((_) async => Right('Added to Watchlist'));
       when(
         mockGetWatchlistStatus.execute(testMovieDetail.id),
-      ).thenAnswer((_) async => true);
-      // act
+      ).thenAnswer((_) async => Right(true));
+
+      // Act
       await provider.addWatchlist(testMovieDetail);
-      // assert
+
+      // Assert
+      verify(mockSaveWatchlist.execute(testMovieDetail));
       verify(mockGetWatchlistStatus.execute(testMovieDetail.id));
       expect(provider.isAddedToWatchlist, true);
       expect(provider.watchlistMessage, 'Added to Watchlist');
       expect(listenerCallCount, 1);
     });
 
-    test('should update watchlist message when add watchlist failed', () async {
-      // arrange
+    test('should handle add watchlist failure', () async {
+      // Arrange
       when(
         mockSaveWatchlist.execute(testMovieDetail),
-      ).thenAnswer((_) async => Left(DatabaseFailure('Failed')));
+      ).thenAnswer((_) async => Left(DatabaseFailure('Failed to add')));
       when(
         mockGetWatchlistStatus.execute(testMovieDetail.id),
-      ).thenAnswer((_) async => false);
-      // act
+      ).thenAnswer((_) async => Right(false));
+
+      // Act
       await provider.addWatchlist(testMovieDetail);
-      // assert
-      expect(provider.watchlistMessage, 'Failed');
+
+      // Assert
+      expect(provider.isAddedToWatchlist, false);
+      expect(provider.watchlistMessage, 'Failed to add');
+    });
+
+    test('should remove from watchlist successfully', () async {
+      // Arrange
+      when(
+        mockRemoveWatchlist.execute(testMovieDetail),
+      ).thenAnswer((_) async => Right('Removed from Watchlist'));
+      when(
+        mockGetWatchlistStatus.execute(testMovieDetail.id),
+      ).thenAnswer((_) async => Right(false));
+
+      // Act
+      await provider.removeFromWatchlist(testMovieDetail);
+
+      // Assert
+      verify(mockRemoveWatchlist.execute(testMovieDetail));
+      verify(mockGetWatchlistStatus.execute(testMovieDetail.id));
+      expect(provider.isAddedToWatchlist, false);
+      expect(provider.watchlistMessage, 'Removed from Watchlist');
       expect(listenerCallCount, 1);
     });
-  });
 
-  group('on Error', () {
-    test('should return error when data is unsuccessful', () async {
-      // arrange
+    test('should handle remove watchlist failure', () async {
+      // Arrange
       when(
-        mockGetMovieDetail.execute(tId),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+        mockRemoveWatchlist.execute(testMovieDetail),
+      ).thenAnswer((_) async => Left(DatabaseFailure('Failed to remove')));
       when(
-        mockGetMovieRecommendations.execute(tId),
-      ).thenAnswer((_) async => Right(tMovies));
-      // act
-      await provider.fetchMovieDetail(tId);
-      // assert
-      expect(provider.movieState, RequestState.Error);
-      expect(provider.message, 'Server Failure');
-      expect(listenerCallCount, 2);
+        mockGetWatchlistStatus.execute(testMovieDetail.id),
+      ).thenAnswer((_) async => Right(true));
+
+      // Act
+      await provider.removeFromWatchlist(testMovieDetail);
+
+      // Assert
+      expect(provider.isAddedToWatchlist, true);
+      expect(provider.watchlistMessage, 'Failed to remove');
     });
   });
 }

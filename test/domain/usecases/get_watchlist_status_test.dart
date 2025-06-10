@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/movies/get_watchlist_status.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -15,10 +16,12 @@ void main() {
   test('should get watchlist status from repository', () async {
     // arrange
     when(mockMovieRepository.isAddedToWatchlist(1))
-        .thenAnswer((_) async => true);
+        .thenAnswer((_) async => Right(true));
+
     // act
     final result = await usecase.execute(1);
+
     // assert
-    expect(result, true);
+    expect(result, Right(true));
   });
 }

@@ -10,6 +10,7 @@ import 'package:ditonton_clean_architecture/common/state_enum.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import '../../dummy_data/dummy_objects.dart';
 import 'movie_list_notifier_test.mocks.dart';
 
 @GenerateMocks([
@@ -37,6 +38,7 @@ void main() {
       getPopularMovies: mockGetPopularMovies,
       getTopRatedMovies: mockGetTopRatedMovies,
       getUpComingMovies: mockGetUpComingMovies,
+      autoInit: false,
     )..addListener(() {
       listenerCallCount += 1;
     });
@@ -58,187 +60,235 @@ void main() {
     voteCount: 1,
   );
   final tMovieList = <Movie>[tMovie];
+  const tPage = 1;
 
-  group('now playing movies', () {
-    test('initialState should be Empty', () {
-      expect(provider.nowPlayingState, equals(RequestState.Empty));
+  group('Initial State', () {
+    test('should have initial empty state', () {
+      expect(provider.nowPlayingState, RequestState.Empty);
+      expect(provider.popularMoviesState, RequestState.Empty);
+      expect(provider.topRatedMoviesState, RequestState.Empty);
+      expect(provider.upComingMoviesState, RequestState.Empty);
+      expect(provider.nowPlayingMovies, isEmpty);
+      expect(provider.popularMovies, isEmpty);
+      expect(provider.topRatedMovies, isEmpty);
+      expect(provider.upComingMovies, isEmpty);
     });
+  });
 
-    test('should get data from the usecase', () async {
+  group('Now Playing Movie', () {
+    test('should update data when success', () async {
       // arrange
       when(
-        mockGetNowPlayingMovies.execute(),
+        mockGetNowPlayingMovies.execute(tPage),
       ).thenAnswer((_) async => Right(tMovieList));
-      // act
-      provider.fetchNowPlayingMovies();
-      // assert
-      verify(mockGetNowPlayingMovies.execute());
-    });
 
-    test('should change state to Loading when usecase is called', () {
-      // arrange
-      when(
-        mockGetNowPlayingMovies.execute(),
-      ).thenAnswer((_) async => Right(tMovieList));
-      // act
-      provider.fetchNowPlayingMovies();
-      // assert
-      expect(provider.nowPlayingState, RequestState.Loading);
-    });
-
-    test('should change movies when data is gotten successfully', () async {
-      // arrange
-      when(
-        mockGetNowPlayingMovies.execute(),
-      ).thenAnswer((_) async => Right(tMovieList));
       // act
       await provider.fetchNowPlayingMovies();
+
       // assert
       expect(provider.nowPlayingState, RequestState.Loaded);
       expect(provider.nowPlayingMovies, tMovieList);
-      expect(listenerCallCount, 2);
+      expect(listenerCallCount, 1);
     });
 
-    test('should return error when data is unsuccessful', () async {
+    test('should update page when success', () async {
       // arrange
       when(
-        mockGetNowPlayingMovies.execute(),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+        mockGetNowPlayingMovies.execute(tPage),
+      ).thenAnswer((_) async => Right(tMovieList));
+
       // act
       await provider.fetchNowPlayingMovies();
+
+      // assert
+      expect(provider.nowPlayingMovies.length, tMovieList.length);
+    });
+
+    test('should handle error', () async {
+      // arrange
+      when(
+        mockGetNowPlayingMovies.execute(tPage),
+      ).thenAnswer((_) async => Left(ServerFailure('Error')));
+
+      // act
+      await provider.fetchNowPlayingMovies();
+
       // assert
       expect(provider.nowPlayingState, RequestState.Error);
-      expect(provider.message, 'Server Failure');
-      expect(listenerCallCount, 2);
+      expect(provider.message, 'Error');
+      expect(listenerCallCount, 1);
     });
   });
 
-  group('popular movies', () {
-    test('should change state to loading when usecase is called', () async {
+  group('Popular Movie', () {
+    test('should update data when success', () async {
       // arrange
       when(
-        mockGetPopularMovies.execute(),
+        mockGetPopularMovies.execute(tPage),
       ).thenAnswer((_) async => Right(tMovieList));
-      // act
-      provider.fetchPopularMovies();
-      // assert
-      expect(provider.popularMoviesState, RequestState.Loading);
-      // verify(provider.setState(RequestState.Loading));
-    });
 
-    test(
-      'should change movies data when data is gotten successfully',
-      () async {
-        // arrange
-        when(
-          mockGetPopularMovies.execute(),
-        ).thenAnswer((_) async => Right(tMovieList));
-        // act
-        await provider.fetchPopularMovies();
-        // assert
-        expect(provider.popularMoviesState, RequestState.Loaded);
-        expect(provider.popularMovies, tMovieList);
-        expect(listenerCallCount, 2);
-      },
-    );
-
-    test('should return error when data is unsuccessful', () async {
-      // arrange
-      when(
-        mockGetPopularMovies.execute(),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
       // act
       await provider.fetchPopularMovies();
+
+      // assert
+      expect(provider.popularMoviesState, RequestState.Loaded);
+      expect(provider.popularMovies, tMovieList);
+      expect(listenerCallCount, 1);
+    });
+
+    test('should handle error', () async {
+      // arrange
+      when(
+        mockGetPopularMovies.execute(tPage),
+      ).thenAnswer((_) async => Left(ServerFailure('Error')));
+
+      // act
+      await provider.fetchPopularMovies();
+
       // assert
       expect(provider.popularMoviesState, RequestState.Error);
-      expect(provider.message, 'Server Failure');
-      expect(listenerCallCount, 2);
+      expect(provider.message, 'Error');
+      expect(listenerCallCount, 1);
     });
   });
 
-  group('top rated movies', () {
-    test('should change state to loading when usecase is called', () async {
+  group('Top Rated Movie', () {
+    test('should update data when success', () async {
       // arrange
       when(
-        mockGetTopRatedMovies.execute(),
+        mockGetTopRatedMovies.execute(tPage),
       ).thenAnswer((_) async => Right(tMovieList));
-      // act
-      provider.fetchTopRatedMovies();
-      // assert
-      expect(provider.topRatedMoviesState, RequestState.Loading);
-    });
 
-    test(
-      'should change movies data when data is gotten successfully',
-      () async {
-        // arrange
-        when(
-          mockGetTopRatedMovies.execute(),
-        ).thenAnswer((_) async => Right(tMovieList));
-        // act
-        await provider.fetchTopRatedMovies();
-        // assert
-        expect(provider.topRatedMoviesState, RequestState.Loaded);
-        expect(provider.topRatedMovies, tMovieList);
-        expect(listenerCallCount, 2);
-      },
-    );
-
-    test('should return error when data is unsuccessful', () async {
-      // arrange
-      when(
-        mockGetTopRatedMovies.execute(),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
       // act
       await provider.fetchTopRatedMovies();
+
+      // assert
+      expect(provider.topRatedMoviesState, RequestState.Loaded);
+      expect(provider.topRatedMovies, tMovieList);
+      expect(listenerCallCount, 1);
+    });
+
+    test('should handle error', () async {
+      // arrange
+      when(
+        mockGetTopRatedMovies.execute(tPage),
+      ).thenAnswer((_) async => Left(ServerFailure('Error')));
+
+      // act
+      await provider.fetchTopRatedMovies();
+
       // assert
       expect(provider.topRatedMoviesState, RequestState.Error);
-      expect(provider.message, 'Server Failure');
-      expect(listenerCallCount, 2);
+      expect(provider.message, 'Error');
+      expect(listenerCallCount, 1);
     });
   });
 
-  group('up coming movies', () {
-    test('should change state to loading when usecase is called', () {
-      // Arrange
-      when(
-        mockGetUpComingMovies.execute(),
-      ).thenAnswer((_) async => Right(tMovieList));
-
-      // Act
-      provider.fetchUpComingMovies();
-
-      // Assert
-      expect(provider.upComingMoviesState, RequestState.Loading);
-    });
-
-    test(
-      'should change movies data when data is gotten successfully',
-      () async {
-        // arrange
-        when(
-          mockGetUpComingMovies.execute(),
-        ).thenAnswer((_) async => Right(tMovieList));
-        // act
-        await provider.fetchUpComingMovies();
-        // assert
-        expect(provider.upComingMoviesState, RequestState.Loaded);
-        expect(provider.upComingMovies, tMovieList);
-        expect(listenerCallCount, 2);
-      },
-    );
-
-    test('should return error when data is unsuccessful', () async {
+  group('Up Coming Movie', () {
+    test('should update data when success', () async {
       // arrange
       when(
-        mockGetUpComingMovies.execute(),
-      ).thenAnswer((_) async => Left(ServerFailure('Server Failure')));
+        mockGetUpComingMovies.execute(tPage),
+      ).thenAnswer((_) async => Right(tMovieList));
+
       // act
       await provider.fetchUpComingMovies();
+
+      // assert
+      expect(provider.upComingMoviesState, RequestState.Loaded);
+      expect(provider.upComingMovies, tMovieList);
+      expect(listenerCallCount, 1);
+    });
+
+    test('should handle error', () async {
+      // arrange
+      when(
+        mockGetUpComingMovies.execute(tPage),
+      ).thenAnswer((_) async => Left(ServerFailure('Error')));
+
+      // act
+      await provider.fetchUpComingMovies();
+
       // assert
       expect(provider.upComingMoviesState, RequestState.Error);
-      expect(provider.message, 'Server Failure');
-      expect(listenerCallCount, 2);
+      expect(provider.message, 'Error');
+      expect(listenerCallCount, 1);
+    });
+  });
+
+  group('Refresh', () {
+    test('should reset all data when refreshed', () async {
+      // arrange
+      when(
+        mockGetNowPlayingMovies.execute(tPage),
+      ).thenAnswer((_) async => Right(tMovieList));
+      when(
+        mockGetPopularMovies.execute(tPage),
+      ).thenAnswer((_) async => Right(tMovieList));
+      when(
+        mockGetTopRatedMovies.execute(tPage),
+      ).thenAnswer((_) async => Right(tMovieList));
+      when(
+        mockGetUpComingMovies.execute(tPage),
+      ).thenAnswer((_) async => Right(tMovieList));
+
+      // act
+      await provider.onRefresh();
+
+      // assert
+      expect(provider.nowPlayingState, RequestState.Loaded);
+      expect(provider.popularMoviesState, RequestState.Loaded);
+      expect(provider.topRatedMoviesState, RequestState.Loaded);
+      expect(provider.upComingMoviesState, RequestState.Loaded);
+      expect(provider.refreshC.isRefresh, false);
+    });
+
+    test('should handle refresh error', () async {
+      // arrange
+      when(
+        mockGetNowPlayingMovies.execute(tPage),
+      ).thenAnswer((_) async => Left(ServerFailure('Error')));
+
+      // act
+      await provider.onRefresh();
+
+      // assert
+      expect(provider.nowPlayingState, RequestState.Error);
+      expect(provider.refreshC.isRefresh, false);
+    });
+  });
+
+  group('Load More', () {
+    test('should load more now playing Movie', () async {
+      // arrange
+      final tTvSeries2 = <Movie>[testMovie, testMovie];
+
+      // Stub untuk mencegah error unexpected call
+      when(mockGetNowPlayingMovies.execute(1))
+          .thenAnswer((_) async => Right(<Movie>[]));
+
+      provider.nowPlayingMovies = tTvSeries2;
+      provider.nowPlayingPage = 2;
+      when(mockGetNowPlayingMovies.execute(2))
+          .thenAnswer((_) async => Right(tTvSeries2));
+
+      // act
+      await provider.loadMoreMovie();
+
+      // assert
+      expect(provider.nowPlayingMovies.length, tMovieList.length * 2);
+      verify(mockGetNowPlayingMovies.execute(2));
+    });
+
+    test('should not load more when fetching', () async {
+      // arrange
+      provider.isFetching = true;
+
+      // act
+      await provider.loadMoreMovie();
+
+      // assert
+      verifyNever(mockGetNowPlayingMovies.execute(any));
     });
   });
 }
