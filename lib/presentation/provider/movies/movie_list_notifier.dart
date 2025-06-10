@@ -50,7 +50,7 @@ class MovieListNotifier extends ChangeNotifier {
 
   String get message => _message;
 
-  RefreshController refreshC = RefreshController(initialRefresh: true);
+  RefreshController refreshC = RefreshController(initialRefresh: false);
 
   final ScrollController nowPlayingController = ScrollController();
   final ScrollController popularController = ScrollController();

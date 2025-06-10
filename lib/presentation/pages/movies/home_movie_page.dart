@@ -1,22 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/common/constants.dart';
 import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
-import 'package:ditonton_clean_architecture/presentation/pages/about_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/movie_detail_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/popular_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/search_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/top_rated_movies_page.dart';
-import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_page.dart';
-import 'package:ditonton_clean_architecture/presentation/pages/tv_series/watchlist_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/up_coming_movies_page.dart';
-import 'package:ditonton_clean_architecture/presentation/pages/movies/watchlist_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
+import 'package:ditonton_clean_architecture/presentation/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 import '../../widgets/error_state_widget.dart';
 
 class HomeMoviePage extends StatelessWidget {
@@ -27,71 +23,17 @@ class HomeMoviePage extends StatelessWidget {
     final provider = Provider.of<MovieListNotifier>(context);
 
     return Scaffold(
-      /// Navigation Drawer
-      drawer: Drawer(
-        child: Column(
-          children: [
-            UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/circle-g.png'),
-                backgroundColor: Colors.grey.shade900,
-              ),
-              accountName: Text('Ditonton'),
-              accountEmail: Text('ditonton@dicoding.com'),
-              decoration: BoxDecoration(color: Colors.grey.shade900),
-            ),
-
-            /// Movies Navigation Drawer
-            ListTile(
-              leading: Icon(Icons.movie),
-              title: Text('Movies'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-
-            /// TV Series Navigation Drawer
-            ListTile(
-              leading: Icon(Icons.tv_rounded),
-              title: Text('TV Series'),
-              onTap: () {
-                Navigator.pushNamed(context, TvSeriesPage.ROUTE_NAME);
-              },
-            ),
-
-            /// Watchlist Movie Navigation Drawer
-            ListTile(
-              leading: Icon(Icons.save_alt),
-              title: Text('Watchlist Movie'),
-              onTap: () {
-                Navigator.pushNamed(context, WatchlistMoviesPage.ROUTE_NAME);
-              },
-            ),
-
-            /// Watchlist Tv Series Navigation Drawer
-            ListTile(
-              leading: Icon(Icons.save_alt),
-              title: Text('Watchlist Tv Series'),
-              onTap: () {
-                Navigator.pushNamed(context, WatchlistTvPage.ROUTE_NAME);
-              },
-            ),
-
-            /// About Navigation Drawer
-            ListTile(
-              onTap: () {
-                Navigator.pushNamed(context, AboutPage.ROUTE_NAME);
-              },
-              leading: Icon(Icons.info_outline),
-              title: Text('About'),
-            ),
-          ],
-        ),
-      ),
-
       /// Home Content
       appBar: AppBar(
-        title: Text('Ditonton'),
+        title: Text('Movies'),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            final customDrawerState =
+                context.findRootAncestorStateOfType<CustomDrawerState>();
+            customDrawerState?.toggle();
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () {

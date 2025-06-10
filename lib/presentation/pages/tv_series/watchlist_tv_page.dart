@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../common/constants.dart';
 import '../../provider/tv_series/watchlist_tv_notifier.dart';
+import '../../widgets/custom_drawer.dart';
 import '../../widgets/error_state_widget.dart';
 
 class WatchlistTvPage extends StatefulWidget {
@@ -51,7 +52,18 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Watchlist TV')),
+      appBar: AppBar(
+        title: Text('Watchlist TV'),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            // drawerKey.currentState?.toggle();
+            final customDrawerState =
+                context.findRootAncestorStateOfType<CustomDrawerState>();
+            customDrawerState?.toggle();
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Consumer<WatchlistTvNotifier>(
@@ -72,7 +84,10 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
                 itemCount: data.watchlistTv.length,
               );
             } else {
-              return EmptyStateWidget(key: Key('error_message'), message: data.message);
+              return EmptyStateWidget(
+                key: Key('error_message'),
+                message: data.message,
+              );
             }
           },
         ),

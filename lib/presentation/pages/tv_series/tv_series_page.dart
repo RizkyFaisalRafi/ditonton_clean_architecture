@@ -11,6 +11,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../common/constants.dart';
 import '../../../common/state_enum.dart';
 import '../../provider/tv_series/tv_list_notifier.dart';
+import '../../widgets/custom_drawer.dart';
 import '../../widgets/error_state_widget.dart';
 import 'on_the_air_tv_page.dart';
 
@@ -27,6 +28,14 @@ class TvSeriesPage extends StatelessWidget {
       /// Home Content
       appBar: AppBar(
         title: Text('TV Series Ditonton'),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            final customDrawerState =
+                context.findRootAncestorStateOfType<CustomDrawerState>();
+            customDrawerState?.toggle();
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () {

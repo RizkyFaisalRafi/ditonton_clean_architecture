@@ -1,6 +1,8 @@
 import 'package:ditonton_clean_architecture/common/constants.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/custom_drawer.dart';
+
 /*
  * Setelah membahas struktur objek Domain dan Data, selanjutnya kita akan masuk ke
  * bagian Presentation. Presentation merupakan lapisan terluar dari clean architecture
@@ -16,6 +18,17 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('About App'),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            final customDrawerState =
+                context.findRootAncestorStateOfType<CustomDrawerState>();
+            customDrawerState?.toggle();
+          },
+        ),
+      ),
       body: Stack(
         children: [
           Column(
@@ -44,12 +57,6 @@ class AboutPage extends StatelessWidget {
               ),
             ],
           ),
-          SafeArea(
-            child: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back),
-            ),
-          )
         ],
       ),
     );

@@ -5,6 +5,7 @@ import 'package:ditonton_clean_architecture/presentation/widgets/movie_card_list
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../widgets/custom_drawer.dart';
 import '../../widgets/error_state_widget.dart';
 
 class WatchlistMoviesPage extends StatefulWidget {
@@ -47,7 +48,17 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Watchlist Movie')),
+      appBar: AppBar(
+        title: Text('Watchlist Movie'),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            final customDrawerState =
+                context.findRootAncestorStateOfType<CustomDrawerState>();
+            customDrawerState?.toggle();
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Consumer<WatchlistMovieNotifier>(
@@ -55,8 +66,10 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
             if (data.watchlistState == RequestState.Loading) {
               return Center(child: CircularProgressIndicator());
             } else if (data.watchlistState == RequestState.Loaded) {
-              if(data.watchlistMovies.isEmpty) {
-                return const EmptyStateWidget(message: 'No Watchlist Available.');
+              if (data.watchlistMovies.isEmpty) {
+                return const EmptyStateWidget(
+                  message: 'No Watchlist Available.',
+                );
               }
               return ListView.builder(
                 itemBuilder: (context, index) {
