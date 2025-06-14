@@ -90,7 +90,7 @@ Coverage App:
 
 - Menerapkan Continuous Integration (Done)
 - Menggunakan Library BLoC
-  - Bloc, Event, State
+  - Bloc, Event, State (Done)
 - Menerapkan SSL Pinning
 - Integrasi dengan Firebase Analytics & Crashlytics
 - Modularisasi, Membagi aplikasi menjadi modul setidaknya untuk dua fitur movie & TV series(
