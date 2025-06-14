@@ -32,6 +32,7 @@ import 'package:ditonton_clean_architecture/domain/usecases/tv_series/search_tv_
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_list/movie_list_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/airing_today/airing_today_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/popular/popular_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_search_notifier.dart';
@@ -118,6 +119,7 @@ void init() {
   );
   locator.registerFactory(() => AiringTodayTvBloc(getAiringTodayTv: locator()));
   locator.registerFactory(() => OnTheAirTvBloc(getOnTheAirTv: locator()));
+  locator.registerFactory(() => PopularTvBloc(getPopularTv: locator()));
 
   // use case
   locator.registerLazySingleton(() => GetNowPlayingMovies(locator()));

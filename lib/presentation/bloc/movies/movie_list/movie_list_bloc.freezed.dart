@@ -365,19 +365,16 @@ class Loaded implements MovieListState {
   return EqualUnmodifiableListView(_upcoming);
 }
 
-// Nama diubah menjadi upcoming
 // Pagination pages
  final  int nowPlayingPage;
  final  int popularPage;
  final  int topRatedPage;
  final  int upcomingPage;
-// Nama diubah menjadi upcomingPage
 // Pagination flags
  final  bool hasMoreNowPlaying;
  final  bool hasMorePopular;
  final  bool hasMoreTopRated;
  final  bool hasMoreUpcoming;
-// Nama diubah menjadi hasMoreUpcoming
 // Opsional: untuk menampilkan error minor tanpa mengubah seluruh state jadi error
  final  String? minorError;
 

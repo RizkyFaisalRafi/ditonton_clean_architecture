@@ -5,9 +5,7 @@ import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_airing
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'airing_today_tv_event.dart';
-
 part 'airing_today_tv_state.dart';
-
 part 'airing_today_tv_bloc.freezed.dart';
 
 class AiringTodayTvBloc extends Bloc<AiringTodayTvEvent, AiringTodayTvState> {

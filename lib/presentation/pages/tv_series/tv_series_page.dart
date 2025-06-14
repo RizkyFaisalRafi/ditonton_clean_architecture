@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/airing_today/airing_today_tv_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/popular/popular_tv_bloc.dart'
+    as popularBloc;
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/popular_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/search_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/top_rated_tv_page.dart';
@@ -12,7 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../common/constants.dart';
 import '../../../common/state_enum.dart';
-import '../../bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart' as onTheAirBloc;
+import '../../bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart'
+    as onTheAirBloc;
 import '../../provider/tv_series/tv_list_notifier.dart';
 import '../../widgets/custom_drawer.dart';
 import '../../widgets/error_state_widget.dart';
@@ -32,24 +35,29 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
   final RefreshController _refreshController = RefreshController();
   late final ScrollController _airingTodayScrollController;
   late final ScrollController _onTheAirScrollController;
+  late final ScrollController _popularScrollController;
 
   @override
   void initState() {
     super.initState();
-    // Inisialisasi controller
+
+    /// Inisialisasi controller
     _airingTodayScrollController = ScrollController();
     _onTheAirScrollController = ScrollController();
+    _popularScrollController = ScrollController();
 
-    // Fetch data awal untuk kedua BLoC
+    /// Fetch data awal BLoC
     context.read<AiringTodayTvBloc>().add(
       const AiringTodayTvEvent.fetchInitialTvS(),
     );
     context.read<onTheAirBloc.OnTheAirTvBloc>().add(
       const onTheAirBloc.OnTheAirTvEvent.fetchInitialOnTheAir(),
     );
+    context.read<popularBloc.PopularTvBloc>().add(
+      const popularBloc.PopularTvEvent.fetchInitialTvS(),
+    );
 
-    // Tambahkan listener untuk infinite scroll
-    /// Airing Today
+    /// listener untuk infinite scroll Airing Today
     _airingTodayScrollController.addListener(() {
       final airingTodayBloc = context.read<AiringTodayTvBloc>();
       // Gunakan helper `onScroll` dari BLoC atau definisikan logikanya di sini
@@ -68,6 +76,16 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
         );
       }
     });
+
+    /// Listener untuk infinite scroll Popular
+    _popularScrollController.addListener(() {
+      if (_popularScrollController.position.pixels >=
+          _popularScrollController.position.maxScrollExtent - 200) {
+        context.read<popularBloc.PopularTvBloc>().add(
+          const popularBloc.PopularTvEvent.fetchMorePopularTv(),
+        );
+      }
+    });
   }
 
   @override
@@ -75,6 +93,7 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
     _refreshController.dispose();
     _airingTodayScrollController.dispose();
     _onTheAirScrollController.dispose();
+    _popularScrollController.dispose();
     super.dispose();
   }
 
@@ -108,20 +127,19 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
         padding: EdgeInsets.all(8.0),
         child: MultiBlocListener(
           listeners: [
-            // Listener untuk AiringTodayTvBloc
+            /// Listener AiringTodayTvBloc
             BlocListener<AiringTodayTvBloc, AiringTodayTvState>(
               listener: (context, state) {
-                // Jika state adalah Error, panggil refreshFailed()
                 if (state is Error) {
                   _refreshController.refreshFailed();
                 }
-                // Jika state adalah Loaded, panggil refreshCompleted()
                 if (state is Loaded) {
                   _refreshController.refreshCompleted();
                 }
               },
             ),
-            // Listener untuk OnTheAirTvBloc
+
+            /// Listener OnTheAirTvBloc
             BlocListener<
               onTheAirBloc.OnTheAirTvBloc,
               onTheAirBloc.OnTheAirTvState
@@ -135,19 +153,38 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                 }
               },
             ),
+
+            /// Listener PopularTvBloc
+            BlocListener<popularBloc.PopularTvBloc, popularBloc.PopularTvState>(
+              listener: (context, state) {
+                if (state is popularBloc.Error) {
+                  _refreshController.refreshFailed();
+                }
+                if (state is popularBloc.Loaded) {
+                  _refreshController.refreshCompleted();
+                }
+              },
+            ),
           ],
           child: SmartRefresher(
             // controller: provider.refreshC,
             controller: _refreshController,
             // onRefresh: provider.onRefresh,
             onRefresh: () {
+              /// Refresh AiringTodayTvBloc
               context.read<AiringTodayTvBloc>().add(
                 const AiringTodayTvEvent.refreshTv(),
               );
+
+              /// Refresh OnTheAirTvBloc
               context.read<onTheAirBloc.OnTheAirTvBloc>().add(
                 const onTheAirBloc.OnTheAirTvEvent.refreshTvOTA(),
               );
-              _refreshController.refreshCompleted();
+
+              /// Refresh PopularTvBloc
+              context.read<popularBloc.PopularTvBloc>().add(
+                const popularBloc.PopularTvEvent.refreshTv(),
+              );
             },
             header: const WaterDropHeader(
               complete: Row(
@@ -176,6 +213,7 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                 children: [
                   /// Now Playing / Airing Today
                   Text('Airing Today', style: kHeading6),
+
                   /// Airing Today Bloc
                   BlocBuilder<AiringTodayTvBloc, AiringTodayTvState>(
                     builder: (context, state) {
@@ -351,6 +389,45 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                         context,
                         PopularTvPage.ROUTE_NAME,
                       );
+                    },
+                  ),
+
+                  /// Popular Bloc
+                  BlocBuilder<
+                    popularBloc.PopularTvBloc,
+                    popularBloc.PopularTvState
+                  >(
+                    builder: (context, state) {
+                      // Gunakan switch expression untuk pattern matching yang modern
+                      return switch (state) {
+                        popularBloc.Initial() ||
+                        popularBloc.Loading() => const SizedBox(
+                          height: 200,
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                        popularBloc.Error(message: final message) => SizedBox(
+                          height: 200,
+                          child: Center(child: Text(message)),
+                        ),
+
+                        popularBloc.Loaded(
+                          popular: final popularTv,
+                          hasMorePopular: final hasMoreP,
+                        ) =>
+                          popularTv.isEmpty
+                              ? const SizedBox(
+                                height: 200,
+                                child: Center(
+                                  child: Text('No TV Series Popular.'),
+                                ),
+                              )
+                              : TvSeriesList(
+                                tvSeries: popularTv,
+                                scrollController: _popularScrollController,
+                                hasMore: hasMoreP,
+                              ),
+                        _ => const SizedBox.shrink(),
+                      };
                     },
                   ),
 
