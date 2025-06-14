@@ -119,7 +119,7 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
       if (result.isNotEmpty) {
         return result.map((data) => MovieTable.fromMap(data)).toList();
       } else {
-        throw CacheException("Can't get the data :(");
+        throw CacheException("Can't get the data, Check your Connection :(");
       }
     } catch (e) {
       if (e is CacheException) {

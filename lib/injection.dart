@@ -29,6 +29,9 @@ import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_watchl
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/remove_watchlist_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/save_watchlist_tv.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/search_tv_series.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_list/movie_list_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/airing_today/airing_today_tv_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/bloc/on_the_air_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_search_notifier.dart';
@@ -105,6 +108,16 @@ void init() {
   locator.registerFactory(() => OnTheAirNotifier(getOnTheAirTv: locator()));
   locator.registerFactory(() => PopularTvNotifier(getPopularTv: locator()));
   locator.registerFactory(() => TopRatedTvNotifier(getTopRatedTv: locator()));
+  locator.registerFactory(
+    () => MovieListBloc(
+      getPopularMovies: locator(),
+      getNowPlayingMovies: locator(),
+      getTopRatedMovies: locator(),
+      getUpComingMovies: locator(),
+    ),
+  );
+  locator.registerFactory(() => AiringTodayTvBloc(getAiringTodayTv: locator()));
+  locator.registerFactory(() => OnTheAirTvBloc(getOnTheAirTv: locator()));
 
   // use case
   locator.registerLazySingleton(() => GetNowPlayingMovies(locator()));

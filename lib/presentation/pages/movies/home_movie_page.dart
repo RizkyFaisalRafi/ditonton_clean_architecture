@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/common/constants.dart';
 import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
@@ -6,235 +8,225 @@ import 'package:ditonton_clean_architecture/presentation/pages/movies/popular_mo
 import 'package:ditonton_clean_architecture/presentation/pages/movies/search_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/top_rated_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/up_coming_movies_page.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_list_notifier.dart';
-import 'package:ditonton_clean_architecture/common/state_enum.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import '../../bloc/movies/movie_list/movie_list_bloc.dart';
 import '../../widgets/error_state_widget.dart';
 
-class HomeMoviePage extends StatelessWidget {
+class HomeMoviePage extends StatefulWidget {
   const HomeMoviePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<MovieListNotifier>(context);
+  State<HomeMoviePage> createState() => _HomeMoviePageState();
+}
 
+class _HomeMoviePageState extends State<HomeMoviePage> {
+  // Deklarasikan semua ScrollController dan RefreshController
+  final RefreshController _refreshController = RefreshController();
+  late final ScrollController _nowPlayingScrollController;
+  late final ScrollController _popularScrollController;
+  late final ScrollController _topRatedScrollController;
+  late final ScrollController _upcomingScrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Inisialisasi controller
+    _nowPlayingScrollController = ScrollController();
+    _popularScrollController = ScrollController();
+    _topRatedScrollController = ScrollController();
+    _upcomingScrollController = ScrollController();
+    final onScrollC = context.read<MovieListBloc>();
+
+    context.read<MovieListBloc>().add(
+      const MovieListEvent.fetchInitialMovies(),
+    );
+
+    // listener untuk setiap controller untuk memicu event 'fetchMore'
+    _nowPlayingScrollController.addListener(
+      () => onScrollC.onScroll(_nowPlayingScrollController, () {
+        context.read<MovieListBloc>().add(
+          const MovieListEvent.fetchMoreNowPlayingMovies(),
+        );
+      }),
+    );
+    _popularScrollController.addListener(
+      () => onScrollC.onScroll(_popularScrollController, () {
+        context.read<MovieListBloc>().add(
+          const MovieListEvent.fetchMorePopularMovies(),
+        );
+      }),
+    );
+    _topRatedScrollController.addListener(
+      () => onScrollC.onScroll(_topRatedScrollController, () {
+        context.read<MovieListBloc>().add(
+          const MovieListEvent.fetchMoreTopRatedMovies(),
+        );
+      }),
+    );
+    _upcomingScrollController.addListener(
+      () => onScrollC.onScroll(_upcomingScrollController, () {
+        context.read<MovieListBloc>().add(
+          const MovieListEvent.fetchMoreUpcomingMovies(),
+        );
+      }),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      /// Home Content
       appBar: AppBar(
-        title: Text('Movies'),
+        title: const Text('Movies'),
         leading: IconButton(
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
           onPressed: () {
-            final customDrawerState =
-                context.findRootAncestorStateOfType<CustomDrawerState>();
-            customDrawerState?.toggle();
+            // Logika untuk membuka drawer
+            context.findRootAncestorStateOfType<CustomDrawerState>()?.toggle();
           },
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, SearchPage.ROUTE_NAME);
-            },
-            icon: Icon(Icons.search),
+            onPressed:
+                () => Navigator.pushNamed(context, SearchPage.ROUTE_NAME),
+            icon: const Icon(Icons.search),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+      body: BlocListener<MovieListBloc, MovieListState>(
+        listener: (context, state) {
+          // Listen for state changes to control the RefreshController
+          if (state is Loaded) {
+            _refreshController.refreshCompleted();
+          }
+          if (state is Error) {
+            _refreshController.refreshFailed();
+          }
+        },
         child: SmartRefresher(
-          controller: provider.refreshC,
-          enablePullDown: true,
-          onRefresh: provider.onRefresh,
+          controller: _refreshController,
+          onRefresh:
+              () => context.read<MovieListBloc>().add(
+                const MovieListEvent.refreshMovies(),
+              ),
           header: const WaterDropHeader(
-            complete: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.check_circle_outline_rounded),
-                Text('Refresh Complete'),
-              ],
-            ),
-            failed: Text('Refresh Failed'),
-            refresh: CircularProgressIndicator(),
-            waterDropColor: Colors.orange,
-            idleIcon: Icon(
-              Icons.refresh_rounded,
-              size: 20,
-              color: Colors.white,
-            ),
           ),
-
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// Now Playing
-                Text('Now Playing', style: kHeading6),
-                Consumer<MovieListNotifier>(
-                  builder: (context, data, child) {
-                    final state = data.nowPlayingState;
-                    if (state == RequestState.Loading) {
-                      return Center(
-                        child: Lottie.asset(
-                          'assets/image_lottie/loading_bar.json',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.fill,
+          child: BlocBuilder<MovieListBloc, MovieListState>(
+            builder: (context, state) {
+              // Gunakan switch expression untuk pattern matching yang modern
+              return switch (state) {
+                Loaded(
+                  nowPlaying: final nowPlaying,
+                  popular: final popular,
+                  topRated: final topRated,
+                  upcoming: final upcoming,
+                  hasMoreNowPlaying: final hasMoreNp,
+                  hasMorePopular: final hasMoreP,
+                  hasMoreTopRated: final hasMoreTr,
+                  hasMoreUpcoming: final hasMoreU,
+                ) =>
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 12.0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // --- Now Playing Section ---
+                        Text('Now Playing', style: kHeading6),
+                        MovieList(
+                          movies: nowPlaying,
+                          scrollController: _nowPlayingScrollController,
+                          hasMore: hasMoreNp,
                         ),
-                      );
-                    } else if (state == RequestState.Error) {
-                      if (data.message.contains(
-                        'Failed to connect to the network',
-                      )) {
-                        return Center(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Lottie.asset(
-                                  'assets/image_lottie/no_connection.json',
-                                  width: 300,
-                                  height: 300,
-                                ),
-                                Text(
-                                  'No Internet Connection!',
-                                  // AppLocalizations.of(context)!.noInternetConnection,
-                                  style: kSubtitle,
-                                ),
-                              ],
-                            ),
+
+                        // --- Popular Section ---
+                        _buildSubHeading(
+                          title: 'Popular',
+                          onTap:
+                              () => Navigator.pushNamed(
+                                context,
+                                PopularMoviesPage.ROUTE_NAME,
+                              ),
+                        ),
+                        MovieList(
+                          movies: popular,
+                          scrollController: _popularScrollController,
+                          hasMore: hasMoreP,
+                        ),
+
+                        // --- Top Rated Section ---
+                        _buildSubHeading(
+                          title: 'Top Rated',
+                          onTap:
+                              () => Navigator.pushNamed(
+                                context,
+                                TopRatedMoviesPage.ROUTE_NAME,
+                              ),
+                        ),
+                        MovieList(
+                          movies: topRated,
+                          scrollController: _topRatedScrollController,
+                          hasMore: hasMoreTr,
+                        ),
+
+                        // --- Upcoming Section ---
+                        _buildSubHeading(
+                          title: 'Upcoming', // Konsistensi nama
+                          onTap:
+                              () => Navigator.pushNamed(
+                                context,
+                                UpComingMoviesPage.ROUTE_NAME,
+                              ),
+                        ),
+                        MovieList(
+                          movies: upcoming,
+                          scrollController: _upcomingScrollController,
+                          hasMore: hasMoreU,
+                        ),
+                      ],
+                    ),
+                  ),
+                Loading() => Center(
+                  child: Lottie.asset(
+                    'assets/image_lottie/loading_bar.json',
+                    width: 150,
+                    height: 150,
+                  ),
+                ),
+                Error(message: final message) => () {
+                  // Tampilkan error state yang sesuai
+                  if (message.contains('Failed to connect to the network')) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.asset(
+                            'assets/image_lottie/no_connection.json',
+                            width: 300,
+                            height: 300,
                           ),
-                        );
-                      } else {
-                        // Error
-                        return ErrorStateWidget2(
-                          message: data.message,
-                          onRetry: () => provider.onRefresh(),
-                        );
-                      }
-                    } else if (state == RequestState.Loaded) {
-                      // Empty Data
-                      if (data.nowPlayingMovies.isEmpty) {
-                        return const EmptyStateWidget(
-                          message: 'No movies available.',
-                        );
-                      }
-                      return MovieList(
-                        data.nowPlayingMovies,
-                        data.nowPlayingController,
-                      );
-                    } else {
-                      // Initial State
-                      return EmptyStateWidget(message: 'Failed');
-                    }
-                  },
-                ),
-
-                /// Popular
-                _buildSubHeading(
-                  title: 'Popular',
-                  onTap:
-                      () => Navigator.pushNamed(
-                        context,
-                        PopularMoviesPage.ROUTE_NAME,
+                          Text('No Internet Connection!', style: kSubtitle),
+                        ],
                       ),
-                ),
-
-                Consumer<MovieListNotifier>(
-                  builder: (context, data, child) {
-                    final state = data.popularMoviesState;
-                    if (state == RequestState.Loading) {
-                      return Center(
-                        child: Lottie.asset(
-                          'assets/image_lottie/loading_bar.json',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.fill,
+                    );
+                  }
+                  return ErrorStateWidget2(
+                    message: message,
+                    onRetry:
+                        () => context.read<MovieListBloc>().add(
+                          const MovieListEvent.refreshMovies(),
                         ),
-                      );
-                    } else if (state == RequestState.Loaded) {
-                      return MovieList(
-                        data.popularMovies,
-                        data.popularController,
-                      );
-                    } else {
-                      return EmptyStateWidget(
-                        message:
-                            "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
-                      );
-                    }
-                  },
-                ),
-
-                /// Top Rated
-                _buildSubHeading(
-                  title: 'Top Rated',
-                  onTap:
-                      () => Navigator.pushNamed(
-                        context,
-                        TopRatedMoviesPage.ROUTE_NAME,
-                      ),
-                ),
-                Consumer<MovieListNotifier>(
-                  builder: (context, data, child) {
-                    final state = data.topRatedMoviesState;
-                    if (state == RequestState.Loading) {
-                      return Center(
-                        child: Lottie.asset(
-                          'assets/image_lottie/loading_bar.json',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.fill,
-                        ),
-                      );
-                    } else if (state == RequestState.Loaded) {
-                      return MovieList(
-                        data.topRatedMovies,
-                        data.topRatedController,
-                      );
-                    } else {
-                      return EmptyStateWidget(message: 'Failed to Load Data');
-                    }
-                  },
-                ),
-
-                /// Up Coming
-                _buildSubHeading(
-                  title: 'Up Coming',
-                  onTap:
-                      () => Navigator.pushNamed(
-                        context,
-                        UpComingMoviesPage.ROUTE_NAME,
-                      ),
-                ),
-
-                Consumer<MovieListNotifier>(
-                  builder: (context, data, child) {
-                    final state = data.upComingMoviesState;
-                    if (state == RequestState.Loading) {
-                      return Center(
-                        child: Lottie.asset(
-                          'assets/image_lottie/loading_bar.json',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.fill,
-                        ),
-                      );
-                    } else if (state == RequestState.Loaded) {
-                      return MovieList(
-                        data.upComingMovies,
-                        data.upComingController,
-                      );
-                    } else {
-                      return EmptyStateWidget(message: 'Failed to Load Data');
-                    }
-                  },
-                ),
-              ],
-            ),
+                  );
+                }(),
+                // Tambahkan case default untuk memastikan switch bersifat exhaustive
+                _ => const SizedBox.shrink(),
+              };
+            },
           ),
         ),
       ),
@@ -248,12 +240,12 @@ class HomeMoviePage extends StatelessWidget {
         Text(title, style: kHeading6),
         InkWell(
           onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Text('See More $title'),
-                Icon(Icons.arrow_forward_ios),
+                Text('See More'),
+                Icon(Icons.arrow_forward_ios, size: 16.0),
               ],
             ),
           ),
@@ -261,22 +253,57 @@ class HomeMoviePage extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  void dispose() {
+    // Jangan lupa dispose semua controller
+    log('Dispose Called');
+    _refreshController.dispose();
+    _nowPlayingScrollController.dispose();
+    _popularScrollController.dispose();
+    _topRatedScrollController.dispose();
+    _upcomingScrollController.dispose();
+    super.dispose();
+  }
 }
 
 class MovieList extends StatelessWidget {
   final List<Movie> movies;
   final ScrollController scrollController;
+  final bool hasMore; // Tambahkan flag ini
 
-  const MovieList(this.movies, this.scrollController, {super.key});
+  const MovieList( // this.movies,
+  // this.scrollController,
+  {
+    super.key,
+    required this.movies,
+    required this.scrollController,
+    this.hasMore = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    if (movies.isEmpty) {
+      return const SizedBox(
+        height: 200,
+        child: Center(child: Text('No movies available.')),
+      );
+    }
+
+    return SizedBox(
       height: 200,
       child: ListView.builder(
         controller: scrollController,
         scrollDirection: Axis.horizontal,
+        // itemCount: movies.length,
+        // Tambah 1 item jika `hasMore` true untuk menampilkan loading indicator
+        itemCount: hasMore ? movies.length + 1 : movies.length,
         itemBuilder: (context, index) {
+          // Jika index adalah item terakhir DAN masih ada data, tampilkan loading
+          if (index >= movies.length) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           final movie = movies[index];
           print('Movie ID: ${movie.id}');
           return Container(
@@ -303,7 +330,6 @@ class MovieList extends StatelessWidget {
             ),
           );
         },
-        itemCount: movies.length,
       ),
     );
   }

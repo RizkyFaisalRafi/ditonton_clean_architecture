@@ -110,7 +110,7 @@ class MovieListNotifier extends ChangeNotifier {
               nowPlayingController.position.maxScrollExtent &&
           !_isFetching &&
           _hasMoreNowPlaying) {
-        loadMoreMovie(); // Trigger loadMore ketika scroll mencapai ujung
+        loadMoreMovieNowPlaying(); // Trigger loadMore ketika scroll mencapai ujung
       }
     });
 
@@ -168,16 +168,13 @@ class MovieListNotifier extends ChangeNotifier {
   }
 
   /// Menangani infinite scroll
-  Future<void> loadMoreMovie() async {
+  Future<void> loadMoreMovieNowPlaying() async {
     if (_isFetching || !_hasMoreNowPlaying) return;
     _isFetching = true;
 
     try {
       // Tambahkan data baru
       await fetchNowPlayingMovies();
-      // await fetchPopularMovies();
-      // await fetchTopRatedMovies();
-      // await fetchUpComingMovies();
     } catch (e) {
       _message = e.toString();
     } finally {
@@ -191,10 +188,7 @@ class MovieListNotifier extends ChangeNotifier {
 
     try {
       // Tambahkan data baru
-      // await fetchNowPlayingMovies();
       await fetchPopularMovies();
-      // await fetchTopRatedMovies();
-      // await fetchUpComingMovies();
     } catch (e) {
       _message = e.toString();
     } finally {
@@ -208,10 +202,7 @@ class MovieListNotifier extends ChangeNotifier {
 
     try {
       // Tambahkan data baru
-      // await fetchNowPlayingMovies();
-      // await fetchPopularMovies();
       await fetchTopRatedMovies();
-      // await fetchUpComingMovies();
     } catch (e) {
       _message = e.toString();
     } finally {
@@ -225,9 +216,6 @@ class MovieListNotifier extends ChangeNotifier {
 
     try {
       // Tambahkan data baru
-      // await fetchNowPlayingMovies();
-      // await fetchPopularMovies();
-      // await fetchTopRatedMovies();
       await fetchUpComingMovies();
     } catch (e) {
       _message = e.toString();
