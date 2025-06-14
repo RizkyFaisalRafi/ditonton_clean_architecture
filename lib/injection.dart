@@ -31,7 +31,7 @@ import 'package:ditonton_clean_architecture/domain/usecases/tv_series/save_watch
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/search_tv_series.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_list/movie_list_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/airing_today/airing_today_tv_bloc.dart';
-import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/bloc/on_the_air_tv_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_detail_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_list_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/movie_search_notifier.dart';

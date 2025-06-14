@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../common/constants.dart';
 import '../../../common/state_enum.dart';
-import '../../bloc/tv/tv_list/bloc/on_the_air_tv_bloc.dart' as onTheAirBloc;
+import '../../bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart' as onTheAirBloc;
 import '../../provider/tv_series/tv_list_notifier.dart';
 import '../../widgets/custom_drawer.dart';
 import '../../widgets/error_state_widget.dart';
@@ -176,7 +176,6 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                 children: [
                   /// Now Playing / Airing Today
                   Text('Airing Today', style: kHeading6),
-
                   /// Airing Today Bloc
                   BlocBuilder<AiringTodayTvBloc, AiringTodayTvState>(
                     builder: (context, state) {

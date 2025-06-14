@@ -6,7 +6,7 @@ import 'package:ditonton_clean_architecture/domain/repositories/movie_repository
 import 'package:ditonton_clean_architecture/domain/usecases/movies/get_now_playing_movies.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_list/movie_list_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/airing_today/airing_today_tv_bloc.dart';
-import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/bloc/on_the_air_tv_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/about_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/movie_detail_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/home_movie_page.dart';
