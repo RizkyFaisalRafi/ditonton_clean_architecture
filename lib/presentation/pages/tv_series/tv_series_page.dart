@@ -12,13 +12,10 @@ import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_seri
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../common/constants.dart';
-import '../../../common/state_enum.dart';
 import '../../bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart'
     as onTheAirBloc;
-import '../../provider/tv_series/tv_list_notifier.dart';
 import '../../widgets/custom_drawer.dart';
 import '../../widgets/error_state_widget.dart';
 import 'on_the_air_tv_page.dart';
@@ -67,7 +64,6 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
     /// listener untuk infinite scroll Airing Today
     _airingTodayScrollController.addListener(() {
       final airingTodayBloc = context.read<AiringTodayTvBloc>();
-      // Gunakan helper `onScroll` dari BLoC atau definisikan logikanya di sini
       if (_airingTodayScrollController.position.pixels >=
           _airingTodayScrollController.position.maxScrollExtent - 200) {
         airingTodayBloc.add(const AiringTodayTvEvent.fetchMoreAiringTodayTv());
@@ -117,8 +113,6 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<TvListNotifier>(context);
-
     return Scaffold(
       /// Home Content
       appBar: AppBar(
@@ -200,9 +194,7 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
             ),
           ],
           child: SmartRefresher(
-            // controller: provider.refreshC,
             controller: _refreshController,
-            // onRefresh: provider.onRefresh,
             onRefresh: () {
               /// Refresh AiringTodayTvBloc
               context.read<AiringTodayTvBloc>().add(
@@ -223,7 +215,6 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
               context.read<topRatedBloc.TopRatedTvBloc>().add(
                 const topRatedBloc.TopRatedTvEvent.refreshTv(),
               );
-
             },
             header: const WaterDropHeader(
               complete: Row(
@@ -258,91 +249,44 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                     builder: (context, state) {
                       // Menggunakan switch expression dengan pattern matching
                       return switch (state) {
-                        Initial() => SizedBox(),
-                        Loading() => const SizedBox(
-                          height: 200,
-                          child: Center(child: CircularProgressIndicator()),
+                        Initial() => EmptyStateWidget(
+                          message:
+                              "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
                         ),
-                        Error(message: final message) => SizedBox(
-                          height: 200,
-                          child: Center(child: Text(message)),
+                        Loading() => Center(
+                          child: Lottie.asset(
+                            key: Key('loading_bar_lottie'),
+                            'assets/image_lottie/loading_bar.json',
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.fill,
+                          ),
                         ),
-
+                        Error(message: final message) => ErrorStateWidget2(
+                          message: message,
+                          onRetry: () {
+                            context.read<AiringTodayTvBloc>().add(
+                              AiringTodayTvEvent.refreshTv(),
+                            );
+                          },
+                        ),
                         Loaded(
                           airingToday: final airingToday,
                           hasMoreAiringToday: final hasMoreAt,
                         ) =>
-                          TvSeriesList(
-                            tvSeries: airingToday,
-                            scrollController: _airingTodayScrollController,
-                            hasMore: hasMoreAt,
-                          ),
+                          airingToday.isEmpty
+                              ? const EmptyStateWidget(
+                                message: 'No Tv available.',
+                              )
+                              : TvSeriesList(
+                                tvSeries: airingToday,
+                                scrollController: _airingTodayScrollController,
+                                hasMore: hasMoreAt,
+                              ),
                         _ => const SizedBox.shrink(),
                       };
                     },
                   ),
-
-                  // Consumer<TvListNotifier>(
-                  //   builder: (context, data, child) {
-                  //     final state = data.airingTodayState;
-                  //     if (state == RequestState.Loading) {
-                  //       return Center(
-                  //         child: Lottie.asset(
-                  //           key: Key('loading_bar_airing_lottie'),
-                  //           'assets/image_lottie/loading_bar.json',
-                  //           width: 100,
-                  //           height: 100,
-                  //           fit: BoxFit.fill,
-                  //         ),
-                  //       );
-                  //     } else if (state == RequestState.Error) {
-                  //       if (data.message.contains(
-                  //         'Failed to connect to the network',
-                  //       )) {
-                  //         return Center(
-                  //           child: SingleChildScrollView(
-                  //             child: Column(
-                  //               mainAxisAlignment: MainAxisAlignment.center,
-                  //               children: [
-                  //                 Lottie.asset(
-                  //                   'assets/image_lottie/no_connection.json',
-                  //                   width: 300,
-                  //                   height: 300,
-                  //                 ),
-                  //                 Text(
-                  //                   'No Internet Connection!',
-                  //                   // AppLocalizations.of(context)!.noInternetConnection,
-                  //                   style: kSubtitle,
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         );
-                  //       } else {
-                  //         // Error
-                  //         return ErrorStateWidget2(
-                  //           message: data.message,
-                  //           onRetry: () => provider.onRefresh(),
-                  //         );
-                  //       }
-                  //     } else if (state == RequestState.Loaded) {
-                  //       // Empty Data
-                  //       if (data.airingTodayTvSeries.isEmpty) {
-                  //         return const EmptyStateWidget(
-                  //           message: 'No movies available.',
-                  //         );
-                  //       }
-                  //
-                  //       return TvSeriesList(
-                  //         data.airingTodayTvSeries,
-                  //         data.airingTodayController,
-                  //       );
-                  //     } else {
-                  //       // Initial State
-                  //       return EmptyStateWidget(message: 'Failed');
-                  //     }
-                  //   },
-                  // ),
 
                   /// On The Air
                   _buildSubHeading(
@@ -363,26 +307,36 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                     builder: (context, state) {
                       // Gunakan switch expression untuk pattern matching yang modern
                       return switch (state) {
-                        onTheAirBloc.Initial() ||
-                        onTheAirBloc.Loading() => const SizedBox(
-                          height: 200,
-                          child: Center(child: CircularProgressIndicator()),
+                        onTheAirBloc.Initial() => EmptyStateWidget(
+                          message:
+                              "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
                         ),
-                        onTheAirBloc.Error(message: final message) => SizedBox(
-                          height: 200,
-                          child: Center(child: Text(message)),
+                        onTheAirBloc.Loading() => Center(
+                          child: Lottie.asset(
+                            key: Key('loading_bar_lottie'),
+                            'assets/image_lottie/loading_bar.json',
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.fill,
+                          ),
                         ),
+                        onTheAirBloc.Error(message: final message) =>
+                          ErrorStateWidget2(
+                            message: message,
+                            onRetry: () {
+                              context.read<onTheAirBloc.OnTheAirTvBloc>().add(
+                                onTheAirBloc.OnTheAirTvEvent.refreshTvOTA(),
+                              );
+                            },
+                          ),
 
                         onTheAirBloc.Loaded(
                           onTheAir: final onTheAir,
                           hasMoreOnTheAir: final hasMoreOta,
                         ) =>
                           onTheAir.isEmpty
-                              ? const SizedBox(
-                                height: 200,
-                                child: Center(
-                                  child: Text('No TV Series On The Air.'),
-                                ),
+                              ? const EmptyStateWidget(
+                                message: 'No Tv available.',
                               )
                               : TvSeriesList(
                                 tvSeries: onTheAir,
@@ -393,32 +347,6 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                       };
                     },
                   ),
-
-                  // Consumer<TvListNotifier>(
-                  //   builder: (context, data, child) {
-                  //     final state = data.onTheAirState;
-                  //     if (state == RequestState.Loading) {
-                  //       return Center(
-                  //         child: Lottie.asset(
-                  //           'assets/image_lottie/loading_bar.json',
-                  //           width: 100,
-                  //           height: 100,
-                  //           fit: BoxFit.fill,
-                  //         ),
-                  //       );
-                  //     } else if (state == RequestState.Loaded) {
-                  //       return TvSeriesList(
-                  //         data.onTheAirTvSeries,
-                  //         data.onTheAirController,
-                  //       );
-                  //     } else {
-                  //       return EmptyStateWidget(
-                  //         message:
-                  //         "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
-                  //       );
-                  //     }
-                  //   },
-                  // ),
 
                   /// Popular Tv Series
                   _buildSubHeading(
@@ -439,26 +367,36 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                     builder: (context, state) {
                       // Gunakan switch expression untuk pattern matching yang modern
                       return switch (state) {
-                        popularBloc.Initial() ||
-                        popularBloc.Loading() => const SizedBox(
-                          height: 200,
-                          child: Center(child: CircularProgressIndicator()),
+                        popularBloc.Initial() => EmptyStateWidget(
+                          message:
+                              "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
                         ),
-                        popularBloc.Error(message: final message) => SizedBox(
-                          height: 200,
-                          child: Center(child: Text(message)),
+                        popularBloc.Loading() => Center(
+                          child: Lottie.asset(
+                            key: Key('loading_bar_lottie'),
+                            'assets/image_lottie/loading_bar.json',
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.fill,
+                          ),
                         ),
+                        popularBloc.Error(message: final message) =>
+                          ErrorStateWidget2(
+                            message: message,
+                            onRetry: () {
+                              context.read<popularBloc.PopularTvBloc>().add(
+                                popularBloc.PopularTvEvent.refreshTv(),
+                              );
+                            },
+                          ),
 
                         popularBloc.Loaded(
                           popular: final popularTv,
                           hasMorePopular: final hasMoreP,
                         ) =>
                           popularTv.isEmpty
-                              ? const SizedBox(
-                                height: 200,
-                                child: Center(
-                                  child: Text('No TV Series Popular.'),
-                                ),
+                              ? const EmptyStateWidget(
+                                message: 'No Tv available.',
                               )
                               : TvSeriesList(
                                 tvSeries: popularTv,
@@ -469,29 +407,6 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                       };
                     },
                   ),
-
-                  // Consumer<TvListNotifier>(
-                  //   builder: (context, data, child) {
-                  //     final state = data.popularTvState;
-                  //     if (state == RequestState.Loading) {
-                  //       return Center(
-                  //         child: Lottie.asset(
-                  //           'assets/image_lottie/loading_bar.json',
-                  //           width: 100,
-                  //           height: 100,
-                  //           fit: BoxFit.fill,
-                  //         ),
-                  //       );
-                  //     } else if (state == RequestState.Loaded) {
-                  //       return TvSeriesList(
-                  //         data.popularTvSeries,
-                  //         data.popularController,
-                  //       );
-                  //     } else {
-                  //       return EmptyStateWidget(message: "Failed to Load Data");
-                  //     }
-                  //   },
-                  // ),
 
                   /// Top Rated
                   _buildSubHeading(
@@ -510,28 +425,37 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                     topRatedBloc.TopRatedTvState
                   >(
                     builder: (context, state) {
-                      // Gunakan switch expression untuk pattern matching yang modern
                       return switch (state) {
-                        topRatedBloc.Initial() ||
-                        topRatedBloc.Loading() => const SizedBox(
-                          height: 200,
-                          child: Center(child: CircularProgressIndicator()),
+                        topRatedBloc.Initial() => EmptyStateWidget(
+                          message:
+                              "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
                         ),
-                        topRatedBloc.Error(message: final message) => SizedBox(
-                          height: 200,
-                          child: Center(child: Text(message)),
+                        topRatedBloc.Loading() => Center(
+                          child: Lottie.asset(
+                            key: Key('loading_bar_lottie'),
+                            'assets/image_lottie/loading_bar.json',
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.fill,
+                          ),
                         ),
+                        topRatedBloc.Error(message: final message) =>
+                          ErrorStateWidget2(
+                            message: message,
+                            onRetry: () {
+                              context.read<topRatedBloc.TopRatedTvBloc>().add(
+                                topRatedBloc.TopRatedTvEvent.refreshTv(),
+                              );
+                            },
+                          ),
 
                         topRatedBloc.Loaded(
                           topRated: final topRatedTv,
                           hasMoreTopRated: final hasMoreTr,
                         ) =>
                           topRatedTv.isEmpty
-                              ? const SizedBox(
-                                height: 200,
-                                child: Center(
-                                  child: Text('No TV Series Popular.'),
-                                ),
+                              ? const EmptyStateWidget(
+                                message: 'No Tv available.',
                               )
                               : TvSeriesList(
                                 tvSeries: topRatedTv,
@@ -542,29 +466,6 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                       };
                     },
                   ),
-
-                  // Consumer<TvListNotifier>(
-                  //   builder: (context, data, child) {
-                  //     final state = data.topRatedTvState;
-                  //     if (state == RequestState.Loading) {
-                  //       return Center(
-                  //         child: Lottie.asset(
-                  //           'assets/image_lottie/loading_bar.json',
-                  //           width: 100,
-                  //           height: 100,
-                  //           fit: BoxFit.fill,
-                  //         ),
-                  //       );
-                  //     } else if (state == RequestState.Loaded) {
-                  //       return TvSeriesList(
-                  //         data.topRatedTvSeries,
-                  //         data.topRatedController,
-                  //       );
-                  //     } else {
-                  //       return EmptyStateWidget(message: 'Failed to Load Data');
-                  //     }
-                  //   },
-                  // ),
                 ],
               ),
             ),
