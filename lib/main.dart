@@ -5,6 +5,7 @@ import 'package:ditonton_clean_architecture/data/repositories/movie_repository_i
 import 'package:ditonton_clean_architecture/domain/repositories/movie_repository.dart';
 import 'package:ditonton_clean_architecture/domain/usecases/movies/get_now_playing_movies.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_list/movie_list_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_search/movie_search_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/airing_today/airing_today_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/popular/popular_tv_bloc.dart';
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => di.locator<OnTheAirTvBloc>()),
         BlocProvider(create: (context) => di.locator<PopularTvBloc>()),
         BlocProvider(create: (context) => di.locator<TopRatedTvBloc>()),
+        BlocProvider(create: (context) => di.locator<MovieSearchBloc>()),
       ],
       child: MultiProvider(
         providers: [
