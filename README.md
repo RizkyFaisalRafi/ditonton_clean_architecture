@@ -89,9 +89,9 @@ Coverage App:
 ## Ketentuaan Submission Awal
 
 - Menerapkan Continuous Integration (Done)
-- Menggunakan Library BLoC
+- Menggunakan Library BLoC (Done)
   - Bloc, Event, State (Done)
-  - Testing
+  - Testing (Done)
 - Menerapkan SSL Pinning
 - Integrasi dengan Firebase Analytics & Crashlytics
 - Modularisasi, Membagi aplikasi menjadi modul setidaknya untuk dua fitur movie & TV series(
