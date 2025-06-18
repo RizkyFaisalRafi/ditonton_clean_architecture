@@ -86,7 +86,7 @@ Coverage App:
 - Menampilkan Informasi Season & Episode
 - Menambahkan Widget & Integration Test
 
-## Ketentuaan Submission Awal
+## Ketentuaan Submission Akhir
 
 - Menerapkan Continuous Integration (Done)
 - Menggunakan Library BLoC (Done)
