@@ -279,6 +279,7 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                                 message: 'No Tv available.',
                               )
                               : TvSeriesList(
+                                key: const Key('airing_today_list'),
                                 tvSeries: airingToday,
                                 scrollController: _airingTodayScrollController,
                                 hasMore: hasMoreAt,
@@ -339,6 +340,7 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                                 message: 'No Tv available.',
                               )
                               : TvSeriesList(
+                                key: const Key('on_the_air_list'),
                                 tvSeries: onTheAir,
                                 scrollController: _onTheAirScrollController,
                                 hasMore: hasMoreOta,
@@ -399,6 +401,7 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                                 message: 'No Tv available.',
                               )
                               : TvSeriesList(
+                                key: const Key('popular_list'),
                                 tvSeries: popularTv,
                                 scrollController: _popularScrollController,
                                 hasMore: hasMoreP,
@@ -458,6 +461,7 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                                 message: 'No Tv available.',
                               )
                               : TvSeriesList(
+                                key: const Key('top_rated_list'),
                                 tvSeries: topRatedTv,
                                 scrollController: _topRatedScrollController,
                                 hasMore: hasMoreTr,

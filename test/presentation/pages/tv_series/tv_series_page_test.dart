@@ -31,22 +31,22 @@ void main() {
 
   // --- PERBAIKAN: Mock untuk path_provider ---
   // Dilakukan sekali untuk semua tes dalam file ini
-  setUpAll(() {
-    TestWidgetsFlutterBinding.ensureInitialized();
-    // Mock untuk MethodChannel dari path_provider
-    const MethodChannel channel = MethodChannel(
-      'plugins.flutter.io/path_provider',
-    );
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
-          // Jika ada panggilan ke method-method ini, kembalikan path palsu
-          if (methodCall.method == 'getTemporaryDirectory' ||
-              methodCall.method == 'getApplicationSupportDirectory') {
-            return '.'; // Path ini tidak harus ada, hanya untuk menghindari error
-          }
-          return null;
-        });
-  });
+  // setUpAll(() {
+  //   TestWidgetsFlutterBinding.ensureInitialized();
+  //   // Mock untuk MethodChannel dari path_provider
+  //   const MethodChannel channel = MethodChannel(
+  //     'plugins.flutter.io/path_provider',
+  //   );
+  //   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+  //       .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
+  //         // Jika ada panggilan ke method-method ini, kembalikan path palsu
+  //         if (methodCall.method == 'getTemporaryDirectory' ||
+  //             methodCall.method == 'getApplicationSupportDirectory') {
+  //           return '.'; // Path ini tidak harus ada, hanya untuk menghindari error
+  //         }
+  //         return null;
+  //       });
+  // });
 
   setUp(() {
     mockAiringTodayTvBloc = MockAiringTodayTvBloc();
@@ -145,41 +145,49 @@ void main() {
   testWidgets('Page should display ListView when data is loaded', (
     WidgetTester tester,
   ) async {
-    await tester.runAsync(() async {
-      // Atur state semua BLoC menjadi Loaded
-      arrangeBlocsState(
-        AiringTodayTvState.loaded(
-          airingToday: tTvList,
-          hasMoreAiringToday: false,
-          airingTodayPage: 1,
-        ),
-        on_the_air_bloc.OnTheAirTvState.loaded(
-          onTheAir: tTvList,
-          hasMoreOnTheAir: false,
-          onTheAirPage: 1,
-        ),
-        popular_bloc.PopularTvState.loaded(
-          popular: tTvList,
-          hasMorePopular: false,
-          popularPage: 1,
-        ),
-        top_rated_bloc.TopRatedTvState.loaded(
-          topRated: tTvList,
-          hasMoreTopRated: false,
-          topRatedPage: 1,
-        ),
-      );
-      await mockNetworkImages(() async {
-        // Bangun widget
-        await tester.pumpWidget(makeTestableWidget(const TvSeriesPage()));
-      });
+    // Arrange
+    arrangeBlocsState(
+      AiringTodayTvState.loaded(
+        airingToday: tTvList,
+        hasMoreAiringToday: false,
+        airingTodayPage: 1,
+      ),
+      on_the_air_bloc.OnTheAirTvState.loaded(
+        onTheAir: tTvList,
+        hasMoreOnTheAir: false,
+        onTheAirPage: 1,
+      ),
+      popular_bloc.PopularTvState.loaded(
+        popular: tTvList,
+        hasMorePopular: false,
+        popularPage: 1,
+      ),
+      top_rated_bloc.TopRatedTvState.loaded(
+        topRated: tTvList,
+        hasMoreTopRated: false,
+        topRatedPage: 1,
+      ),
+    );
 
+    // Act
+    await mockNetworkImages(() async {
+      await tester.pumpWidget(makeTestableWidget(const TvSeriesPage()));
       await tester.pump();
-
-      // Verifikasi
-      expect(find.byType(TvSeriesList), findsNWidgets(4));
-      expect(find.byType(ListView), findsNWidgets(4));
+      // PERBAIKAN: Pump lagi dengan durasi untuk menyelesaikan timer dari pull_to_refresh.
+      // Log error menunjukkan timer 600ms, jadi 1 detik sudah aman.
+      await tester.pump(const Duration(seconds: 1));
     });
+
+    // --- PERBAIKAN: Menggunakan Key yang unik untuk setiap list ---
+    // Assert: Verifikasi bahwa setiap list ditemukan berdasarkan Key yang unik.
+    expect(find.byKey(const Key('airing_today_list')), findsOneWidget);
+    expect(find.byKey(const Key('on_the_air_list')), findsOneWidget);
+    expect(find.byKey(const Key('popular_list')), findsOneWidget);
+    expect(find.byKey(const Key('top_rated_list')), findsOneWidget);
+
+    // Verifikasi
+    expect(find.byType(TvSeriesList), findsNWidgets(4));
+    expect(find.byType(ListView), findsNWidgets(4));
   });
 
   testWidgets('Page should display error message when data failed to load', (
