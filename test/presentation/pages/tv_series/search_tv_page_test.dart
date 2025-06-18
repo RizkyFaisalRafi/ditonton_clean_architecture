@@ -1,174 +1,137 @@
-import 'package:ditonton_clean_architecture/common/state_enum.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_search/tv_search_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/search_tv_page.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_search_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/error_state_widget.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/tv_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:mocktail_image_network/mocktail_image_network.dart';
-import 'package:provider/provider.dart';
+import '../../../dummy_data/dummy_objects.dart';
 import 'search_tv_page_test.mocks.dart';
 
-@GenerateMocks([TvSearchNotifier])
+@GenerateMocks([TvSearchBloc])
 void main() {
-  late MockTvSearchNotifier mockTvSearchNotifier;
-  late List<TvSeries> testTvSeries;
+  late MockTvSearchBloc mockTvSearchBloc;
 
   // dijalankan sebelum setiap test
   setUp(() {
-    mockTvSearchNotifier = MockTvSearchNotifier();
-    testTvSeries = [
-      TvSeries(
-        id: 1,
-        name: 'Lapor Pak',
-        overview: 'Overview 1',
-        posterPath: '/poster1.jpg',
-        backdropPath: '/backdrop1.jpg',
-        adult: null,
-        genreIds: [],
-        originCountry: [],
-        originalLanguage: '',
-        originalName: '',
-        popularity: null,
-        firstAirDate: '',
-        voteAverage: null,
-        voteCount: null,
-      ),
-      TvSeries(
-        id: 2,
-        name: 'Joko Widodo',
-        overview: 'Overview 2',
-        posterPath: '/poster2.jpg',
-        backdropPath: '/backdrop2.jpg',
-        adult: null,
-        genreIds: [],
-        originCountry: [],
-        originalLanguage: '',
-        originalName: '',
-        popularity: null,
-        firstAirDate: '',
-        voteAverage: null,
-        voteCount: null,
-      ),
-    ];
+    mockTvSearchBloc = MockTvSearchBloc();
   });
 
-  // fungsi yang dijalankan setelah setiap test case selesai
-  tearDown(() {
-    reset(mockTvSearchNotifier); // Reset setelah setiap test
-  });
+  final tTvList = <TvSeries>[testTvSeries];
+  const tQuery = 'test query';
 
-  Widget makeTestableWidget(Widget body) {
-    return ChangeNotifierProvider<TvSearchNotifier>.value(
-      value: mockTvSearchNotifier,
+  Widget _makeTestableWidget(Widget body) {
+    return BlocProvider<TvSearchBloc>.value(
+      value: mockTvSearchBloc,
       child: MaterialApp(home: Scaffold(body: body)),
     );
   }
 
+  // Penting: BlocBuilder mendengarkan `stream`, jadi kita perlu mock stream dari BLoC.
+  // Properti `.state` digunakan untuk state awal sebelum ada interaksi.
+  void arrangeBlocState(TvSearchState state) {
+    when(mockTvSearchBloc.state).thenReturn(state);
+    when(mockTvSearchBloc.stream).thenAnswer((_) => Stream.value(state));
+  }
+
   group('SearchTvPage UI Tests', () {
-    testWidgets('should display initial state correctly', (tester) async {
-      // Arrange
-      when(mockTvSearchNotifier.state).thenReturn(RequestState.Empty);
+    testWidgets('should display initial state with Lottie animation', (
+      WidgetTester tester,
+    ) async {
+      // Arrange: Atur state awal BLoC menjadi SearchEmpty
+      arrangeBlocState(SearchEmpty());
 
-      // Act
-      await tester.pumpWidget(makeTestableWidget(SearchTvPage()));
+      // Act: Render widget SearchTvPage
+      await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
 
-      // Assert
-      expect(find.text('Search Tv Series'), findsNWidgets(2));
+      // Assert: Verifikasi bahwa TextField, Lottie, dan teks awal ada di layar
       expect(find.byType(TextField), findsOneWidget);
       expect(find.byType(Lottie), findsOneWidget);
+      expect(find.text('Search TV Series'), findsOneWidget);
     });
 
-    testWidgets('should show loading indicator when loading', (tester) async {
-      // Arrange
-      when(mockTvSearchNotifier.state).thenReturn(RequestState.Loading);
+    testWidgets('should display loading indicator when state is loading', (
+      WidgetTester tester,
+    ) async {
+      // Arrange: Atur state BLoC menjadi SearchLoading
+      arrangeBlocState(SearchLoading());
 
-      // Act
-      await tester.pumpWidget(makeTestableWidget(SearchTvPage()));
+      // Act: Render widget
+      await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
 
-      // Assert
-      expect(find.byType(Lottie), findsOneWidget);
+      // Assert: Verifikasi bahwa Lottie loading ditampilkan
+      final lottieFinder = find.byType(Lottie);
       expect(find.byKey(Key('loading_state_lottie')), findsOneWidget);
+      expect(lottieFinder, findsOneWidget);
     });
 
-    testWidgets('should show error widget when error occurs', (tester) async {
-      // Arrange
-      when(mockTvSearchNotifier.state).thenReturn(RequestState.Error);
-      when(mockTvSearchNotifier.message).thenReturn('Error');
+    testWidgets('should display ListView when data is loaded', (
+      WidgetTester tester,
+    ) async {
+      // Arrange: Atur state BLoC menjadi SearchHasData dengan data
+      arrangeBlocState(SearchHasData(tTvList));
 
-      // Act
-      await tester.pumpWidget(makeTestableWidget(SearchTvPage()));
+      // Act: Render widget
+      await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
 
-      // Assert
-      expect(find.byKey(Key('error_state')), findsOneWidget);
+      // Assert: Verifikasi bahwa ListView dan TvCard ditampilkan
+      expect(find.byType(ListView), findsOneWidget);
+      expect(find.byType(TvCard), findsOneWidget);
+      expect(
+        find.text('Gute Zeiten, schlechte Zeiten'),
+        findsOneWidget,
+      ); // Periksa berdasarkan nama TV
     });
 
-    testWidgets('should show empty results widget', (tester) async {
-      // Arrange
-      when(mockTvSearchNotifier.state).thenReturn(RequestState.Loaded);
-      when(mockTvSearchNotifier.searchResult).thenReturn([]);
+    testWidgets('should display error widget when search result is empty', (
+      WidgetTester tester,
+    ) async {
+      // Arrange: Atur state BLoC menjadi SearchHasData dengan list kosong
+      arrangeBlocState(SearchHasData(const []));
 
-      // Act
-      await tester.pumpWidget(makeTestableWidget(SearchTvPage()));
+      // Act: Render widget
+      await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
 
-      // Assert
+      // Assert: Verifikasi bahwa ErrorStateWidget dengan pesan 'No results found' ditampilkan
+      expect(find.byType(ErrorStateWidget), findsOneWidget);
       expect(find.byKey(Key('loaded_state_empty_search')), findsOneWidget);
-      expect(find.text('Tv Series Search Not Found!'), findsOneWidget);
+      expect(find.text('TV Search Not Found!'), findsOneWidget);
     });
 
-    testWidgets('should show tv cards when data is loaded', (tester) async {
-      // Arrange
-      when(mockTvSearchNotifier.state).thenReturn(RequestState.Loaded);
-      when(mockTvSearchNotifier.searchResult).thenReturn(testTvSeries);
-
-      // Act
-      await tester.pumpWidget(makeTestableWidget(SearchTvPage()));
-
-      // Assert
-      expect(find.byType(TvCard), findsNWidgets(2));
-      expect(find.text('Lapor Pak'), findsOneWidget);
-    });
-  });
-
-  group('SearchTvPage Interaction Tests', () {
-    testWidgets('should call fetchTvSearch when search submitted', (
-      tester,
+    testWidgets('should display error widget when state is error', (
+      WidgetTester tester,
     ) async {
-      // Arrange
-      when(mockTvSearchNotifier.state).thenReturn(RequestState.Empty);
-      when(mockTvSearchNotifier.fetchTvSearch('joy')).thenAnswer((_) async {});
+      // Arrange: Atur state BLoC menjadi SearchError
+      const errorMessage = 'TV Server Failure!';
+      arrangeBlocState(const SearchError(errorMessage));
 
-      await tester.pumpWidget(makeTestableWidget(SearchTvPage()));
+      // Act: Render widget
+      await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
 
-      // Act
-      await tester.enterText(find.byType(TextField), 'query');
-      await tester.testTextInput.receiveAction(TextInputAction.search);
-      await tester.pump();
-
-      // Assert
-      verify(mockTvSearchNotifier.fetchTvSearch('query')).called(1);
+      // Assert: Verifikasi bahwa ErrorStateWidget dengan pesan error yang sesuai ditampilkan
+      expect(find.byType(ErrorStateWidget), findsOneWidget);
+      expect(find.byKey(Key('error_state')), findsOneWidget);
+      expect(find.text(errorMessage), findsOneWidget);
     });
 
-    testWidgets('should not call fetchTvSearch for empty query', (
-      tester,
+    testWidgets('should trigger search event when text field is changed', (
+      WidgetTester tester,
     ) async {
-      // Arrange
-      when(mockTvSearchNotifier.state).thenReturn(RequestState.Empty);
-      when(mockTvSearchNotifier.fetchTvSearch('joy')).thenAnswer((_) async {});
+      // Arrange: Atur state awal BLoC
+      arrangeBlocState(SearchEmpty());
 
-      await tester.pumpWidget(makeTestableWidget(SearchTvPage()));
+      // Act: Render widget, masukkan teks ke TextField
+      await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
+      await tester.enterText(find.byType(TextField), tQuery);
+      // Tunggu sebentar untuk debounce (jika ada di BLoC)
+      await tester.pump(const Duration(milliseconds: 500));
 
-      // Act
-      await tester.enterText(find.byType(TextField), '   ');
-      await tester.testTextInput.receiveAction(TextInputAction.search);
-      await tester.pump();
-
-      // Assert
-      verifyNever(mockTvSearchNotifier.fetchTvSearch('joy'));
+      // Assert: Verifikasi bahwa event OnQueryChangedTv dikirim ke BLoC dengan query yang benar
+      verify(mockTvSearchBloc.add(const OnQueryChangedTv(tQuery))).called(1);
     });
   });
 }

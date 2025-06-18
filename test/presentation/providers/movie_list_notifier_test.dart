@@ -273,7 +273,7 @@ void main() {
           .thenAnswer((_) async => Right(tTvSeries2));
 
       // act
-      await provider.loadMoreMovie();
+      await provider.loadMoreMovieNowPlaying();
 
       // assert
       expect(provider.nowPlayingMovies.length, tMovieList.length * 2);
@@ -285,7 +285,7 @@ void main() {
       provider.isFetching = true;
 
       // act
-      await provider.loadMoreMovie();
+      await provider.loadMoreMovieNowPlaying();
 
       // assert
       verifyNever(mockGetNowPlayingMovies.execute(any));

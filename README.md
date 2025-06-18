@@ -89,7 +89,66 @@ Coverage App:
 ## Ketentuaan Submission Awal
 
 - Menerapkan Continuous Integration (Done)
-- Menggunakan Library BLoC
+- Menggunakan Library BLoC (Done)
+  - lib
+    - presentation/bloc
+      - Movie List (Merge) (Done)
+      - Movie Search (Done)
+      - TvSeries List (Done)
+        - AiringTodayTv
+        - OnTheAirTv
+        - PopularTv
+        - TopRatedTv
+      - Tv Search (Done)
+      
+    - presentation/pages
+      - HomeMoviePage (Done)
+      - SearchMoviePage (Done)
+      - SearchTvPage (Done)
+      - TvSeriesPage (Done)
+      
+      - MovieDetailPage
+      - PopularMoviesPage (SeeMore)
+      - TopRatedMoviesPage (SeeMore)
+      - UpComingMoviesPage (SeeMore)
+      - WatchlistMoviesPage
+      
+      - OnTheAirTvPage (SeeMore)
+      - PopularTvPage (SeeMore)
+      - TopRatedTvPage (SeeMore)
+      - TvSeriesDetailPage
+      - WatchlistTvPage
+    
+  - Testing
+    - presentation/bloc
+      - MovieListBloc (Merge) (Done)
+      - MovieSearchBloc (Done)
+      - TvSeries List (Done)
+        - AiringTodayTvBloc
+        - OnTheAirTvBloc
+        - PopularTvBloc
+        - TopRatedTvBloc
+      - TvSearchBloc (Done)
+      
+    - presentation/pages
+      - HomeMoviePageTest
+      - SearchMoviePageTest
+      - SearchTvPageTest (Done)
+      - TvSeriesPageTest (Done)
+      
+      - MovieDetailPage
+      - PopularMoviesPage (SeeMore)
+      - TopRatedMoviesPage (SeeMore)
+      - UpComingMoviesPage (SeeMore)
+      - WatchlistMoviesPage
+      
+      - OnTheAirTvPage (SeeMore)
+      - PopularTvPage (SeeMore)
+      - TopRatedTvPage (SeeMore)
+      - TvSeriesDetailPage
+      - WatchlistTvPage
+      
+  
 - Menerapkan SSL Pinning
 - Integrasi dengan Firebase Analytics & Crashlytics
 - Modularisasi, Membagi aplikasi menjadi modul setidaknya untuk dua fitur movie & TV series(
