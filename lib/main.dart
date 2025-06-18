@@ -10,11 +10,12 @@ import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/airing_
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/popular/popular_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/top_rated/top_rated_tv_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_search/tv_search_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/about_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/movie_detail_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/home_movie_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/popular_movies_page.dart';
-import 'package:ditonton_clean_architecture/presentation/pages/movies/search_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/movies/search_movie_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/top_rated_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/on_the_air_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/popular_tv_page.dart';
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => di.locator<PopularTvBloc>()),
         BlocProvider(create: (context) => di.locator<TopRatedTvBloc>()),
         BlocProvider(create: (context) => di.locator<MovieSearchBloc>()),
+        BlocProvider(create: (context) => di.locator<TvSearchBloc>()),
       ],
       child: MultiProvider(
         providers: [
@@ -143,8 +145,8 @@ class MyApp extends StatelessWidget {
                   builder: (_) => MovieDetailPage(id: id),
                   settings: settings,
                 );
-              case SearchPage.ROUTE_NAME:
-                return CupertinoPageRoute(builder: (_) => SearchPage());
+              case SearchMoviePage.ROUTE_NAME:
+                return CupertinoPageRoute(builder: (_) => SearchMoviePage());
               case WatchlistMoviesPage.ROUTE_NAME:
                 return MaterialPageRoute(builder: (_) => WatchlistMoviesPage());
               case AboutPage.ROUTE_NAME:

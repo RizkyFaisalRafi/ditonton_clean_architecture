@@ -54,7 +54,7 @@ class ErrorStateWidget extends StatelessWidget {
         break;
       case ErrorType.serverError:
         asset = 'assets/image_lottie/error.json';
-        displayMessage = 'Terjadi Kesalahan Pada Server!';
+        displayMessage = '$title Server Failure!';
         break;
     }
     return Center(

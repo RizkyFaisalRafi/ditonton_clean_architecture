@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'movie_search_bloc.dart';
+part of 'tv_search_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,7 +13,7 @@ part of 'movie_search_bloc.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$MovieSearchEvent {
+mixin _$TvSearchEvent {
 
 
 
@@ -21,7 +21,7 @@ mixin _$MovieSearchEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MovieSearchEvent);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TvSearchEvent);
 }
 
 
@@ -30,22 +30,22 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'MovieSearchEvent()';
+  return 'TvSearchEvent()';
 }
 
 
 }
 
 /// @nodoc
-class $MovieSearchEventCopyWith<$Res>  {
-$MovieSearchEventCopyWith(MovieSearchEvent _, $Res Function(MovieSearchEvent) __);
+class $TvSearchEventCopyWith<$Res>  {
+$TvSearchEventCopyWith(TvSearchEvent _, $Res Function(TvSearchEvent) __);
 }
 
 
 /// @nodoc
 
 
-class _Started implements MovieSearchEvent {
+class _Started implements TvSearchEvent {
   const _Started();
   
 
@@ -65,7 +65,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'MovieSearchEvent.started()';
+  return 'TvSearchEvent.started()';
 }
 
 
@@ -77,23 +77,23 @@ String toString() {
 /// @nodoc
 
 
-class OnQueryChanged implements MovieSearchEvent {
-  const OnQueryChanged(this.query);
+class OnQueryChangedTv implements TvSearchEvent {
+  const OnQueryChangedTv(this.query);
   
 
  final  String query;
 
-/// Create a copy of MovieSearchEvent
+/// Create a copy of TvSearchEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$OnQueryChangedCopyWith<OnQueryChanged> get copyWith => _$OnQueryChangedCopyWithImpl<OnQueryChanged>(this, _$identity);
+$OnQueryChangedTvCopyWith<OnQueryChangedTv> get copyWith => _$OnQueryChangedTvCopyWithImpl<OnQueryChangedTv>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnQueryChanged&&(identical(other.query, query) || other.query == query));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OnQueryChangedTv&&(identical(other.query, query) || other.query == query));
 }
 
 
@@ -102,15 +102,15 @@ int get hashCode => Object.hash(runtimeType,query);
 
 @override
 String toString() {
-  return 'MovieSearchEvent.onQueryChanged(query: $query)';
+  return 'TvSearchEvent.onQueryChangedTv(query: $query)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $OnQueryChangedCopyWith<$Res> implements $MovieSearchEventCopyWith<$Res> {
-  factory $OnQueryChangedCopyWith(OnQueryChanged value, $Res Function(OnQueryChanged) _then) = _$OnQueryChangedCopyWithImpl;
+abstract mixin class $OnQueryChangedTvCopyWith<$Res> implements $TvSearchEventCopyWith<$Res> {
+  factory $OnQueryChangedTvCopyWith(OnQueryChangedTv value, $Res Function(OnQueryChangedTv) _then) = _$OnQueryChangedTvCopyWithImpl;
 @useResult
 $Res call({
  String query
@@ -121,17 +121,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$OnQueryChangedCopyWithImpl<$Res>
-    implements $OnQueryChangedCopyWith<$Res> {
-  _$OnQueryChangedCopyWithImpl(this._self, this._then);
+class _$OnQueryChangedTvCopyWithImpl<$Res>
+    implements $OnQueryChangedTvCopyWith<$Res> {
+  _$OnQueryChangedTvCopyWithImpl(this._self, this._then);
 
-  final OnQueryChanged _self;
-  final $Res Function(OnQueryChanged) _then;
+  final OnQueryChangedTv _self;
+  final $Res Function(OnQueryChangedTv) _then;
 
-/// Create a copy of MovieSearchEvent
+/// Create a copy of TvSearchEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? query = null,}) {
-  return _then(OnQueryChanged(
+  return _then(OnQueryChangedTv(
 null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -141,7 +141,7 @@ as String,
 }
 
 /// @nodoc
-mixin _$MovieSearchState {
+mixin _$TvSearchState {
 
 
 
@@ -149,7 +149,7 @@ mixin _$MovieSearchState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MovieSearchState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TvSearchState);
 }
 
 
@@ -158,22 +158,22 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'MovieSearchState()';
+  return 'TvSearchState()';
 }
 
 
 }
 
 /// @nodoc
-class $MovieSearchStateCopyWith<$Res>  {
-$MovieSearchStateCopyWith(MovieSearchState _, $Res Function(MovieSearchState) __);
+class $TvSearchStateCopyWith<$Res>  {
+$TvSearchStateCopyWith(TvSearchState _, $Res Function(TvSearchState) __);
 }
 
 
 /// @nodoc
 
 
-class SearchEmpty implements MovieSearchState {
+class SearchEmpty implements TvSearchState {
   const SearchEmpty();
   
 
@@ -193,7 +193,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'MovieSearchState.searchEmpty()';
+  return 'TvSearchState.searchEmpty()';
 }
 
 
@@ -205,7 +205,7 @@ String toString() {
 /// @nodoc
 
 
-class SearchLoading implements MovieSearchState {
+class SearchLoading implements TvSearchState {
   const SearchLoading();
   
 
@@ -225,7 +225,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'MovieSearchState.searchLoading()';
+  return 'TvSearchState.searchLoading()';
 }
 
 
@@ -237,13 +237,13 @@ String toString() {
 /// @nodoc
 
 
-class SearchError implements MovieSearchState {
+class SearchError implements TvSearchState {
   const SearchError(this.message);
   
 
  final  String message;
 
-/// Create a copy of MovieSearchState
+/// Create a copy of TvSearchState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
@@ -262,14 +262,14 @@ int get hashCode => Object.hash(runtimeType,message);
 
 @override
 String toString() {
-  return 'MovieSearchState.searchError(message: $message)';
+  return 'TvSearchState.searchError(message: $message)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $SearchErrorCopyWith<$Res> implements $MovieSearchStateCopyWith<$Res> {
+abstract mixin class $SearchErrorCopyWith<$Res> implements $TvSearchStateCopyWith<$Res> {
   factory $SearchErrorCopyWith(SearchError value, $Res Function(SearchError) _then) = _$SearchErrorCopyWithImpl;
 @useResult
 $Res call({
@@ -288,7 +288,7 @@ class _$SearchErrorCopyWithImpl<$Res>
   final SearchError _self;
   final $Res Function(SearchError) _then;
 
-/// Create a copy of MovieSearchState
+/// Create a copy of TvSearchState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
   return _then(SearchError(
@@ -303,19 +303,19 @@ as String,
 /// @nodoc
 
 
-class SearchHasData implements MovieSearchState {
-  const SearchHasData(final  List<Movie> result): _result = result;
+class SearchHasData implements TvSearchState {
+  const SearchHasData(final  List<TvSeries> result): _result = result;
   
 
- final  List<Movie> _result;
- List<Movie> get result {
+ final  List<TvSeries> _result;
+ List<TvSeries> get result {
   if (_result is EqualUnmodifiableListView) return _result;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_result);
 }
 
 
-/// Create a copy of MovieSearchState
+/// Create a copy of TvSearchState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
@@ -334,18 +334,18 @@ int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(
 
 @override
 String toString() {
-  return 'MovieSearchState.searchHasData(result: $result)';
+  return 'TvSearchState.searchHasData(result: $result)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $SearchHasDataCopyWith<$Res> implements $MovieSearchStateCopyWith<$Res> {
+abstract mixin class $SearchHasDataCopyWith<$Res> implements $TvSearchStateCopyWith<$Res> {
   factory $SearchHasDataCopyWith(SearchHasData value, $Res Function(SearchHasData) _then) = _$SearchHasDataCopyWithImpl;
 @useResult
 $Res call({
- List<Movie> result
+ List<TvSeries> result
 });
 
 
@@ -360,12 +360,12 @@ class _$SearchHasDataCopyWithImpl<$Res>
   final SearchHasData _self;
   final $Res Function(SearchHasData) _then;
 
-/// Create a copy of MovieSearchState
+/// Create a copy of TvSearchState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? result = null,}) {
   return _then(SearchHasData(
 null == result ? _self._result : result // ignore: cast_nullable_to_non_nullable
-as List<Movie>,
+as List<TvSeries>,
   ));
 }
 

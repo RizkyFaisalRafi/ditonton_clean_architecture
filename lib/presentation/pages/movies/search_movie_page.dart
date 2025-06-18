@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import '../../widgets/error_state_widget.dart';
 
-class SearchPage extends StatelessWidget {
+class SearchMoviePage extends StatelessWidget {
   static const ROUTE_NAME = '/search';
 
   @override

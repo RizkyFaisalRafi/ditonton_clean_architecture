@@ -1,11 +1,10 @@
 import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/common/constants.dart';
 import 'package:ditonton_clean_architecture/domain/entities/movies/movie.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/movie_detail_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/popular_movies_page.dart';
-import 'package:ditonton_clean_architecture/presentation/pages/movies/search_page.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/movies/search_movie_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/top_rated_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/custom_drawer.dart';
@@ -91,7 +90,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
         actions: [
           IconButton(
             onPressed:
-                () => Navigator.pushNamed(context, SearchPage.ROUTE_NAME),
+                () => Navigator.pushNamed(context, SearchMoviePage.ROUTE_NAME),
             icon: const Icon(Icons.search),
           ),
         ],
