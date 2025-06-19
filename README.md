@@ -4,8 +4,7 @@
 
 [//]: # (# [![Codemagic build status]&#40;https://api.codemagic.io/apps/6379c4a01063f44db75df13a/6379c4a01063f44db75df139/status_badge.svg&#41;]&#40;https://codemagic.io/apps/6379c4a01063f44db75df13a/6379c4a01063f44db75df139/latest_build&#41;)
 
-Repository ini merupakan project awal dan akhir submission kelas Flutter Expert Dicoding Indonesia
-2025.
+Repository ini merupakan project awal dan akhir submission kelas Flutter Expert Dicoding Indonesia 2025.
 
 ---
 Negative Case:
@@ -100,14 +99,15 @@ Coverage App:
         - PopularTv
         - TopRatedTv
       - Tv Search (Done)
+      - MovieDetail (Done)
       
     - presentation/pages
       - HomeMoviePage (Done)
       - SearchMoviePage (Done)
       - SearchTvPage (Done)
       - TvSeriesPage (Done)
+      - MovieDetailPage (Done)
       
-      - MovieDetailPage
       - PopularMoviesPage (SeeMore)
       - TopRatedMoviesPage (SeeMore)
       - UpComingMoviesPage (SeeMore)
@@ -129,14 +129,15 @@ Coverage App:
         - PopularTvBloc
         - TopRatedTvBloc
       - TvSearchBloc (Done)
+      - MovieDetailBloc (Done)
       
     - presentation/pages
       - HomeMoviePageTest
       - SearchMoviePageTest
       - SearchTvPageTest (Done)
       - TvSeriesPageTest (Done)
-      
-      - MovieDetailPage
+      - MovieDetailPageTest (Done)
+
       - PopularMoviesPage (SeeMore)
       - TopRatedMoviesPage (SeeMore)
       - UpComingMoviesPage (SeeMore)
