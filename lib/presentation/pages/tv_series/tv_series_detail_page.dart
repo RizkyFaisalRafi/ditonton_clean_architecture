@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_detail.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_detail/tv_detail_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_detail_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -27,52 +29,115 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      Provider.of<TvDetailNotifier>(
-        context,
-        listen: false,
-      ).fetchTvDetail(widget.id);
-      Provider.of<TvDetailNotifier>(
-        context,
-        listen: false,
-      ).loadWatchlistStatus(widget.id);
-    });
+    // Future.microtask(() {
+    //   Provider.of<TvDetailNotifier>(
+    //     context,
+    //     listen: false,
+    //   ).fetchTvDetail(widget.id);
+    //   Provider.of<TvDetailNotifier>(
+    //     context,
+    //     listen: false,
+    //   ).loadWatchlistStatus(widget.id);
+    // });
+
+    context.read<TvDetailBloc>().add(FetchTvDetail(widget.id));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<TvDetailNotifier>(
-        builder: (context, provider, child) {
-          if (provider.tvState == RequestState.Loading) {
-            return Center(
-              child: Lottie.asset(
-                key: Key('loading_tv_detail'),
-                'assets/image_lottie/loading_bar.json',
-                width: 100,
-                height: 100,
-                fit: BoxFit.fill,
-              ),
-            );
-          } else if (provider.tvState == RequestState.Loaded) {
-            final tvDetail = provider.tvDetail;
-            return SafeArea(
-              child: DetailContents(
-                tvDetail!,
-                provider.tvRecommendations,
-                provider.isAddedToWatchlist,
-              ),
-            );
-          } else {
-            return Center(
-              child: ErrorStateWidget2(
-                message: provider.message,
-                onRetry: () => provider.fetchTvDetail(widget.id),
-              ),
-            );
+      body: BlocListener<TvDetailBloc, TvDetailState>(
+        listener: (context, state) {
+          if (state is Loaded) {
+            final message = state.watchlistMessage;
+            if (message != null && message.isNotEmpty) {
+              if (message == TvDetailState.watchlistAddSuccessMessage ||
+                  message == TvDetailState.watchlistRemoveSuccessMessage) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(message)));
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(content: Text(message));
+                  },
+                );
+              }
+            }
           }
         },
+        child: BlocBuilder<TvDetailBloc, TvDetailState>(
+          builder: (context, state) {
+            if (state is Loading) {
+              return Center(
+                child: Lottie.asset(
+                  'assets/image_lottie/loading_bar.json',
+                  width: 150,
+                  height: 150,
+                ),
+              );
+            } else if (state is Loaded) {
+              return SafeArea(
+                child: DetailContents(
+                  state.tvDetail,
+                  state.tvRecommendations,
+                  state.isAddedToWatchlist,
+                ),
+              );
+            } else if (state is Error) {
+              return ErrorStateWidget2(
+                message: state.message,
+                onRetry: () {
+                  context.read<TvDetailBloc>().add(
+                    TvDetailEvent.fetchTvDetail(widget.id),
+                  );
+                },
+              );
+            } else if (state is Initial) {
+              return Center(
+                child: CircularProgressIndicator(key: Key('initialState')),
+              );
+            } else {
+              // Mengembalikan widget kosong sebagai fallback
+              return const SizedBox.shrink();
+            }
+          },
+        ),
       ),
+
+      // body: Consumer<TvDetailNotifier>(
+      //   builder: (context, provider, child) {
+      //     if (provider.tvState == RequestState.Loading) {
+      //       return Center(
+      //         child: Lottie.asset(
+      //           key: Key('loading_tv_detail'),
+      //           'assets/image_lottie/loading_bar.json',
+      //           width: 100,
+      //           height: 100,
+      //           fit: BoxFit.fill,
+      //         ),
+      //       );
+      //     } else if (provider.tvState == RequestState.Loaded) {
+      //       final tvDetail = provider.tvDetail;
+      //       return SafeArea(
+      //         child: DetailContents(
+      //           tvDetail!,
+      //           provider.tvRecommendations,
+      //           provider.isAddedToWatchlist,
+      //         ),
+      //       );
+      //     } else {
+      //       return Center(
+      //         child: ErrorStateWidget2(
+      //           message: provider.message,
+      //           onRetry: () => provider.fetchTvDetail(widget.id),
+      //         ),
+      //       );
+      //     }
+      //   },
+      // ),
     );
   }
 }
@@ -152,42 +217,51 @@ class DetailContents extends StatelessWidget {
                             FilledButton(
                               onPressed: () async {
                                 if (!isAddedWatchlist) {
-                                  await Provider.of<TvDetailNotifier>(
-                                    context,
-                                    listen: false,
-                                  ).addWatchlist(tvDetail);
+                                  context.read<TvDetailBloc>().add(
+                                    TvDetailEvent.addToWatchlist(tvDetail),
+                                  );
+
+                                  // await Provider.of<TvDetailNotifier>(
+                                  //   context,
+                                  //   listen: false,
+                                  // ).addWatchlist(tvDetail);
                                 } else {
-                                  await Provider.of<TvDetailNotifier>(
-                                    context,
-                                    listen: false,
-                                  ).removeFromWatchlist(tvDetail);
+                                  context.read<TvDetailBloc>().add(
+                                    TvDetailEvent.removeFromWatchlist(tvDetail),
+                                  );
+
+                                  // await Provider.of<TvDetailNotifier>(
+                                  //   context,
+                                  //   listen: false,
+                                  // ).removeFromWatchlist(tvDetail);
                                 }
 
-                                final message =
-                                    Provider.of<TvDetailNotifier>(
-                                      context,
-                                      listen: false,
-                                    ).watchlistMessage;
+                                // final message =
+                                //     Provider.of<TvDetailNotifier>(
+                                //       context,
+                                //       listen: false,
+                                //     ).watchlistMessage;
+                                //
+                                // if (message ==
+                                //         TvDetailNotifier
+                                //             .watchlistAddSuccessMessage ||
+                                //     message ==
+                                //         TvDetailNotifier
+                                //             .watchlistRemoveSuccessMessage) {
+                                //   ScaffoldMessenger.of(context).showSnackBar(
+                                //     SnackBar(content: Text(message)),
+                                //   );
+                                // } else {
+                                //   showDialog(
+                                //     context: context,
+                                //     builder: (context) {
+                                //       return AlertDialog(
+                                //         content: Text(message),
+                                //       );
+                                //     },
+                                //   );
+                                // }
 
-                                if (message ==
-                                        TvDetailNotifier
-                                            .watchlistAddSuccessMessage ||
-                                    message ==
-                                        TvDetailNotifier
-                                            .watchlistRemoveSuccessMessage) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(message)),
-                                  );
-                                } else {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        content: Text(message),
-                                      );
-                                    },
-                                  );
-                                }
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -420,105 +494,181 @@ class DetailContents extends StatelessWidget {
                             // Recommendations Tv Series
                             Text('Recommendations Tv Series', style: kHeading6),
                             SizedBox(height: 8),
-                            Consumer<TvDetailNotifier>(
-                              builder: (context, data, child) {
-                                if (data.recommendationState ==
-                                    RequestState.Loading) {
-                                  return Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                } else if (data.recommendationState ==
-                                    RequestState.Error) {
-                                  return Text(data.message);
-                                } else if (data.recommendationState ==
-                                    RequestState.Loaded) {
-                                  return Container(
-                                    height: 150,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: recommendations.length,
-                                      itemBuilder: (context, index) {
-                                        final tvRecommend =
-                                            recommendations[index];
-                                        return Padding(
-                                          padding: EdgeInsets.all(4.0),
-                                          child: Stack(
-                                            children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  // Navigation Detail Page
-                                                  Navigator.pushReplacementNamed(
-                                                    context,
-                                                    TvSeriesDetailPage
-                                                        .ROUTE_NAME,
-                                                    arguments: tvRecommend.id,
-                                                  );
-                                                },
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                        Radius.circular(8),
-                                                      ),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        'https://image.tmdb.org/t/p/w500${tvRecommend.posterPath}',
-                                                    width: 100,
-                                                    fit: BoxFit.cover,
-                                                    placeholder:
-                                                        (
-                                                          context,
-                                                          url,
-                                                        ) => Center(
-                                                          child:
-                                                              CircularProgressIndicator(),
-                                                        ),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Icon(Icons.error),
-                                                  ),
-                                                ),
-                                              ),
 
-                                              /// Textnya sesuai dengan ukuran Gambar
-                                              Align(
-                                                alignment:
-                                                    Alignment.bottomCenter,
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  width: 100,
-                                                  height: 40,
-                                                  color: Colors.black54,
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 4,
-                                                    vertical: 4,
-                                                  ),
-                                                  child: Text(
-                                                    tvRecommend.name ??
-                                                        'No Title',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                            // Recommendations
+                            BlocBuilder<TvDetailBloc, TvDetailState>(
+                              builder: (context, state) {
+                                // Pastikan state adalah Loaded sebelum mencoba mengakses propertinya
+                                if (state is Loaded) {
+                                  final recState = state.recommendationState;
+                                  final recs = state.tvRecommendations;
+
+                                  if (recState == RequestState.Loading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (recState == RequestState.Loaded) {
+                                    return SizedBox(
+                                      key: Key('LoadedState Recommendation'),
+                                      height: 150,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) {
+                                          final tv = recs[index];
+                                          return Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: InkWell(
+                                              onTap: () {
+                                                Navigator.pushReplacementNamed(
+                                                  context,
+                                                  TvSeriesDetailPage.ROUTE_NAME,
+                                                  arguments: tv.id,
+                                                );
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                      Radius.circular(8),
                                                     ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.center,
-                                                  ),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      'https://image.tmdb.org/t/p/w500${tv.posterPath}',
+                                                  placeholder:
+                                                      (
+                                                        context,
+                                                        url,
+                                                      ) => const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          const Icon(
+                                                            Icons.error,
+                                                          ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  );
-                                } else {
-                                  return Container();
+                                            ),
+                                          );
+                                        },
+                                        itemCount: recs.length,
+                                      ),
+                                    );
+                                  } else {
+                                    // kasus untuk RequestState.Error atau kondisi lain
+                                    return const Text(
+                                      'Failed to load recommendations.',
+                                    );
+                                  }
                                 }
+
+                                // Kembalikan widget kosong jika state bukan Loaded
+                                // untuk menghindari error render.
+                                return const SizedBox.shrink(
+                                  key: Key('Error State Recommendation'),
+                                );
                               },
                             ),
+
+                            // Consumer<TvDetailNotifier>(
+                            //   builder: (context, data, child) {
+                            //     if (data.recommendationState ==
+                            //         RequestState.Loading) {
+                            //       return Center(
+                            //         child: CircularProgressIndicator(),
+                            //       );
+                            //     } else if (data.recommendationState ==
+                            //         RequestState.Error) {
+                            //       return Text(data.message);
+                            //     } else if (data.recommendationState ==
+                            //         RequestState.Loaded) {
+                            //       return Container(
+                            //         height: 150,
+                            //         child: ListView.builder(
+                            //           scrollDirection: Axis.horizontal,
+                            //           itemCount: recommendations.length,
+                            //           itemBuilder: (context, index) {
+                            //             final tvRecommend =
+                            //                 recommendations[index];
+                            //             return Padding(
+                            //               padding: EdgeInsets.all(4.0),
+                            //               child: Stack(
+                            //                 children: [
+                            //                   InkWell(
+                            //                     onTap: () {
+                            //                       // Navigation Detail Page
+                            //                       Navigator.pushReplacementNamed(
+                            //                         context,
+                            //                         TvSeriesDetailPage
+                            //                             .ROUTE_NAME,
+                            //                         arguments: tvRecommend.id,
+                            //                       );
+                            //                     },
+                            //                     child: ClipRRect(
+                            //                       borderRadius:
+                            //                           BorderRadius.all(
+                            //                             Radius.circular(8),
+                            //                           ),
+                            //                       child: CachedNetworkImage(
+                            //                         imageUrl:
+                            //                             'https://image.tmdb.org/t/p/w500${tvRecommend.posterPath}',
+                            //                         width: 100,
+                            //                         fit: BoxFit.cover,
+                            //                         placeholder:
+                            //                             (
+                            //                               context,
+                            //                               url,
+                            //                             ) => Center(
+                            //                               child:
+                            //                                   CircularProgressIndicator(),
+                            //                             ),
+                            //                         errorWidget:
+                            //                             (context, url, error) =>
+                            //                                 Icon(Icons.error),
+                            //                       ),
+                            //                     ),
+                            //                   ),
+                            //
+                            //                   /// Textnya sesuai dengan ukuran Gambar
+                            //                   Align(
+                            //                     alignment:
+                            //                         Alignment.bottomCenter,
+                            //                     child: Container(
+                            //                       alignment: Alignment.center,
+                            //                       width: 100,
+                            //                       height: 40,
+                            //                       color: Colors.black54,
+                            //                       padding: EdgeInsets.symmetric(
+                            //                         horizontal: 4,
+                            //                         vertical: 4,
+                            //                       ),
+                            //                       child: Text(
+                            //                         tvRecommend.name ??
+                            //                             'No Title',
+                            //                         style: TextStyle(
+                            //                           color: Colors.white,
+                            //                           fontSize: 12,
+                            //                           fontWeight:
+                            //                               FontWeight.bold,
+                            //                         ),
+                            //                         overflow:
+                            //                             TextOverflow.ellipsis,
+                            //                         maxLines: 2,
+                            //                         textAlign: TextAlign.center,
+                            //                       ),
+                            //                     ),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             );
+                            //           },
+                            //         ),
+                            //       );
+                            //     } else {
+                            //       return Container();
+                            //     }
+                            //   },
+                            // ),
                           ],
                         ),
                       ),

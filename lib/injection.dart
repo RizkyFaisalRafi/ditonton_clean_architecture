@@ -32,6 +32,7 @@ import 'package:ditonton_clean_architecture/domain/usecases/tv_series/search_tv_
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_detail/movie_detail_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_list/movie_list_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_search/movie_search_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_detail/tv_detail_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/airing_today/airing_today_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/popular/popular_tv_bloc.dart';
@@ -134,6 +135,15 @@ void init() {
       removeWatchlist: locator(),
       getMovieDetail: locator(),
       getMovieRecommendations: locator(),
+      getWatchListStatus: locator(),
+      saveWatchlist: locator(),
+    ),
+  );
+  locator.registerFactory(
+    () => TvDetailBloc(
+      removeWatchlist: locator(),
+      getTvDetail: locator(),
+      getTvRecommendations: locator(),
       getWatchListStatus: locator(),
       saveWatchlist: locator(),
     ),
