@@ -102,6 +102,8 @@ Coverage App:
       - MovieDetail (Done)
       - TvDetail (Done)
       - SeeMorePopularMovieBloc (Done)
+      - SeeMoreTopRatedMovieBloc (Done)
+      - SeeMoreUpComingMovieBloc (Process)
       
     - presentation/pages
       - HomeMoviePage (Done)
@@ -111,9 +113,9 @@ Coverage App:
       - MovieDetailPage (Done)
       - TvSeriesDetailPage (Done)
       - PopularMoviesPage (SeeMore) (Done)
+      - TopRatedMoviesPage (SeeMore) (Done)
+      - UpComingMoviesPage (SeeMore) (Process)
 
-      - TopRatedMoviesPage (SeeMore)
-      - UpComingMoviesPage (SeeMore)
       - WatchlistMoviesPage
 
       - OnTheAirTvPage (SeeMore)
@@ -133,7 +135,9 @@ Coverage App:
       - TvSearchBlocTest (Done)
       - MovieDetailBlocTest (Done)
       - TvDetailBlocTest (Done)
-      - SeeMorePopularMovieBlocTest (Process)
+      - SeeMorePopularMovieBlocTest (Done)
+      - SeeMoreTopRatedMovieBlocTest (Done)
+      - SeeMoreUpComingMovieBlocTest (Process)
       
     - presentation/pages
       - HomeMoviePageTest
@@ -143,9 +147,9 @@ Coverage App:
       - MovieDetailPageTest (Done)
       - TvSeriesDetailPage (Done)
       - PopularMoviesPageTest (SeeMore) (Done)
+      - TopRatedMoviesPageTest (SeeMore) (Done)
+      - UpComingMoviesPageTest (SeeMore) (Process)
 
-      - TopRatedMoviesPage (SeeMore)
-      - UpComingMoviesPage (SeeMore)
       - WatchlistMoviesPage
 
       - OnTheAirTvPage (SeeMore)
