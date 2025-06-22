@@ -111,8 +111,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               () => context.read<MovieListBloc>().add(
                 const MovieListEvent.refreshMovies(),
               ),
-          header: const WaterDropHeader(
-          ),
+          header: const WaterDropHeader(),
           child: BlocBuilder<MovieListBloc, MovieListState>(
             builder: (context, state) {
               // Gunakan switch expression untuk pattern matching yang modern
