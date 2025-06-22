@@ -100,6 +100,7 @@ Coverage App:
         - TopRatedTv
       - Tv Search (Done)
       - MovieDetail (Done)
+      - TvDetail (Done)
       
     - presentation/pages
       - HomeMoviePage (Done)
@@ -107,16 +108,16 @@ Coverage App:
       - SearchTvPage (Done)
       - TvSeriesPage (Done)
       - MovieDetailPage (Done)
-      
-      - PopularMoviesPage (SeeMore)
+      - TvSeriesDetailPage (Done)
+      - PopularMoviesPage (SeeMore) (Process)
+
       - TopRatedMoviesPage (SeeMore)
       - UpComingMoviesPage (SeeMore)
       - WatchlistMoviesPage
-      
+
       - OnTheAirTvPage (SeeMore)
       - PopularTvPage (SeeMore)
       - TopRatedTvPage (SeeMore)
-      - TvSeriesDetailPage
       - WatchlistTvPage
     
   - Testing
@@ -130,6 +131,7 @@ Coverage App:
         - TopRatedTvBloc
       - TvSearchBloc (Done)
       - MovieDetailBloc (Done)
+      - TvDetailBloc (Done)
       
     - presentation/pages
       - HomeMoviePageTest
@@ -137,19 +139,18 @@ Coverage App:
       - SearchTvPageTest (Done)
       - TvSeriesPageTest (Done)
       - MovieDetailPageTest (Done)
+      - TvSeriesDetailPage (Done)
+      - PopularMoviesPage (SeeMore) (Process)
 
-      - PopularMoviesPage (SeeMore)
       - TopRatedMoviesPage (SeeMore)
       - UpComingMoviesPage (SeeMore)
       - WatchlistMoviesPage
-      
+
       - OnTheAirTvPage (SeeMore)
       - PopularTvPage (SeeMore)
       - TopRatedTvPage (SeeMore)
-      - TvSeriesDetailPage
       - WatchlistTvPage
-      
-  
+
 - Menerapkan SSL Pinning
 - Integrasi dengan Firebase Analytics & Crashlytics
 - Modularisasi, Membagi aplikasi menjadi modul setidaknya untuk dua fitur movie & TV series(

@@ -10,7 +10,4 @@ class MovieDetailEvent with _$MovieDetailEvent {
 
   // Event untuk Delete to Watchlist
   const factory MovieDetailEvent.removeFromWatchlist(MovieDetail movieDetail) = RemoveFromWatchlist;
-
-  // Event untuk Add to Watchlist
-  // const factory MovieDetailEvent.loadWatchlistStatus(int id) = LoadWatchlistStatus;
 }
