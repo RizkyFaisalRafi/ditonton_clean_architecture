@@ -82,8 +82,8 @@ void main() {
   });
 
   testWidgets('Page should display error message when error occurs', (
-      WidgetTester tester,
-      ) async {
+    WidgetTester tester,
+  ) async {
     when(mockNotifier.state).thenReturn(RequestState.Error);
     when(mockNotifier.message).thenReturn('Error message');
 
@@ -97,8 +97,8 @@ void main() {
   });
 
   testWidgets('Page should trigger refresh when retry is pressed', (
-      WidgetTester tester,
-      ) async {
+    WidgetTester tester,
+  ) async {
     when(mockNotifier.state).thenReturn(RequestState.Error);
     when(mockNotifier.message).thenReturn('Error message');
 
@@ -118,8 +118,8 @@ void main() {
   });
 
   testWidgets('SmartRefresher should be configured correctly', (
-      WidgetTester tester,
-      ) async {
+    WidgetTester tester,
+  ) async {
     when(mockNotifier.state).thenReturn(RequestState.Loaded);
     when(mockNotifier.movies).thenReturn(testMovieList);
 
@@ -127,6 +127,4 @@ void main() {
 
     expect(find.byType(SmartRefresher), findsOneWidget);
   });
-
-
 }
