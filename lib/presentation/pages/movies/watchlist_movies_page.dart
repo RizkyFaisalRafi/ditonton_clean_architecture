@@ -1,10 +1,9 @@
-import 'package:ditonton_clean_architecture/common/state_enum.dart';
 import 'package:ditonton_clean_architecture/common/utils.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/movies/watchlist_movie_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_watchlist/watchlist_movie_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/movie_card_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import '../../widgets/custom_drawer.dart';
 import '../../widgets/error_state_widget.dart';
 
@@ -22,12 +21,8 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-      () =>
-          Provider.of<WatchlistMovieNotifier>(
-            context,
-            listen: false,
-          ).fetchWatchlistMovies(),
+    context.read<WatchlistMovieBloc>().add(
+      const WatchlistMovieEvent.fetchInitialWatchlistMovies(),
     );
   }
 
@@ -39,10 +34,11 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
 
   @override
   void didPopNext() {
-    Provider.of<WatchlistMovieNotifier>(
-      context,
-      listen: false,
-    ).fetchWatchlistMovies();
+    // Mengirim event ke BLoC untuk mengambil ulang data watchlist
+    context.read<WatchlistMovieBloc>().add(
+      const WatchlistMovieEvent.fetchInitialWatchlistMovies(),
+    );
+    super.didPopNext(); // Sebaiknya panggil super juga
   }
 
   @override
@@ -61,30 +57,36 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer<WatchlistMovieNotifier>(
-          builder: (context, data, child) {
-            if (data.watchlistState == RequestState.Loading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (data.watchlistState == RequestState.Loaded) {
-              if (data.watchlistMovies.isEmpty) {
-                return const EmptyStateWidget(
-                  message: 'No Watchlist Available.',
-                );
-              }
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  final movie = data.watchlistMovies[index];
-                  return MovieCard(movie);
-                },
-                itemCount: data.watchlistMovies.length,
-              );
-            } else {
-              return EmptyStateWidget(message: data.message);
-              // return Center(
-              //   key: Key('error_message'),
-              //   child: Text(data.message),
-              // );
-            }
+
+        child: BlocBuilder<WatchlistMovieBloc, WatchlistMovieState>(
+          builder: (context, state) {
+            return switch (state) {
+              Initial() || Loading() => Center(
+                child: Lottie.asset(
+                  key: Key('loading_watchlist_movie'),
+                  'assets/image_lottie/loading_bar.json',
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.fill,
+                ),
+              ),
+
+              Loaded(watchlistMovie: final watchlistMovie) =>
+                watchlistMovie.isEmpty
+                    ? EmptyStateWidget(message: 'No Watchlist Available.')
+                    : ListView.builder(
+                      itemCount: watchlistMovie.length,
+                      itemBuilder: (context, index) {
+                        final watchlist = watchlistMovie[index];
+                        return MovieCard(watchlist);
+                      },
+                    ),
+
+              Error(message: final message) => () {
+                return EmptyStateWidget(message: message);
+              }(),
+              _ => const SizedBox.shrink(),
+            };
           },
         ),
       ),
