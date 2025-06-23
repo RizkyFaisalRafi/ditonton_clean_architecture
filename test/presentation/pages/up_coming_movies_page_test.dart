@@ -1,129 +1,281 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ditonton_clean_architecture/common/state_enum.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/movies/see_more_upcoming/see_more_upcoming_movie_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/movies/up_coming_movies_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/error_state_widget.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/movie_card_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:provider/provider.dart';
+import 'package:mocktail_image_network/mocktail_image_network.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../dummy_data/dummy_objects.dart';
-import '../providers/up_coming_movies_notifier_test.mocks.dart';
+import 'up_coming_movies_page_test.mocks.dart';
 
-@GenerateMocks([UpComingMoviesNotifier])
+@GenerateMocks([UpComingMoviesNotifier, SeeMoreUpcomingMovieBloc])
 void main() {
-  late MockUpComingMoviesNotifier mockNotifier;
+  late MockSeeMoreUpcomingMovieBloc mockSeeMoreUpcomingMovieBloc;
 
   setUp(() {
-    mockNotifier = MockUpComingMoviesNotifier();
-
     // Setup properties
-    when(mockNotifier.refreshC).thenReturn(RefreshController());
-    when(mockNotifier.scrollController).thenReturn(ScrollController());
+    mockSeeMoreUpcomingMovieBloc = MockSeeMoreUpcomingMovieBloc();
   });
 
   Widget _makeTestableWidget(Widget body) {
-    return ChangeNotifierProvider<UpComingMoviesNotifier>.value(
-      value: mockNotifier,
+    return BlocProvider<SeeMoreUpcomingMovieBloc>.value(
+      value: mockSeeMoreUpcomingMovieBloc,
       child: MaterialApp(home: body),
     );
   }
 
-  testWidgets('Page should display app bar with title', (
-    WidgetTester tester,
+  void _arrangeBlocState(SeeMoreUpcomingMovieState state) {
+    when(mockSeeMoreUpcomingMovieBloc.state).thenReturn(state);
+    when(
+      mockSeeMoreUpcomingMovieBloc.stream,
+    ).thenAnswer((_) => Stream.value(state));
+  }
+
+  /// Loading
+  testWidgets(
+    'Page should display Lottie loading indicator when state is loading',
+    (widgetTester) async {
+      // Arrange
+      _arrangeBlocState(const SeeMoreUpcomingMovieState.loading());
+
+      // Act
+      await widgetTester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+
+      // Assert
+      final progressBarFinder = find.byKey(Key('loading_up_coming_movie'));
+      final lottieFinder = find.byType(Lottie);
+      expect(progressBarFinder, findsOneWidget);
+      expect(lottieFinder, findsOneWidget);
+    },
+  );
+
+  /// Loaded
+  testWidgets('Page should display ListView when state is loaded with data', (
+    widgetTester,
   ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loading);
+    // Arrange
+    _arrangeBlocState(
+      SeeMoreUpcomingMovieState.loaded(
+        upComing: testMovieList,
+        upComingPage: 1,
+        hasMoreUpComing: false,
+      ),
+    );
 
-    await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+    // Act
+    await mockNetworkImages(() async {
+      await widgetTester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+      await widgetTester.pump();
+      await widgetTester.pump(const Duration(seconds: 1));
+    });
 
-    expect(find.text('Up Coming Movies'), findsOneWidget);
-  });
+    // Assert
+    final listViewFinder = find.byKey(const Key('loaded_up_coming'));
+    final smartRefresherFinder = find.byType(SmartRefresher);
 
-  testWidgets('Page should display loading indicator when loading', (
-    WidgetTester tester,
-  ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loading);
-
-    await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
-
-    final progressBarFinder = find.byKey(Key('loading_up_coming_movie'));
-    expect(progressBarFinder, findsOneWidget);
-    expect(find.byType(Lottie), findsOneWidget);
-  });
-
-  testWidgets('Page should display empty widget when movies is empty', (
-    WidgetTester tester,
-  ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loaded);
-    when(mockNotifier.movies).thenReturn([]);
-
-    await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
-
-    expect(find.text('No movies available.'), findsOneWidget);
-  });
-
-  testWidgets('Page should display ListView when data is loaded', (
-    WidgetTester tester,
-  ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loaded);
-    when(mockNotifier.movies).thenReturn(testMovieList);
-
-    final listViewFinder = find.byKey(Key('loaded_up_coming'));
-    await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
-
-    expect(find.byType(MovieCard), findsOneWidget);
-    expect(find.byType(CachedNetworkImage), findsOneWidget);
     expect(listViewFinder, findsOneWidget);
+    expect(smartRefresherFinder, findsOneWidget);
+    expect(find.byType(CachedNetworkImage), findsOneWidget);
+    expect(find.byType(MovieCard), findsOneWidget);
   });
 
-  testWidgets('Page should display error message when error occurs', (
+  /// Loaded - Empty Data List
+  testWidgets(
+    'Page should display EmptyStateWidget when state is Loaded but data is empty',
+    (widgetTester) async {
+      // Arrange
+      _arrangeBlocState(
+        const SeeMoreUpcomingMovieState.loaded(
+          upComing: [],
+          upComingPage: 1,
+          hasMoreUpComing: false,
+        ),
+      );
+
+      // Act
+      await widgetTester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+
+      // Assert
+      final emptyMessageFinder = find.text(
+        'There are no up coming movies at the moment',
+      );
+      expect(emptyMessageFinder, findsOneWidget);
+    },
+  );
+
+  /// No Internet
+  testWidgets(
+    'Page should display No Internet error message when state is Error with network message',
+    (WidgetTester tester) async {
+      // Arrange
+      _arrangeBlocState(
+        SeeMoreUpcomingMovieState.error('Failed to connect to the network'),
+      );
+
+      // Act
+      await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+      await tester.pump(); // pump again to ensure the state propagates
+
+      // Assert
+      final errorMessageFinder = find.text('No Internet Connection!');
+      expect(errorMessageFinder, findsOneWidget);
+      final lottieFinder = find.byType(Lottie);
+      expect(lottieFinder, findsOneWidget);
+    },
+  );
+
+  /// Other Error
+  testWidgets('Page should display ErrorStateWidget2 for other errors', (
     WidgetTester tester,
   ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Error);
-    when(mockNotifier.message).thenReturn('Error message');
+    // Arrange
+    _arrangeBlocState(const SeeMoreUpcomingMovieState.error('Server Error'));
 
+    // Act
     await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+    await tester.pump(); // pump again to ensure the state propagates
 
-    final textFinder = find.byKey(Key('error_message'));
-
-    expect(textFinder, findsOneWidget);
-    expect(find.text('Error message'), findsOneWidget);
-    expect(find.byType(ErrorStateWidget2), findsOneWidget);
+    // Assert
+    final errorMessageFinder = find.text('Server Error');
+    expect(errorMessageFinder, findsOneWidget);
   });
 
-  testWidgets('Page should trigger refresh when retry is pressed', (
-    WidgetTester tester,
-  ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Error);
-    when(mockNotifier.message).thenReturn('Error message');
+  /// Error - Trigger Refresh
+  testWidgets(
+    'Page should dispatch refreshMovies event when retry button is pressed on error state',
+    (WidgetTester tester) async {
+      // Arrange
+      _arrangeBlocState(
+        const SeeMoreUpcomingMovieState.error('Server Failure'),
+      );
 
-    when(mockNotifier.onRefresh()).thenAnswer((_) async {});
+      await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
 
-    await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+      // Ensure the error widget is visible
+      final errorMessageFinder = find.text('Server Failure');
+      expect(errorMessageFinder, findsOneWidget);
 
-    final errorWidgetFinder = find.byType(ErrorStateWidget2);
-    final elevatedError = find.byKey(Key('elevated_button_ErrorStateWidget2'));
+      // This test assumes your ErrorStateWidget2 contains an ElevatedButton for retry.
+      final retryButtonFinder = find.byType(ElevatedButton);
+      expect(retryButtonFinder, findsOneWidget);
 
-    await tester.tap(elevatedError);
-    await tester.pump();
+      // Act
+      // Simulate tapping the retry button
+      await tester.tap(retryButtonFinder);
+      await tester.pump(); // Let the UI react to the tap
 
-    expect(errorWidgetFinder, findsOneWidget);
-    expect(elevatedError, findsOneWidget);
-    verify(mockNotifier.onRefresh()).called(1);
-  });
+      final errorWidgetFinder = find.byType(ErrorStateWidget2);
 
-  testWidgets('SmartRefresher should be configured correctly', (
-    WidgetTester tester,
-  ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loaded);
-    when(mockNotifier.movies).thenReturn(testMovieList);
+      // Assert
+      expect(errorWidgetFinder, findsOneWidget);
+      // Verify that the 'add' method on the BLoC was called exactly once
+      // with the refreshMovies event.
+      verify(
+        mockSeeMoreUpcomingMovieBloc.add(
+          const SeeMoreUpcomingMovieEvent.refreshMovies(),
+        ),
+      ).called(1);
+    },
+  );
 
-    await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
-
-    expect(find.byType(SmartRefresher), findsOneWidget);
-  });
+  // testWidgets('Page should display app bar with title', (
+  //   WidgetTester tester,
+  // ) async {
+  //   when(mockNotifier.state).thenReturn(RequestState.Loading);
+  //
+  //   await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+  //
+  //   expect(find.text('Up Coming Movies'), findsOneWidget);
+  // });
+  //
+  // testWidgets('Page should display loading indicator when loading', (
+  //   WidgetTester tester,
+  // ) async {
+  //   when(mockNotifier.state).thenReturn(RequestState.Loading);
+  //
+  //   await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+  //
+  //   final progressBarFinder = find.byKey(Key('loading_up_coming_movie'));
+  //   expect(progressBarFinder, findsOneWidget);
+  //   expect(find.byType(Lottie), findsOneWidget);
+  // });
+  //
+  // testWidgets('Page should display empty widget when movies is empty', (
+  //   WidgetTester tester,
+  // ) async {
+  //   when(mockNotifier.state).thenReturn(RequestState.Loaded);
+  //   when(mockNotifier.movies).thenReturn([]);
+  //
+  //   await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+  //
+  //   expect(find.text('No movies available.'), findsOneWidget);
+  // });
+  //
+  // testWidgets('Page should display ListView when data is loaded', (
+  //   WidgetTester tester,
+  // ) async {
+  //   when(mockNotifier.state).thenReturn(RequestState.Loaded);
+  //   when(mockNotifier.movies).thenReturn(testMovieList);
+  //
+  //   final listViewFinder = find.byKey(Key('loaded_up_coming'));
+  //   await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+  //
+  //   expect(find.byType(MovieCard), findsOneWidget);
+  //   expect(find.byType(CachedNetworkImage), findsOneWidget);
+  //   expect(listViewFinder, findsOneWidget);
+  // });
+  //
+  // testWidgets('Page should display error message when error occurs', (
+  //   WidgetTester tester,
+  // ) async {
+  //   when(mockNotifier.state).thenReturn(RequestState.Error);
+  //   when(mockNotifier.message).thenReturn('Error message');
+  //
+  //   await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+  //
+  //   final textFinder = find.byKey(Key('error_message'));
+  //
+  //   expect(textFinder, findsOneWidget);
+  //   expect(find.text('Error message'), findsOneWidget);
+  //   expect(find.byType(ErrorStateWidget2), findsOneWidget);
+  // });
+  //
+  // testWidgets('Page should trigger refresh when retry is pressed', (
+  //   WidgetTester tester,
+  // ) async {
+  //   when(mockNotifier.state).thenReturn(RequestState.Error);
+  //   when(mockNotifier.message).thenReturn('Error message');
+  //
+  //   when(mockNotifier.onRefresh()).thenAnswer((_) async {});
+  //
+  //   await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+  //
+  //   final errorWidgetFinder = find.byType(ErrorStateWidget2);
+  //   final elevatedError = find.byKey(Key('elevated_button_ErrorStateWidget2'));
+  //
+  //   await tester.tap(elevatedError);
+  //   await tester.pump();
+  //
+  //   expect(errorWidgetFinder, findsOneWidget);
+  //   expect(elevatedError, findsOneWidget);
+  //   verify(mockNotifier.onRefresh()).called(1);
+  // });
+  //
+  // testWidgets('SmartRefresher should be configured correctly', (
+  //   WidgetTester tester,
+  // ) async {
+  //   when(mockNotifier.state).thenReturn(RequestState.Loaded);
+  //   when(mockNotifier.movies).thenReturn(testMovieList);
+  //
+  //   await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+  //
+  //   expect(find.byType(SmartRefresher), findsOneWidget);
+  // });
 }

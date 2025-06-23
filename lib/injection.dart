@@ -34,6 +34,7 @@ import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_list/
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_search/movie_search_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/see_more_popular/see_more_popular_movie_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/see_more_top_rated/see_more_top_rated_movie_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/movies/see_more_upcoming/see_more_upcoming_movie_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_detail/tv_detail_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/airing_today/airing_today_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart';
@@ -155,6 +156,9 @@ void init() {
   );
   locator.registerFactory(
     () => SeeMoreTopRatedMovieBloc(getTopRatedMovies: locator()),
+  );
+  locator.registerFactory(
+    () => SeeMoreUpcomingMovieBloc(getUpComingMovies: locator()),
   );
 
   // use case
