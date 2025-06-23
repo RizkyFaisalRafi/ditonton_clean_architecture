@@ -106,7 +106,8 @@ Coverage App:
       - SeeMoreUpComingMovieBloc (Done)
       - WatchlistMovieBloc (Done)
       - WatchlistTvBloc (Done)
-      - OnTheAirTvBloc (Process)
+      - SeeMoreOnTheAirTvBloc (Done)
+      - SeeMorePopularTvBloc (Process)
       
     - presentation/pages
       - HomeMoviePage (Done)
@@ -120,9 +121,9 @@ Coverage App:
       - UpComingMoviesPage (SeeMore) (Done)
       - WatchlistMoviesPage (Done)
       - WatchlistTvPage (Done)
-      - OnTheAirTvPage (SeeMore) (Process)
+      - OnTheAirTvPage (SeeMore) (Done)
+      - PopularTvPage (SeeMore) (Process)
 
-      - PopularTvPage (SeeMore)
       - TopRatedTvPage (SeeMore)
     
   - Testing
@@ -142,7 +143,8 @@ Coverage App:
       - SeeMoreUpComingMovieBlocTest (Done)
       - WatchlistMovieBlocTest (Done)
       - WatchlistTvBlocTest (Done)
-      - OnTheAirTvBlocTest (SeeMore) (Process)
+      - SeeMoreOnTheAirTvBlocTest (SeeMore) (Done)
+      - SeeMorePopularTvBlocTest (SeeMore) (Process)
       
     - presentation/pages
       - HomeMoviePageTest
@@ -156,9 +158,9 @@ Coverage App:
       - UpComingMoviesPageTest (SeeMore) (Done)
       - WatchlistMoviesPageTest (Done)
       - WatchlistTvPageTest (Done)
-      - OnTheAirTvPageTest (SeeMore) (Process)
+      - OnTheAirTvPageTest (SeeMore) (Done)
+      - PopularTvPageTest (SeeMore) (Process)
 
-      - PopularTvPageTest (SeeMore)
       - TopRatedTvPageTest (SeeMore)
 
 - Menerapkan SSL Pinning

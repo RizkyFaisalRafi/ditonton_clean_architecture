@@ -55,7 +55,6 @@ class _TopRatedMoviesPageState extends State<TopRatedMoviesPage>
 
   @override
   Widget build(BuildContext context) {
-
     // Panggil `super.build(context)` sesuai syarat dari mixin.
     super.build(context);
 
