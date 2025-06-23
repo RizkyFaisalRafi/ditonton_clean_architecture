@@ -1,81 +1,40 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ditonton_clean_architecture/common/state_enum.dart';
-import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_watchlist/watchlist_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/watchlist_tv_page.dart';
-import 'package:ditonton_clean_architecture/presentation/provider/tv_series/watchlist_tv_notifier.dart';
+import 'package:ditonton_clean_architecture/presentation/widgets/error_state_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:mocktail_image_network/mocktail_image_network.dart';
-import 'package:provider/provider.dart';
+import '../../../dummy_data/dummy_objects.dart';
 import 'watchlist_tv_page_test.mocks.dart';
 
-@GenerateNiceMocks([
-  MockSpec<WatchlistTvNotifier>(),
-  MockSpec<NavigatorObserver>(),
-  MockSpec<Route>(),
-])
+@GenerateNiceMocks([MockSpec<WatchlistTvBloc>(), MockSpec<NavigatorObserver>()])
 void main() {
-  late MockWatchlistTvNotifier mockNotifier;
   late MockNavigatorObserver mockObserver;
-  late List<TvSeries> testTvSeries;
+  late MockWatchlistTvBloc mockWatchlistTvBloc;
 
   setUp(() {
-    mockNotifier = MockWatchlistTvNotifier();
     mockObserver = MockNavigatorObserver();
+    mockWatchlistTvBloc = MockWatchlistTvBloc();
   });
 
-  testTvSeries = [
-    TvSeries(
-      id: 1,
-      name: 'Test TV 1',
-      overview: 'Overview 1',
-      posterPath: '/poster1.jpg',
-      backdropPath: '/backdrop2.jpg',
-      adult: null,
-      genreIds: [],
-      originCountry: [],
-      originalLanguage: '',
-      originalName: '',
-      popularity: null,
-      firstAirDate: '',
-      voteAverage: null,
-      voteCount: null,
-    ),
-    TvSeries(
-      id: 2,
-      name: 'Test TV 2',
-      overview: 'Overview 2',
-      posterPath: '/poster2.jpg',
-      backdropPath: '/backdrop2.jpg',
-      adult: null,
-      genreIds: [],
-      originCountry: [],
-      originalLanguage: '',
-      originalName: '',
-      popularity: null,
-      firstAirDate: '',
-      voteAverage: null,
-      voteCount: null,
-    ),
-  ];
-
+  // Widget helper untuk membungkus halaman (tidak ada perubahan)
   Widget makeTestableWidget(Widget body) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<WatchlistTvNotifier>.value(value: mockNotifier),
-      ],
+    return BlocProvider<WatchlistTvBloc>.value(
+      value: mockWatchlistTvBloc,
       child: MaterialApp(
         home: body,
+        // Menyediakan navigator observer agar tes navigasi bisa berjalan
         navigatorObservers: [mockObserver],
+        // Menambahkan onGenerateRoute untuk menangani navigasi bernama
         onGenerateRoute: (settings) {
           if (settings.name == TvSeriesDetailPage.ROUTE_NAME) {
-            return MaterialPageRoute(
-              builder: (_) => Scaffold(),
-              settings: settings,
-            );
+            // Ketika navigasi ke halaman detail terdeteksi,
+            // kembalikan halaman palsu (dummy) untuk tes.
+            // Kita tidak perlu merender halaman detail yang sesungguhnya.
+            return MaterialPageRoute(builder: (_) => const Scaffold());
           }
           return null;
         },
@@ -83,120 +42,112 @@ void main() {
     );
   }
 
-  group('WatchlistTvPage', () {
-    testWidgets('should display app bar with title', (tester) async {
-      when(mockNotifier.watchlistState).thenReturn(RequestState.Loading);
-      when(mockNotifier.watchlistTv).thenReturn([]);
+  /// Loading
+  testWidgets('Page should display Lottie loading when state is Loading', (
+    WidgetTester tester,
+  ) async {
+    // Arrange: Atur mock BLoC dengan Mockito
+    // Kita perlu stub 'state' dan 'stream' dari BLoC
+    when(
+      mockWatchlistTvBloc.state,
+    ).thenReturn(const WatchlistTvState.loading());
+    when(mockWatchlistTvBloc.stream).thenAnswer((_) => Stream.empty());
 
-      await tester.pumpWidget(makeTestableWidget(WatchlistTvPage()));
+    // Act
+    await tester.pumpWidget(makeTestableWidget(const WatchlistTvPage()));
 
-      expect(find.text('Watchlist TV'), findsOneWidget);
-    });
-
-    testWidgets('should call fetchWatchlistTv when initState', (tester) async {
-      when(mockNotifier.watchlistState).thenReturn(RequestState.Loading);
-      when(mockNotifier.watchlistTv).thenReturn([]);
-
-      await tester.pumpWidget(makeTestableWidget(WatchlistTvPage()));
-
-      verify(mockNotifier.fetchWatchlistTv()).called(1);
-    });
-
-    testWidgets('should show loading indicator when state is Loading', (
-      tester,
-    ) async {
-      when(mockNotifier.watchlistState).thenReturn(RequestState.Loading);
-      when(mockNotifier.watchlistTv).thenReturn([]);
-
-      await tester.pumpWidget(makeTestableWidget(WatchlistTvPage()));
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    });
-
-    testWidgets('should show error message when state is Error', (
-      tester,
-    ) async {
-      when(mockNotifier.watchlistState).thenReturn(RequestState.Error);
-      when(mockNotifier.watchlistTv).thenReturn([]);
-      when(mockNotifier.message).thenReturn('Error message');
-
-      await tester.pumpWidget(makeTestableWidget(WatchlistTvPage()));
-
-      expect(find.text('Error message'), findsOneWidget);
-      expect(find.byKey(Key('error_message')), findsOneWidget);
-    });
-
-    testWidgets('should show list of tv series when state is Loaded', (
-      tester,
-    ) async {
-      when(mockNotifier.watchlistState).thenReturn(RequestState.Loaded);
-      when(mockNotifier.watchlistTv).thenReturn(testTvSeries);
-
-      await mockNetworkImages(() async {
-        await tester.pumpWidget(makeTestableWidget(WatchlistTvPage()));
-      });
-
-      expect(find.byType(ListView), findsOneWidget);
-      expect(find.byType(InkWell), findsNWidgets(3));
-    });
-
-    testWidgets('should navigate to detail page when tv series is tapped', (
-      tester,
-    ) async {
-      when(mockNotifier.watchlistState).thenReturn(RequestState.Loaded);
-      when(mockNotifier.watchlistTv).thenReturn(testTvSeries);
-
-      await mockNetworkImages(() async {
-        await tester.pumpWidget(makeTestableWidget(WatchlistTvPage()));
-
-        await tester.tap(find.byType(InkWell).first);
-        await tester.pumpAndSettle();
-
-        verify(mockObserver.didPush(any, any)).called(lessThanOrEqualTo(2));
-      });
-    });
+    // Assert
+    final lottieFinder = find.byKey(const Key('loading_watchlist_tv'));
+    expect(lottieFinder, findsOneWidget);
   });
 
-  group('MovieCardTv', () {
-    testWidgets('should display tv series information correctly', (
-      tester,
-    ) async {
-      final testTv = testTvSeries[0];
+  /// Loaded
+  testWidgets('Page should display ListView when state is Loaded with data', (
+    WidgetTester tester,
+  ) async {
+    // Arrange
+    when(
+      mockWatchlistTvBloc.state,
+    ).thenReturn(WatchlistTvState.loaded(watchlistTv: testTvList));
+    when(mockWatchlistTvBloc.stream).thenAnswer((_) => Stream.empty());
 
-      await mockNetworkImages(() async {
-        await tester.pumpWidget(
-          makeTestableWidget(Scaffold(body: MovieCardTv(testTv))),
-        );
+    // Act
+    await tester.pumpWidget(makeTestableWidget(const WatchlistTvPage()));
 
-        expect(find.text(testTv.name!), findsOneWidget);
-        expect(find.text(testTv.overview!), findsOneWidget);
-        expect(find.byType(CachedNetworkImage), findsOneWidget);
-      });
-    });
+    // Assert
+    final listViewFinder = find.byType(ListView);
+    final movieCardFinder = find.byType(TvCard);
+    expect(listViewFinder, findsOneWidget);
+    expect(movieCardFinder, findsOneWidget);
+  });
 
-    testWidgets('should show placeholder while loading image', (tester) async {
-      final testTv = testTvSeries[0];
+  /// Loaded - Empty Data
+  testWidgets(
+    'Page should display EmptyStateWidget when state is Loaded but data is empty',
+    (WidgetTester tester) async {
+      // Arrange
+      when(
+        mockWatchlistTvBloc.state,
+      ).thenReturn(const WatchlistTvState.loaded(watchlistTv: []));
+      when(mockWatchlistTvBloc.stream).thenAnswer((_) => Stream.empty());
 
-      await tester.pumpWidget(
-        makeTestableWidget(Scaffold(body: MovieCardTv(testTv))),
-      );
+      // Act
+      await tester.pumpWidget(makeTestableWidget(const WatchlistTvPage()));
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    });
+      // Assert
+      final emptyWidgetFinder = find.byType(EmptyStateWidget);
+      final textFinder = find.text('No Watchlist Available.');
+      expect(emptyWidgetFinder, findsOneWidget);
+      expect(textFinder, findsOneWidget);
+    },
+  );
 
-    testWidgets('should navigate to detail when tapped', (tester) async {
-      final testTv = testTvSeries[0];
+  /// Error
+  testWidgets(
+    'Page should display EmptyStateWidget with error message when state is Error',
+    (WidgetTester tester) async {
+      const errorMessage = 'Failed to fetch data';
+      // Arrange
+      when(
+        mockWatchlistTvBloc.state,
+      ).thenReturn(const WatchlistTvState.error(errorMessage));
+      when(mockWatchlistTvBloc.stream).thenAnswer((_) => Stream.empty());
 
-      await mockNetworkImages(() async {
-        await tester.pumpWidget(
-          makeTestableWidget(Scaffold(body: MovieCardTv(testTv))),
-        );
+      // Act
+      await tester.pumpWidget(makeTestableWidget(const WatchlistTvPage()));
 
-        await tester.tap(find.byType(InkWell));
-        await tester.pumpAndSettle();
+      // Assert
+      final emptyWidgetFinder = find.byType(EmptyStateWidget);
+      final textFinder = find.text(errorMessage);
+      expect(emptyWidgetFinder, findsOneWidget);
+      expect(textFinder, findsOneWidget);
+    },
+  );
 
-        verify(mockObserver.didPush(any, any)).called(lessThanOrEqualTo(2));
-      });
-    });
+  /// Navigation Test
+  testWidgets('should navigate to detail page when tv series card is tapped', (
+    WidgetTester tester,
+  ) async {
+    // Arrange
+    when(
+      mockWatchlistTvBloc.state,
+    ).thenReturn(WatchlistTvState.loaded(watchlistTv: testTvList));
+    when(mockWatchlistTvBloc.stream).thenAnswer((_) => Stream.empty());
+
+    // Act
+    await tester.pumpWidget(makeTestableWidget(const WatchlistTvPage()));
+
+    // ===================================================================
+    // PERBAIKAN KUNCI: Reset riwayat panggilan pada mock observer
+    // setelah halaman awal selesai di-render, tapi sebelum aksi tap.
+    clearInteractions(mockObserver);
+    // ===================================================================
+
+    await tester.tap(find.byType(TvCard).first);
+    await tester.pumpAndSettle();
+
+    // Assert: Sekarang verify HANYA akan menghitung push yang terjadi
+    // setelah clearInteractions, yaitu push dari aksi tap.
+    verify(mockObserver.didPush(any, any)).called(1);
   });
 }

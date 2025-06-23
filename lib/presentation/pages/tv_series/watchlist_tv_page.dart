@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ditonton_clean_architecture/common/state_enum.dart';
 import 'package:ditonton_clean_architecture/common/utils.dart';
 import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_watchlist/watchlist_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/tv_series_detail_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import '../../../common/constants.dart';
-import '../../provider/tv_series/watchlist_tv_notifier.dart';
 import '../../widgets/custom_drawer.dart';
 import '../../widgets/error_state_widget.dart';
 
@@ -23,12 +23,8 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-      () =>
-          Provider.of<WatchlistTvNotifier>(
-            context,
-            listen: false,
-          ).fetchWatchlistTv(),
+    context.read<WatchlistTvBloc>().add(
+      const WatchlistTvEvent.fetchInitialWatchlistTv(),
     );
   }
 
@@ -46,7 +42,11 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
 
   @override
   void didPopNext() {
-    Provider.of<WatchlistTvNotifier>(context, listen: false).fetchWatchlistTv();
+    // Mengirim event ke BLoC untuk mengambil ulang data watchlist
+    context.read<WatchlistTvBloc>().add(
+      const WatchlistTvEvent.fetchInitialWatchlistTv(),
+    );
+    super.didPopNext(); // Sebaiknya panggil super juga
   }
 
   @override
@@ -66,29 +66,36 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Consumer<WatchlistTvNotifier>(
-          builder: (context, data, child) {
-            if (data.watchlistState == RequestState.Loading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (data.watchlistState == RequestState.Loaded) {
-              if (data.watchlistTv.isEmpty) {
-                return const EmptyStateWidget(
-                  message: 'No Watchlist Available.',
-                );
-              }
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  final tv = data.watchlistTv[index];
-                  return MovieCardTv(tv);
-                },
-                itemCount: data.watchlistTv.length,
-              );
-            } else {
-              return EmptyStateWidget(
-                key: Key('error_message'),
-                message: data.message,
-              );
-            }
+
+        child: BlocBuilder<WatchlistTvBloc, WatchlistTvState>(
+          builder: (context, state) {
+            return switch (state) {
+              Initial() || Loading() => Center(
+                child: Lottie.asset(
+                  key: Key('loading_watchlist_tv'),
+                  'assets/image_lottie/loading_bar.json',
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.fill,
+                ),
+              ),
+
+              Loaded(watchlistTv: final watchlistTv) =>
+                watchlistTv.isEmpty
+                    ? EmptyStateWidget(message: 'No Watchlist Available.')
+                    : ListView.builder(
+                      itemCount: watchlistTv.length,
+                      itemBuilder: (context, index) {
+                        final watchlist = watchlistTv[index];
+                        return TvCard(watchlist);
+                      },
+                    ),
+
+              Error(message: final message) => () {
+                return EmptyStateWidget(message: message);
+              }(),
+              _ => const SizedBox.shrink(),
+            };
           },
         ),
       ),
@@ -96,10 +103,10 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
   }
 }
 
-class MovieCardTv extends StatelessWidget {
+class TvCard extends StatelessWidget {
   final TvSeries tv;
 
-  const MovieCardTv(this.tv, {super.key});
+  const TvCard(this.tv, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +114,7 @@ class MovieCardTv extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: InkWell(
         onTap: () {
+          print('--- TvCard Tapped for id: ${tv.id}! ---');
           Navigator.pushNamed(
             context,
             TvSeriesDetailPage.ROUTE_NAME,

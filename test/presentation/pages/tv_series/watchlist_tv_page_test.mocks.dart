@@ -3,20 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i9;
-import 'dart:ui' as _i10;
+import 'dart:async' as _i4;
 
-import 'package:ditonton_clean_architecture/common/state_enum.dart' as _i7;
-import 'package:ditonton_clean_architecture/domain/entities/tv/tv_series.dart'
-    as _i6;
+import 'package:bloc/bloc.dart' as _i5;
 import 'package:ditonton_clean_architecture/domain/usecases/tv_series/get_watchlist_tv.dart'
     as _i2;
-import 'package:ditonton_clean_architecture/presentation/provider/tv_series/watchlist_tv_notifier.dart'
-    as _i5;
-import 'package:flutter/foundation.dart' as _i4;
-import 'package:flutter/material.dart' as _i3;
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_watchlist/watchlist_tv_bloc.dart'
+    as _i3;
+import 'package:flutter/src/widgets/navigator.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i8;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -38,27 +33,16 @@ class _FakeGetWatchlistTv_0 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeRouteSettings_1 extends _i1.SmartFake implements _i3.RouteSettings {
-  _FakeRouteSettings_1(Object parent, Invocation parentInvocation)
+class _FakeWatchlistTvState_1 extends _i1.SmartFake
+    implements _i3.WatchlistTvState {
+  _FakeWatchlistTvState_1(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeValueListenable_2<T1> extends _i1.SmartFake
-    implements _i4.ValueListenable<T1> {
-  _FakeValueListenable_2(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeTickerFuture_3 extends _i1.SmartFake implements _i3.TickerFuture {
-  _FakeTickerFuture_3(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-/// A class which mocks [WatchlistTvNotifier].
+/// A class which mocks [WatchlistTvBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWatchlistTvNotifier extends _i1.Mock
-    implements _i5.WatchlistTvNotifier {
+class MockWatchlistTvBloc extends _i1.Mock implements _i3.WatchlistTvBloc {
   @override
   _i2.GetWatchlistTv get getWatchlistTv =>
       (super.noSuchMethod(
@@ -75,77 +59,97 @@ class MockWatchlistTvNotifier extends _i1.Mock
           as _i2.GetWatchlistTv);
 
   @override
-  List<_i6.TvSeries> get watchlistTv =>
+  _i3.WatchlistTvState get state =>
       (super.noSuchMethod(
-            Invocation.getter(#watchlistTv),
-            returnValue: <_i6.TvSeries>[],
-            returnValueForMissingStub: <_i6.TvSeries>[],
-          )
-          as List<_i6.TvSeries>);
-
-  @override
-  _i7.RequestState get watchlistState =>
-      (super.noSuchMethod(
-            Invocation.getter(#watchlistState),
-            returnValue: _i7.RequestState.Empty,
-            returnValueForMissingStub: _i7.RequestState.Empty,
-          )
-          as _i7.RequestState);
-
-  @override
-  String get message =>
-      (super.noSuchMethod(
-            Invocation.getter(#message),
-            returnValue: _i8.dummyValue<String>(
+            Invocation.getter(#state),
+            returnValue: _FakeWatchlistTvState_1(
               this,
-              Invocation.getter(#message),
+              Invocation.getter(#state),
             ),
-            returnValueForMissingStub: _i8.dummyValue<String>(
+            returnValueForMissingStub: _FakeWatchlistTvState_1(
               this,
-              Invocation.getter(#message),
+              Invocation.getter(#state),
             ),
           )
-          as String);
+          as _i3.WatchlistTvState);
 
   @override
-  bool get hasListeners =>
+  _i4.Stream<_i3.WatchlistTvState> get stream =>
       (super.noSuchMethod(
-            Invocation.getter(#hasListeners),
+            Invocation.getter(#stream),
+            returnValue: _i4.Stream<_i3.WatchlistTvState>.empty(),
+            returnValueForMissingStub: _i4.Stream<_i3.WatchlistTvState>.empty(),
+          )
+          as _i4.Stream<_i3.WatchlistTvState>);
+
+  @override
+  bool get isClosed =>
+      (super.noSuchMethod(
+            Invocation.getter(#isClosed),
             returnValue: false,
             returnValueForMissingStub: false,
           )
           as bool);
 
   @override
-  _i9.Future<void> fetchWatchlistTv() =>
+  void add(_i3.WatchlistTvEvent? event) => super.noSuchMethod(
+    Invocation.method(#add, [event]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void onEvent(_i3.WatchlistTvEvent? event) => super.noSuchMethod(
+    Invocation.method(#onEvent, [event]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void emit(_i3.WatchlistTvState? state) => super.noSuchMethod(
+    Invocation.method(#emit, [state]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void on<E extends _i3.WatchlistTvEvent>(
+    _i5.EventHandler<E, _i3.WatchlistTvState>? handler, {
+    _i5.EventTransformer<E>? transformer,
+  }) => super.noSuchMethod(
+    Invocation.method(#on, [handler], {#transformer: transformer}),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void onTransition(
+    _i5.Transition<_i3.WatchlistTvEvent, _i3.WatchlistTvState>? transition,
+  ) => super.noSuchMethod(
+    Invocation.method(#onTransition, [transition]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  _i4.Future<void> close() =>
       (super.noSuchMethod(
-            Invocation.method(#fetchWatchlistTv, []),
-            returnValue: _i9.Future<void>.value(),
-            returnValueForMissingStub: _i9.Future<void>.value(),
+            Invocation.method(#close, []),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
           )
-          as _i9.Future<void>);
+          as _i4.Future<void>);
 
   @override
-  void addListener(_i10.VoidCallback? listener) => super.noSuchMethod(
-    Invocation.method(#addListener, [listener]),
+  void onChange(_i5.Change<_i3.WatchlistTvState>? change) => super.noSuchMethod(
+    Invocation.method(#onChange, [change]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void removeListener(_i10.VoidCallback? listener) => super.noSuchMethod(
-    Invocation.method(#removeListener, [listener]),
+  void addError(Object? error, [StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#addError, [error, stackTrace]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void dispose() => super.noSuchMethod(
-    Invocation.method(#dispose, []),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void notifyListeners() => super.noSuchMethod(
-    Invocation.method(#notifyListeners, []),
+  void onError(Object? error, StackTrace? stackTrace) => super.noSuchMethod(
+    Invocation.method(#onError, [error, stackTrace]),
     returnValueForMissingStub: null,
   );
 }
@@ -153,16 +157,16 @@ class MockWatchlistTvNotifier extends _i1.Mock
 /// A class which mocks [NavigatorObserver].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNavigatorObserver extends _i1.Mock implements _i3.NavigatorObserver {
+class MockNavigatorObserver extends _i1.Mock implements _i6.NavigatorObserver {
   @override
-  void didPush(_i3.Route<dynamic>? route, _i3.Route<dynamic>? previousRoute) =>
+  void didPush(_i6.Route<dynamic>? route, _i6.Route<dynamic>? previousRoute) =>
       super.noSuchMethod(
         Invocation.method(#didPush, [route, previousRoute]),
         returnValueForMissingStub: null,
       );
 
   @override
-  void didPop(_i3.Route<dynamic>? route, _i3.Route<dynamic>? previousRoute) =>
+  void didPop(_i6.Route<dynamic>? route, _i6.Route<dynamic>? previousRoute) =>
       super.noSuchMethod(
         Invocation.method(#didPop, [route, previousRoute]),
         returnValueForMissingStub: null,
@@ -170,8 +174,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i3.NavigatorObserver {
 
   @override
   void didRemove(
-    _i3.Route<dynamic>? route,
-    _i3.Route<dynamic>? previousRoute,
+    _i6.Route<dynamic>? route,
+    _i6.Route<dynamic>? previousRoute,
   ) => super.noSuchMethod(
     Invocation.method(#didRemove, [route, previousRoute]),
     returnValueForMissingStub: null,
@@ -179,8 +183,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i3.NavigatorObserver {
 
   @override
   void didReplace({
-    _i3.Route<dynamic>? newRoute,
-    _i3.Route<dynamic>? oldRoute,
+    _i6.Route<dynamic>? newRoute,
+    _i6.Route<dynamic>? oldRoute,
   }) => super.noSuchMethod(
     Invocation.method(#didReplace, [], {
       #newRoute: newRoute,
@@ -191,8 +195,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i3.NavigatorObserver {
 
   @override
   void didChangeTop(
-    _i3.Route<dynamic>? topRoute,
-    _i3.Route<dynamic>? previousTopRoute,
+    _i6.Route<dynamic>? topRoute,
+    _i6.Route<dynamic>? previousTopRoute,
   ) => super.noSuchMethod(
     Invocation.method(#didChangeTop, [topRoute, previousTopRoute]),
     returnValueForMissingStub: null,
@@ -200,8 +204,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i3.NavigatorObserver {
 
   @override
   void didStartUserGesture(
-    _i3.Route<dynamic>? route,
-    _i3.Route<dynamic>? previousRoute,
+    _i6.Route<dynamic>? route,
+    _i6.Route<dynamic>? previousRoute,
   ) => super.noSuchMethod(
     Invocation.method(#didStartUserGesture, [route, previousRoute]),
     returnValueForMissingStub: null,
@@ -210,233 +214,6 @@ class MockNavigatorObserver extends _i1.Mock implements _i3.NavigatorObserver {
   @override
   void didStopUserGesture() => super.noSuchMethod(
     Invocation.method(#didStopUserGesture, []),
-    returnValueForMissingStub: null,
-  );
-}
-
-/// A class which mocks [Route].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockRoute<T> extends _i1.Mock implements _i3.Route<T> {
-  @override
-  bool get requestFocus =>
-      (super.noSuchMethod(
-            Invocation.getter(#requestFocus),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  _i3.RouteSettings get settings =>
-      (super.noSuchMethod(
-            Invocation.getter(#settings),
-            returnValue: _FakeRouteSettings_1(
-              this,
-              Invocation.getter(#settings),
-            ),
-            returnValueForMissingStub: _FakeRouteSettings_1(
-              this,
-              Invocation.getter(#settings),
-            ),
-          )
-          as _i3.RouteSettings);
-
-  @override
-  _i4.ValueListenable<String?> get restorationScopeId =>
-      (super.noSuchMethod(
-            Invocation.getter(#restorationScopeId),
-            returnValue: _FakeValueListenable_2<String?>(
-              this,
-              Invocation.getter(#restorationScopeId),
-            ),
-            returnValueForMissingStub: _FakeValueListenable_2<String?>(
-              this,
-              Invocation.getter(#restorationScopeId),
-            ),
-          )
-          as _i4.ValueListenable<String?>);
-
-  @override
-  List<_i3.OverlayEntry> get overlayEntries =>
-      (super.noSuchMethod(
-            Invocation.getter(#overlayEntries),
-            returnValue: <_i3.OverlayEntry>[],
-            returnValueForMissingStub: <_i3.OverlayEntry>[],
-          )
-          as List<_i3.OverlayEntry>);
-
-  @override
-  _i3.RoutePopDisposition get popDisposition =>
-      (super.noSuchMethod(
-            Invocation.getter(#popDisposition),
-            returnValue: _i3.RoutePopDisposition.pop,
-            returnValueForMissingStub: _i3.RoutePopDisposition.pop,
-          )
-          as _i3.RoutePopDisposition);
-
-  @override
-  bool get willHandlePopInternally =>
-      (super.noSuchMethod(
-            Invocation.getter(#willHandlePopInternally),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  _i9.Future<T?> get popped =>
-      (super.noSuchMethod(
-            Invocation.getter(#popped),
-            returnValue: _i9.Future<T?>.value(),
-            returnValueForMissingStub: _i9.Future<T?>.value(),
-          )
-          as _i9.Future<T?>);
-
-  @override
-  bool get isCurrent =>
-      (super.noSuchMethod(
-            Invocation.getter(#isCurrent),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  bool get isFirst =>
-      (super.noSuchMethod(
-            Invocation.getter(#isFirst),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  bool get hasActiveRouteBelow =>
-      (super.noSuchMethod(
-            Invocation.getter(#hasActiveRouteBelow),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  bool get isActive =>
-      (super.noSuchMethod(
-            Invocation.getter(#isActive),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  void install() => super.noSuchMethod(
-    Invocation.method(#install, []),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  _i3.TickerFuture didPush() =>
-      (super.noSuchMethod(
-            Invocation.method(#didPush, []),
-            returnValue: _FakeTickerFuture_3(
-              this,
-              Invocation.method(#didPush, []),
-            ),
-            returnValueForMissingStub: _FakeTickerFuture_3(
-              this,
-              Invocation.method(#didPush, []),
-            ),
-          )
-          as _i3.TickerFuture);
-
-  @override
-  void didAdd() => super.noSuchMethod(
-    Invocation.method(#didAdd, []),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void didReplace(_i3.Route<dynamic>? oldRoute) => super.noSuchMethod(
-    Invocation.method(#didReplace, [oldRoute]),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  _i9.Future<_i3.RoutePopDisposition> willPop() =>
-      (super.noSuchMethod(
-            Invocation.method(#willPop, []),
-            returnValue: _i9.Future<_i3.RoutePopDisposition>.value(
-              _i3.RoutePopDisposition.pop,
-            ),
-            returnValueForMissingStub:
-                _i9.Future<_i3.RoutePopDisposition>.value(
-                  _i3.RoutePopDisposition.pop,
-                ),
-          )
-          as _i9.Future<_i3.RoutePopDisposition>);
-
-  @override
-  void onPopInvoked(bool? didPop) => super.noSuchMethod(
-    Invocation.method(#onPopInvoked, [didPop]),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void onPopInvokedWithResult(bool? didPop, T? result) => super.noSuchMethod(
-    Invocation.method(#onPopInvokedWithResult, [didPop, result]),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  bool didPop(T? result) =>
-      (super.noSuchMethod(
-            Invocation.method(#didPop, [result]),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  void didComplete(T? result) => super.noSuchMethod(
-    Invocation.method(#didComplete, [result]),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void didPopNext(_i3.Route<dynamic>? nextRoute) => super.noSuchMethod(
-    Invocation.method(#didPopNext, [nextRoute]),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void didChangeNext(_i3.Route<dynamic>? nextRoute) => super.noSuchMethod(
-    Invocation.method(#didChangeNext, [nextRoute]),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void didChangePrevious(_i3.Route<dynamic>? previousRoute) =>
-      super.noSuchMethod(
-        Invocation.method(#didChangePrevious, [previousRoute]),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void changedInternalState() => super.noSuchMethod(
-    Invocation.method(#changedInternalState, []),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void changedExternalState() => super.noSuchMethod(
-    Invocation.method(#changedExternalState, []),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void dispose() => super.noSuchMethod(
-    Invocation.method(#dispose, []),
     returnValueForMissingStub: null,
   );
 }

@@ -105,7 +105,8 @@ Coverage App:
       - SeeMoreTopRatedMovieBloc (Done)
       - SeeMoreUpComingMovieBloc (Done)
       - WatchlistMovieBloc (Done)
-      - WatchlistTvBloc (Process)
+      - WatchlistTvBloc (Done)
+      - OnTheAirTvBloc (Process)
       
     - presentation/pages
       - HomeMoviePage (Done)
@@ -118,9 +119,9 @@ Coverage App:
       - TopRatedMoviesPage (SeeMore) (Done)
       - UpComingMoviesPage (SeeMore) (Done)
       - WatchlistMoviesPage (Done)
-      - WatchlistTvPage (Process)
+      - WatchlistTvPage (Done)
+      - OnTheAirTvPage (SeeMore) (Process)
 
-      - OnTheAirTvPage (SeeMore)
       - PopularTvPage (SeeMore)
       - TopRatedTvPage (SeeMore)
     
@@ -140,7 +141,8 @@ Coverage App:
       - SeeMoreTopRatedMovieBlocTest (Done)
       - SeeMoreUpComingMovieBlocTest (Done)
       - WatchlistMovieBlocTest (Done)
-      - WatchlistTvBlocTest (Process)
+      - WatchlistTvBlocTest (Done)
+      - OnTheAirTvBlocTest (SeeMore) (Process)
       
     - presentation/pages
       - HomeMoviePageTest
@@ -152,12 +154,12 @@ Coverage App:
       - PopularMoviesPageTest (SeeMore) (Done)
       - TopRatedMoviesPageTest (SeeMore) (Done)
       - UpComingMoviesPageTest (SeeMore) (Done)
-      - WatchlistMoviesPage (Done)
-      - WatchlistTvPage (Process)
+      - WatchlistMoviesPageTest (Done)
+      - WatchlistTvPageTest (Done)
+      - OnTheAirTvPageTest (SeeMore) (Process)
 
-      - OnTheAirTvPage (SeeMore)
-      - PopularTvPage (SeeMore)
-      - TopRatedTvPage (SeeMore)
+      - PopularTvPageTest (SeeMore)
+      - TopRatedTvPageTest (SeeMore)
 
 - Menerapkan SSL Pinning
 - Integrasi dengan Firebase Analytics & Crashlytics

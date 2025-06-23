@@ -1,4 +1,5 @@
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_watchlist/watchlist_movie_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/pages/movies/movie_detail_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/watchlist_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/error_state_widget.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/movie_card_list.dart';
@@ -7,17 +8,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-
 import '../../dummy_data/dummy_objects.dart';
 import 'watchlist_movies_page_test.mocks.dart';
 
-@GenerateMocks([WatchlistMovieBloc])
+@GenerateNiceMocks([
+  MockSpec<WatchlistMovieBloc>(),
+  MockSpec<NavigatorObserver>(),
+])
 void main() {
+  late MockNavigatorObserver mockObserver;
   // Deklarasikan mock dengan tipe dari file .mocks.dart
   late MockWatchlistMovieBloc mockWatchlistMovieBloc;
 
   // Inisialisasi mock sebelum setiap test
   setUp(() {
+    mockObserver = MockNavigatorObserver();
     mockWatchlistMovieBloc = MockWatchlistMovieBloc();
   });
 
@@ -25,7 +30,21 @@ void main() {
   Widget makeTestableWidget(Widget body) {
     return BlocProvider<WatchlistMovieBloc>.value(
       value: mockWatchlistMovieBloc,
-      child: MaterialApp(home: body),
+      child: MaterialApp(
+        home: body,
+        // Menyediakan navigator observer agar tes navigasi bisa berjalan
+        navigatorObservers: [mockObserver],
+        // Menambahkan onGenerateRoute untuk menangani navigasi bernama
+        onGenerateRoute: (settings) {
+          if (settings.name == MovieDetailPage.ROUTE_NAME) {
+            // Ketika navigasi ke halaman detail terdeteksi,
+            // kembalikan halaman palsu (dummy) untuk tes.
+            // Kita tidak perlu merender halaman detail yang sesungguhnya.
+            return MaterialPageRoute(builder: (_) => const Scaffold());
+          }
+          return null;
+        },
+      ),
     );
   }
 
@@ -110,4 +129,31 @@ void main() {
       expect(textFinder, findsOneWidget);
     },
   );
+
+  /// Navigation Test
+  testWidgets('should navigate to detail page when movie card is tapped', (
+    WidgetTester tester,
+  ) async {
+    // Arrange
+    when(
+      mockWatchlistMovieBloc.state,
+    ).thenReturn(WatchlistMovieState.loaded(watchlistMovie: testMovieList));
+    when(mockWatchlistMovieBloc.stream).thenAnswer((_) => Stream.empty());
+
+    // Act
+    await tester.pumpWidget(makeTestableWidget(const WatchlistMoviesPage()));
+
+    // ===================================================================
+    // PERBAIKAN KUNCI: Reset riwayat panggilan pada mock observer
+    // setelah halaman awal selesai di-render, tapi sebelum aksi tap.
+    clearInteractions(mockObserver);
+    // ===================================================================
+
+    await tester.tap(find.byType(MovieCard).first);
+    await tester.pumpAndSettle();
+
+    // Assert: Sekarang verify HANYA akan menghitung push yang terjadi
+    // setelah clearInteractions, yaitu push dari aksi tap.
+    verify(mockObserver.didPush(any, any)).called(1);
+  });
 }
