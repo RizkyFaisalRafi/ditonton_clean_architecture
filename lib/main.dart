@@ -17,6 +17,7 @@ import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/on_the_
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/popular/popular_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/top_rated/top_rated_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_search/tv_search_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_watchlist/watchlist_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/about_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/movie_detail_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/home_movie_page.dart';
@@ -89,9 +90,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => di.locator<SeeMoreUpcomingMovieBloc>(),
         ),
-        BlocProvider(
-          create: (context) => di.locator<WatchlistMovieBloc>(),
-        ),
+        BlocProvider(create: (context) => di.locator<WatchlistMovieBloc>()),
+        BlocProvider(create: (context) => di.locator<WatchlistTvBloc>()),
       ],
       child: MultiProvider(
         providers: [

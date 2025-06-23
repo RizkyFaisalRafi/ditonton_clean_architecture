@@ -10,6 +10,7 @@ import 'package:ditonton_clean_architecture/domain/usecases/movies/get_watchlist
     as _i2;
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/movie_watchlist/watchlist_movie_bloc.dart'
     as _i3;
+import 'package:flutter/src/widgets/navigator.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -43,15 +44,15 @@ class _FakeWatchlistMovieState_1 extends _i1.SmartFake
 /// See the documentation for Mockito's code generation for more information.
 class MockWatchlistMovieBloc extends _i1.Mock
     implements _i3.WatchlistMovieBloc {
-  MockWatchlistMovieBloc() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i2.GetWatchlistMovies get getWatchlistMovies =>
       (super.noSuchMethod(
             Invocation.getter(#getWatchlistMovies),
             returnValue: _FakeGetWatchlistMovies_0(
+              this,
+              Invocation.getter(#getWatchlistMovies),
+            ),
+            returnValueForMissingStub: _FakeGetWatchlistMovies_0(
               this,
               Invocation.getter(#getWatchlistMovies),
             ),
@@ -66,6 +67,10 @@ class MockWatchlistMovieBloc extends _i1.Mock
               this,
               Invocation.getter(#state),
             ),
+            returnValueForMissingStub: _FakeWatchlistMovieState_1(
+              this,
+              Invocation.getter(#state),
+            ),
           )
           as _i3.WatchlistMovieState);
 
@@ -74,12 +79,18 @@ class MockWatchlistMovieBloc extends _i1.Mock
       (super.noSuchMethod(
             Invocation.getter(#stream),
             returnValue: _i4.Stream<_i3.WatchlistMovieState>.empty(),
+            returnValueForMissingStub:
+                _i4.Stream<_i3.WatchlistMovieState>.empty(),
           )
           as _i4.Stream<_i3.WatchlistMovieState>);
 
   @override
   bool get isClosed =>
-      (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
+      (super.noSuchMethod(
+            Invocation.getter(#isClosed),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
           as bool);
 
   @override
@@ -143,6 +154,70 @@ class MockWatchlistMovieBloc extends _i1.Mock
   @override
   void onError(Object? error, StackTrace? stackTrace) => super.noSuchMethod(
     Invocation.method(#onError, [error, stackTrace]),
+    returnValueForMissingStub: null,
+  );
+}
+
+/// A class which mocks [NavigatorObserver].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNavigatorObserver extends _i1.Mock implements _i6.NavigatorObserver {
+  @override
+  void didPush(_i6.Route<dynamic>? route, _i6.Route<dynamic>? previousRoute) =>
+      super.noSuchMethod(
+        Invocation.method(#didPush, [route, previousRoute]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void didPop(_i6.Route<dynamic>? route, _i6.Route<dynamic>? previousRoute) =>
+      super.noSuchMethod(
+        Invocation.method(#didPop, [route, previousRoute]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void didRemove(
+    _i6.Route<dynamic>? route,
+    _i6.Route<dynamic>? previousRoute,
+  ) => super.noSuchMethod(
+    Invocation.method(#didRemove, [route, previousRoute]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void didReplace({
+    _i6.Route<dynamic>? newRoute,
+    _i6.Route<dynamic>? oldRoute,
+  }) => super.noSuchMethod(
+    Invocation.method(#didReplace, [], {
+      #newRoute: newRoute,
+      #oldRoute: oldRoute,
+    }),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void didChangeTop(
+    _i6.Route<dynamic>? topRoute,
+    _i6.Route<dynamic>? previousTopRoute,
+  ) => super.noSuchMethod(
+    Invocation.method(#didChangeTop, [topRoute, previousTopRoute]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void didStartUserGesture(
+    _i6.Route<dynamic>? route,
+    _i6.Route<dynamic>? previousRoute,
+  ) => super.noSuchMethod(
+    Invocation.method(#didStartUserGesture, [route, previousRoute]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void didStopUserGesture() => super.noSuchMethod(
+    Invocation.method(#didStopUserGesture, []),
     returnValueForMissingStub: null,
   );
 }
