@@ -82,11 +82,11 @@ class SeeMorePopularTvBloc
       final result = await getPopularTv.execute(currentState.popularTvPage);
       result.fold(
         (failure) => emit(currentState.copyWith(minorError: failure.message)),
-        (newMovies) => emit(
+        (newTv) => emit(
           currentState.copyWith(
-            popularTv: List.of(currentState.popularTv)..addAll(newMovies),
+            popularTv: List.of(currentState.popularTv)..addAll(newTv),
             popularTvPage: currentState.popularTvPage + 1,
-            hasMorePopularTv: newMovies.isNotEmpty,
+            hasMorePopularTv: newTv.isNotEmpty,
           ),
         ),
       );

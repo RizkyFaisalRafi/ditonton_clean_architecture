@@ -13,6 +13,7 @@ import 'package:ditonton_clean_architecture/presentation/bloc/movies/see_more_to
 import 'package:ditonton_clean_architecture/presentation/bloc/movies/see_more_upcoming/see_more_upcoming_movie_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/see_more_on_the_air/see_more_on_the_air_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/see_more_popular/see_more_popular_tv_bloc.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/see_more_top_rated/see_more_top_rated_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_detail/tv_detail_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/airing_today/airing_today_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/bloc/tv/tv_list/on_the_air/on_the_air_tv_bloc.dart';
@@ -94,6 +95,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(create: (context) => di.locator<SeeMoreOnTheAirTvBloc>()),
         BlocProvider(create: (context) => di.locator<SeeMorePopularTvBloc>()),
+        BlocProvider(create: (context) => di.locator<SeeMoreTopRatedTvBloc>()),
         BlocProvider(create: (context) => di.locator<WatchlistMovieBloc>()),
         BlocProvider(create: (context) => di.locator<WatchlistTvBloc>()),
       ],

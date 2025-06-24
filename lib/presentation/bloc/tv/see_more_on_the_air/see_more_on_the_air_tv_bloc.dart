@@ -83,11 +83,11 @@ class SeeMoreOnTheAirTvBloc
       final result = await getOnTheAirTv.execute(currentState.onTheAirPage);
       result.fold(
         (failure) => emit(currentState.copyWith(minorError: failure.message)),
-        (newMovies) => emit(
+        (newTv) => emit(
           currentState.copyWith(
-            onTheAir: List.of(currentState.onTheAir)..addAll(newMovies),
+            onTheAir: List.of(currentState.onTheAir)..addAll(newTv),
             onTheAirPage: currentState.onTheAirPage + 1,
-            hasMoreOnTheAir: newMovies.isNotEmpty,
+            hasMoreOnTheAir: newTv.isNotEmpty,
           ),
         ),
       );
