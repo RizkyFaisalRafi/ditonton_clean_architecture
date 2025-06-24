@@ -149,7 +149,7 @@ void main() {
 
   /// Error - Trigger Refresh
   testWidgets(
-    'Page should dispatch refreshMovies event when retry button is pressed on error state',
+    'Page should dispatch refreshTv event when retry button is pressed on error state',
     (WidgetTester tester) async {
       // Arrange
       _arrangeBlocState(const SeeMoreOnTheAirTvState.error('Server Failure'));
@@ -177,7 +177,7 @@ void main() {
       // with the refreshMovies event.
       verify(
         mockSeeMoreOnTheAirTvBloc.add(
-          const SeeMoreOnTheAirTvEvent.refreshMovies(),
+          const SeeMoreOnTheAirTvEvent.refreshTv(),
         ),
       ).called(1);
     },

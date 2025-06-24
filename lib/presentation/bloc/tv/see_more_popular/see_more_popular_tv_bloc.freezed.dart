@@ -4,7 +4,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'see_more_on_the_air_tv_bloc.dart';
+part of 'see_more_popular_tv_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,7 +13,7 @@ part of 'see_more_on_the_air_tv_bloc.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$SeeMoreOnTheAirTvEvent {
+mixin _$SeeMorePopularTvEvent {
 
 
 
@@ -21,7 +21,7 @@ mixin _$SeeMoreOnTheAirTvEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SeeMoreOnTheAirTvEvent);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SeeMorePopularTvEvent);
 }
 
 
@@ -30,23 +30,23 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SeeMoreOnTheAirTvEvent()';
+  return 'SeeMorePopularTvEvent()';
 }
 
 
 }
 
 /// @nodoc
-class $SeeMoreOnTheAirTvEventCopyWith<$Res>  {
-$SeeMoreOnTheAirTvEventCopyWith(SeeMoreOnTheAirTvEvent _, $Res Function(SeeMoreOnTheAirTvEvent) __);
+class $SeeMorePopularTvEventCopyWith<$Res>  {
+$SeeMorePopularTvEventCopyWith(SeeMorePopularTvEvent _, $Res Function(SeeMorePopularTvEvent) __);
 }
 
 
 /// @nodoc
 
 
-class FetchInitialOnTheAirTv implements SeeMoreOnTheAirTvEvent {
-  const FetchInitialOnTheAirTv();
+class FetchInitialPopularTv implements SeeMorePopularTvEvent {
+  const FetchInitialPopularTv();
   
 
 
@@ -56,7 +56,7 @@ class FetchInitialOnTheAirTv implements SeeMoreOnTheAirTvEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FetchInitialOnTheAirTv);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FetchInitialPopularTv);
 }
 
 
@@ -65,7 +65,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SeeMoreOnTheAirTvEvent.fetchInitialOnTheAirTv()';
+  return 'SeeMorePopularTvEvent.fetchInitialPopularTv()';
 }
 
 
@@ -77,8 +77,8 @@ String toString() {
 /// @nodoc
 
 
-class FetchMoreOnTheAirTv implements SeeMoreOnTheAirTvEvent {
-  const FetchMoreOnTheAirTv();
+class FetchMorePopularTv implements SeeMorePopularTvEvent {
+  const FetchMorePopularTv();
   
 
 
@@ -88,7 +88,7 @@ class FetchMoreOnTheAirTv implements SeeMoreOnTheAirTvEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FetchMoreOnTheAirTv);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FetchMorePopularTv);
 }
 
 
@@ -97,7 +97,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SeeMoreOnTheAirTvEvent.fetchMoreOnTheAirTv()';
+  return 'SeeMorePopularTvEvent.fetchMorePopularTv()';
 }
 
 
@@ -109,7 +109,7 @@ String toString() {
 /// @nodoc
 
 
-class RefreshTv implements SeeMoreOnTheAirTvEvent {
+class RefreshTv implements SeeMorePopularTvEvent {
   const RefreshTv();
   
 
@@ -129,7 +129,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SeeMoreOnTheAirTvEvent.refreshTv()';
+  return 'SeeMorePopularTvEvent.refreshTv()';
 }
 
 
@@ -139,7 +139,7 @@ String toString() {
 
 
 /// @nodoc
-mixin _$SeeMoreOnTheAirTvState {
+mixin _$SeeMorePopularTvState {
 
 
 
@@ -147,7 +147,7 @@ mixin _$SeeMoreOnTheAirTvState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SeeMoreOnTheAirTvState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SeeMorePopularTvState);
 }
 
 
@@ -156,22 +156,22 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SeeMoreOnTheAirTvState()';
+  return 'SeeMorePopularTvState()';
 }
 
 
 }
 
 /// @nodoc
-class $SeeMoreOnTheAirTvStateCopyWith<$Res>  {
-$SeeMoreOnTheAirTvStateCopyWith(SeeMoreOnTheAirTvState _, $Res Function(SeeMoreOnTheAirTvState) __);
+class $SeeMorePopularTvStateCopyWith<$Res>  {
+$SeeMorePopularTvStateCopyWith(SeeMorePopularTvState _, $Res Function(SeeMorePopularTvState) __);
 }
 
 
 /// @nodoc
 
 
-class Initial implements SeeMoreOnTheAirTvState {
+class Initial implements SeeMorePopularTvState {
   const Initial();
   
 
@@ -191,7 +191,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SeeMoreOnTheAirTvState.initial()';
+  return 'SeeMorePopularTvState.initial()';
 }
 
 
@@ -203,7 +203,7 @@ String toString() {
 /// @nodoc
 
 
-class Loading implements SeeMoreOnTheAirTvState {
+class Loading implements SeeMorePopularTvState {
   const Loading();
   
 
@@ -223,7 +223,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SeeMoreOnTheAirTvState.loading()';
+  return 'SeeMorePopularTvState.loading()';
 }
 
 
@@ -235,26 +235,26 @@ String toString() {
 /// @nodoc
 
 
-class Loaded implements SeeMoreOnTheAirTvState {
-  const Loaded({required final  List<TvSeries> onTheAir, required this.onTheAirPage, required this.hasMoreOnTheAir, this.minorError}): _onTheAir = onTheAir;
+class Loaded implements SeeMorePopularTvState {
+  const Loaded({required final  List<TvSeries> popularTv, required this.popularTvPage, required this.hasMorePopularTv, this.minorError}): _popularTv = popularTv;
   
 
 // Data List
- final  List<TvSeries> _onTheAir;
+ final  List<TvSeries> _popularTv;
 // Data List
- List<TvSeries> get onTheAir {
-  if (_onTheAir is EqualUnmodifiableListView) return _onTheAir;
+ List<TvSeries> get popularTv {
+  if (_popularTv is EqualUnmodifiableListView) return _popularTv;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_onTheAir);
+  return EqualUnmodifiableListView(_popularTv);
 }
 
 // Pagination Pages
- final  int onTheAirPage;
+ final  int popularTvPage;
 // Pagination Flags
- final  bool hasMoreOnTheAir;
+ final  bool hasMorePopularTv;
  final  String? minorError;
 
-/// Create a copy of SeeMoreOnTheAirTvState
+/// Create a copy of SeeMorePopularTvState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
@@ -264,27 +264,27 @@ $LoadedCopyWith<Loaded> get copyWith => _$LoadedCopyWithImpl<Loaded>(this, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loaded&&const DeepCollectionEquality().equals(other._onTheAir, _onTheAir)&&(identical(other.onTheAirPage, onTheAirPage) || other.onTheAirPage == onTheAirPage)&&(identical(other.hasMoreOnTheAir, hasMoreOnTheAir) || other.hasMoreOnTheAir == hasMoreOnTheAir)&&(identical(other.minorError, minorError) || other.minorError == minorError));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loaded&&const DeepCollectionEquality().equals(other._popularTv, _popularTv)&&(identical(other.popularTvPage, popularTvPage) || other.popularTvPage == popularTvPage)&&(identical(other.hasMorePopularTv, hasMorePopularTv) || other.hasMorePopularTv == hasMorePopularTv)&&(identical(other.minorError, minorError) || other.minorError == minorError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_onTheAir),onTheAirPage,hasMoreOnTheAir,minorError);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_popularTv),popularTvPage,hasMorePopularTv,minorError);
 
 @override
 String toString() {
-  return 'SeeMoreOnTheAirTvState.loaded(onTheAir: $onTheAir, onTheAirPage: $onTheAirPage, hasMoreOnTheAir: $hasMoreOnTheAir, minorError: $minorError)';
+  return 'SeeMorePopularTvState.loaded(popularTv: $popularTv, popularTvPage: $popularTvPage, hasMorePopularTv: $hasMorePopularTv, minorError: $minorError)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $LoadedCopyWith<$Res> implements $SeeMoreOnTheAirTvStateCopyWith<$Res> {
+abstract mixin class $LoadedCopyWith<$Res> implements $SeeMorePopularTvStateCopyWith<$Res> {
   factory $LoadedCopyWith(Loaded value, $Res Function(Loaded) _then) = _$LoadedCopyWithImpl;
 @useResult
 $Res call({
- List<TvSeries> onTheAir, int onTheAirPage, bool hasMoreOnTheAir, String? minorError
+ List<TvSeries> popularTv, int popularTvPage, bool hasMorePopularTv, String? minorError
 });
 
 
@@ -299,13 +299,13 @@ class _$LoadedCopyWithImpl<$Res>
   final Loaded _self;
   final $Res Function(Loaded) _then;
 
-/// Create a copy of SeeMoreOnTheAirTvState
+/// Create a copy of SeeMorePopularTvState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? onTheAir = null,Object? onTheAirPage = null,Object? hasMoreOnTheAir = null,Object? minorError = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? popularTv = null,Object? popularTvPage = null,Object? hasMorePopularTv = null,Object? minorError = freezed,}) {
   return _then(Loaded(
-onTheAir: null == onTheAir ? _self._onTheAir : onTheAir // ignore: cast_nullable_to_non_nullable
-as List<TvSeries>,onTheAirPage: null == onTheAirPage ? _self.onTheAirPage : onTheAirPage // ignore: cast_nullable_to_non_nullable
-as int,hasMoreOnTheAir: null == hasMoreOnTheAir ? _self.hasMoreOnTheAir : hasMoreOnTheAir // ignore: cast_nullable_to_non_nullable
+popularTv: null == popularTv ? _self._popularTv : popularTv // ignore: cast_nullable_to_non_nullable
+as List<TvSeries>,popularTvPage: null == popularTvPage ? _self.popularTvPage : popularTvPage // ignore: cast_nullable_to_non_nullable
+as int,hasMorePopularTv: null == hasMorePopularTv ? _self.hasMorePopularTv : hasMorePopularTv // ignore: cast_nullable_to_non_nullable
 as bool,minorError: freezed == minorError ? _self.minorError : minorError // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -317,13 +317,13 @@ as String?,
 /// @nodoc
 
 
-class Error implements SeeMoreOnTheAirTvState {
+class Error implements SeeMorePopularTvState {
   const Error(this.message);
   
 
  final  String message;
 
-/// Create a copy of SeeMoreOnTheAirTvState
+/// Create a copy of SeeMorePopularTvState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
@@ -342,14 +342,14 @@ int get hashCode => Object.hash(runtimeType,message);
 
 @override
 String toString() {
-  return 'SeeMoreOnTheAirTvState.error(message: $message)';
+  return 'SeeMorePopularTvState.error(message: $message)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $ErrorCopyWith<$Res> implements $SeeMoreOnTheAirTvStateCopyWith<$Res> {
+abstract mixin class $ErrorCopyWith<$Res> implements $SeeMorePopularTvStateCopyWith<$Res> {
   factory $ErrorCopyWith(Error value, $Res Function(Error) _then) = _$ErrorCopyWithImpl;
 @useResult
 $Res call({
@@ -368,7 +368,7 @@ class _$ErrorCopyWithImpl<$Res>
   final Error _self;
   final $Res Function(Error) _then;
 
-/// Create a copy of SeeMoreOnTheAirTvState
+/// Create a copy of SeeMorePopularTvState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
   return _then(Error(
