@@ -262,14 +262,32 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
                             fit: BoxFit.fill,
                           ),
                         ),
-                        Error(message: final message) => ErrorStateWidget2(
-                          message: message,
-                          onRetry: () {
-                            context.read<AiringTodayTvBloc>().add(
-                              AiringTodayTvEvent.refreshTv(),
-                            );
-                          },
-                        ),
+                        Error(message: final message) =>
+                          message.contains('Failed to connect to the network')
+                              ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset(
+                                      'assets/image_lottie/no_connection.json',
+                                      width: 300,
+                                      height: 300,
+                                    ),
+                                    Text(
+                                      'No Internet Connection!',
+                                      style: kSubtitle,
+                                    ),
+                                  ],
+                                ),
+                              )
+                              : ErrorStateWidget2(
+                                message: message,
+                                onRetry: () {
+                                  context.read<AiringTodayTvBloc>().add(
+                                    AiringTodayTvEvent.refreshTv(),
+                                  );
+                                },
+                              ),
                         Loaded(
                           airingToday: final airingToday,
                           hasMoreAiringToday: final hasMoreAt,

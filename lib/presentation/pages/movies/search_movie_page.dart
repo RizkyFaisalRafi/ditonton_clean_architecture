@@ -22,12 +22,7 @@ class SearchMoviePage extends StatelessWidget {
               onChanged: (query) {
                 context.read<MovieSearchBloc>().add(OnQueryChanged(query));
               },
-              // onSubmitted: (query) {
-              //   Provider.of<MovieSearchNotifier>(
-              //     context,
-              //     listen: false,
-              //   ).fetchMovieSearch(query);
-              // },
+
               decoration: InputDecoration(
                 hintText: 'Search title',
                 prefixIcon: Icon(Icons.search),
@@ -45,6 +40,7 @@ class SearchMoviePage extends StatelessWidget {
                   return Expanded(
                     child: Center(
                       child: Lottie.asset(
+                        key: Key('loading_state_lottie'),
                         'assets/image_lottie/loading_elephant.json',
                         width: 300,
                         height: 300,
@@ -57,6 +53,7 @@ class SearchMoviePage extends StatelessWidget {
 
                   if (result.isEmpty) {
                     return ErrorStateWidget(
+                      key: Key('loaded_state_empty_search'),
                       message: 'No results found',
                       title: 'Movie',
                     );
@@ -76,6 +73,7 @@ class SearchMoviePage extends StatelessWidget {
                   // return Expanded(child: Center(child: Text(state.message)));
                   return Expanded(
                     child: ErrorStateWidget(
+                      key: Key('error_state'),
                       message: state.message,
                       title: 'Movie',
                     ),
@@ -104,61 +102,6 @@ class SearchMoviePage extends StatelessWidget {
                 }
               },
             ),
-
-            // Expanded(
-            //   child: Consumer<MovieSearchNotifier>(
-            //     builder: (context, data, child) {
-            //       if (data.state == RequestState.Loading) {
-            //         return Center(
-            //           child: Lottie.asset(
-            //             'assets/image_lottie/loading_elephant.json',
-            //             width: 300,
-            //             height: 300,
-            //             fit: BoxFit.fill,
-            //           ),
-            //         );
-            //       } else if (data.state == RequestState.Error) {
-            //         return ErrorStateWidget(
-            //           message: data.message,
-            //           title: 'Movie',
-            //         );
-            //       } else if (data.state == RequestState.Loaded) {
-            //         if (data.searchResult.isEmpty) {
-            //           return ErrorStateWidget(
-            //             message: 'No results found',
-            //             title: 'Movie',
-            //           );
-            //         }
-            //         return ListView.builder(
-            //           padding: const EdgeInsets.all(8),
-            //           itemBuilder: (context, index) {
-            //             final movie = data.searchResult[index];
-            //             return MovieCard(movie);
-            //           },
-            //           itemCount: data.searchResult.length,
-            //         );
-            //       } else {
-            //         // Initial state
-            //         return Center(
-            //           child: SingleChildScrollView(
-            //             child: Column(
-            //               mainAxisAlignment: MainAxisAlignment.center,
-            //               children: [
-            //                 Lottie.asset(
-            //                   'assets/image_lottie/animation_movie.json',
-            //                   width: 300,
-            //                   height: 300,
-            //                   fit: BoxFit.fill,
-            //                 ),
-            //                 Text('Search Movie', style: kHeading6),
-            //               ],
-            //             ),
-            //           ),
-            //         );
-            //       }
-            //     },
-            //   ),
-            // ),
           ],
         ),
       ),

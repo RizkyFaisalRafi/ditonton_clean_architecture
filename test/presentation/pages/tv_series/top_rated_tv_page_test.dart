@@ -1,129 +1,186 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton_clean_architecture/common/state_enum.dart';
+import 'package:ditonton_clean_architecture/presentation/bloc/tv/see_more_top_rated/see_more_top_rated_tv_bloc.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/tv_series/top_rated_tv_page.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/tv_series/top_rated_tv_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/error_state_widget.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/tv_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:mocktail_image_network/mocktail_image_network.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../dummy_data/dummy_objects.dart';
 import 'top_rated_tv_page_test.mocks.dart';
 
-@GenerateMocks([TopRatedTvNotifier])
+@GenerateMocks([SeeMoreTopRatedTvBloc])
 void main() {
-  late MockTopRatedTvNotifier mockNotifier;
+  late MockSeeMoreTopRatedTvBloc mockSeeMoreTopRatedTvBloc;
 
   setUp(() {
-    mockNotifier = MockTopRatedTvNotifier();
-    // Setup properties
-    when(mockNotifier.refreshC).thenReturn(RefreshController());
-    when(mockNotifier.scrollController).thenReturn(ScrollController());
+    mockSeeMoreTopRatedTvBloc = MockSeeMoreTopRatedTvBloc();
   });
 
   Widget _makeTestableWidget(Widget body) {
-    return ChangeNotifierProvider<TopRatedTvNotifier>.value(
-      value: mockNotifier,
+    return BlocProvider<SeeMoreTopRatedTvBloc>.value(
+      value: mockSeeMoreTopRatedTvBloc,
       child: MaterialApp(home: body),
     );
   }
 
-  testWidgets('Page should display app bar with title', (
+  void _arrangeBlocState(SeeMoreTopRatedTvState state) {
+    when(mockSeeMoreTopRatedTvBloc.state).thenReturn(state);
+    when(
+      mockSeeMoreTopRatedTvBloc.stream,
+    ).thenAnswer((_) => Stream.value(state));
+  }
+
+  /// Loading
+  testWidgets(
+    'Page should display Lottie loading indicator when state is Loading',
+    (WidgetTester tester) async {
+      // Arrange
+      _arrangeBlocState(const SeeMoreTopRatedTvState.loading());
+
+      // Act
+      await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+
+      // Assert
+      final progressBarFinder = find.byKey(Key('loading_top_rated_tv'));
+      final lottieFinder = find.byType(Lottie);
+      expect(progressBarFinder, findsOneWidget);
+      expect(lottieFinder, findsOneWidget);
+    },
+  );
+
+  /// Loaded
+  testWidgets('Page should display ListView when state is Loaded with data', (
     WidgetTester tester,
   ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loading);
+    // Arrange
+    _arrangeBlocState(
+      SeeMoreTopRatedTvState.loaded(
+        topRatedTv: testTvList,
+        topRatedTvPage: 1,
+        hasMoreTopRatedTv: false,
+      ),
+    );
 
-    await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+    // Act
+    await mockNetworkImages(() async {
+      await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+      await tester.pump();
+      // PERBAIKAN: Pump lagi dengan durasi untuk menyelesaikan timer dari pull_to_refresh.
+      // Log error menunjukkan timer 600ms, jadi 1 detik sudah aman.
+      await tester.pump(const Duration(seconds: 1));
+    });
 
-    expect(find.text('Top Rated Tv Series'), findsOneWidget);
-  });
-
-  testWidgets('Page should display loading indicator when loading', (
-    WidgetTester tester,
-  ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loading);
-
-    await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
-
-    final progressBarFinder = find.byKey(Key('loading_top_rated_tv'));
-    expect(progressBarFinder, findsOneWidget);
-    expect(find.byType(Lottie), findsOneWidget);
-  });
-
-  testWidgets('Page should display empty widget when movies is empty', (
-    WidgetTester tester,
-  ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loaded);
-    when(mockNotifier.tvSeriesList).thenReturn([]);
-
-    await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
-
-    expect(find.text('No tv series available.'), findsOneWidget);
-  });
-
-  testWidgets('Page should display ListView when data is loaded', (
-    WidgetTester tester,
-  ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loaded);
-    when(mockNotifier.tvSeriesList).thenReturn(testTvList);
-
-    final listViewFinder = find.byKey(Key('loaded_top_rated_tv'));
-
-    await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+    // Assert
+    final listViewFinder = find.byKey(const Key('loaded_top_rated_tv'));
+    final smartRefresherFinder = find.byType(SmartRefresher);
 
     expect(find.byType(TvCard), findsOneWidget);
+    expect(smartRefresherFinder, findsOneWidget);
     expect(find.byType(CachedNetworkImage), findsOneWidget);
     expect(listViewFinder, findsOneWidget);
   });
 
-  testWidgets('Page should display error message when error occurs', (
+  /// Loaded - Empty Data List
+  testWidgets(
+    'Page should display EmptyStateWidget when state is Loaded but data is empty',
+    (WidgetTester tester) async {
+      // Arrange
+      _arrangeBlocState(
+        const SeeMoreTopRatedTvState.loaded(
+          topRatedTv: [],
+          topRatedTvPage: 1,
+          hasMoreTopRatedTv: false,
+        ),
+      );
+
+      // Act
+      await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+
+      // Assert
+      final emptyMessageFinder = find.text(
+        'There are no top rated tv at the moment',
+      );
+      expect(emptyMessageFinder, findsOneWidget);
+    },
+  );
+
+  /// No Internet
+  testWidgets(
+    'Page should display No Internet error message when state is Error with network message',
+    (WidgetTester tester) async {
+      // Arrange
+      _arrangeBlocState(
+        SeeMoreTopRatedTvState.error('Failed to connect to the network'),
+      );
+
+      // Act
+      await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+      await tester.pump(); // pump again to ensure the state propagates
+
+      // Assert
+      final errorMessageFinder = find.text('No Internet Connection!');
+      expect(errorMessageFinder, findsOneWidget);
+      final lottieFinder = find.byType(Lottie);
+      expect(lottieFinder, findsOneWidget);
+    },
+  );
+
+  /// Other Error
+  testWidgets('Page should display ErrorStateWidget2 for other errors', (
     WidgetTester tester,
   ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Error);
-    when(mockNotifier.message).thenReturn('Error message');
+    // Arrange
+    _arrangeBlocState(const SeeMoreTopRatedTvState.error('Server Error'));
 
+    // Act
     await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+    await tester.pump(); // pump again to ensure the state propagates
 
-    final textFinder = find.byKey(Key('error_message'));
-
-    expect(textFinder, findsOneWidget);
-    expect(find.text('Error message'), findsOneWidget);
-    expect(find.byType(ErrorStateWidget2), findsOneWidget);
+    // Assert
+    final errorMessageFinder = find.text('Server Error');
+    expect(errorMessageFinder, findsOneWidget);
   });
 
-  testWidgets('Page should trigger refresh when retry is pressed', (
-    WidgetTester tester,
-  ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Error);
-    when(mockNotifier.message).thenReturn('Error message');
+  /// Error - Trigger Refresh
+  testWidgets(
+    'Page should dispatch refreshTv event when retry button is pressed on error state',
+    (WidgetTester tester) async {
+      // Arrange
+      _arrangeBlocState(const SeeMoreTopRatedTvState.error('Server Failure'));
 
-    when(mockNotifier.onRefresh()).thenAnswer((_) async {});
+      await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
 
-    await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+      // Ensure the error widget is visible
+      final errorMessageFinder = find.text('Server Failure');
+      expect(errorMessageFinder, findsOneWidget);
 
-    final errorWidgetFinder = find.byType(ErrorStateWidget2);
-    final elevatedError = find.byKey(Key('elevated_button_ErrorStateWidget2'));
+      // This test assumes your ErrorStateWidget2 contains an ElevatedButton for retry.
+      final retryButtonFinder = find.byType(ElevatedButton);
+      expect(retryButtonFinder, findsOneWidget);
 
-    await tester.tap(elevatedError);
-    await tester.pump();
+      // Act
+      // Simulate tapping the retry button
+      await tester.tap(retryButtonFinder);
+      await tester.pump(); // Let the UI react to the tap
 
-    expect(errorWidgetFinder, findsOneWidget);
-    expect(elevatedError, findsOneWidget);
-    verify(mockNotifier.onRefresh()).called(1);
-  });
+      final errorWidgetFinder = find.byType(ErrorStateWidget2);
 
-  testWidgets('SmartRefresher should be configured correctly', (
-    WidgetTester tester,
-  ) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loaded);
-    when(mockNotifier.tvSeriesList).thenReturn(testTvList);
-
-    await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
-
-    expect(find.byType(SmartRefresher), findsOneWidget);
-  });
+      // Assert
+      expect(errorWidgetFinder, findsOneWidget);
+      // Verify that the 'add' method on the BLoC was called exactly once
+      // with the refreshMovies event.
+      verify(
+        mockSeeMoreTopRatedTvBloc.add(const SeeMoreTopRatedTvEvent.refreshTv()),
+      ).called(1);
+    },
+  );
 }
