@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_table.dart';
-
-// import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 import '../../../common/encrypt.dart';
 import '../../models/movies/cache/movie_detail_table.dart';

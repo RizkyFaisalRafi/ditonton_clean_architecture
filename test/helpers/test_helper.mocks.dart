@@ -51,7 +51,7 @@ import 'package:ditonton_clean_architecture/domain/repositories/tv_series_reposi
 import 'package:http/http.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i17;
-import 'package:sqflite/sqflite.dart' as _i19;
+import 'package:sqflite_sqlcipher/sqflite.dart' as _i19;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
