@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_table.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_sqlcipher/sqflite.dart';
+import '../../../common/encrypt.dart';
 import '../../models/movies/cache/movie_detail_table.dart';
 import '../../models/movies/cache/movie_table.dart';
 import '../../models/tv_series/cache/tv_series_detail_table.dart';
@@ -32,7 +33,16 @@ class DatabaseHelper {
     final path = await getDatabasesPath();
     final databasePath = '$path/ditonton.db';
 
-    var db = await openDatabase(databasePath, version: 1, onCreate: _onCreate);
+    /**
+     * database SQLite memiliki satu lapisan keamanan tambahan.
+     * Password ini akan digunakan untuk mengenkripsi database.
+     */
+    var db = await openDatabase(
+      databasePath,
+      version: 1,
+      onCreate: _onCreate,
+      password: encrypt('databaseSecure301201'), // Enkripsi
+    );
     return db;
   }
 

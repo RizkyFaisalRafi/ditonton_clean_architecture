@@ -56,11 +56,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:ditonton_clean_architecture/injection.dart' as di;
+import 'common/ssl_pinning.dart';
 import 'presentation/provider/tv_series/tv_list_notifier.dart';
 import 'presentation/provider/tv_series/watchlist_tv_notifier.dart';
 
-void main() {
-  di.init();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   runApp(MyApp());
 }
 
