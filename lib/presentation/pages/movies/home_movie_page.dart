@@ -116,6 +116,10 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
             builder: (context, state) {
               // Gunakan switch expression untuk pattern matching yang modern
               return switch (state) {
+                Initial() => EmptyStateWidget(
+                  message:
+                  "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
+                ),
                 Loaded(
                   nowPlaying: final nowPlaying,
                   popular: final popular,
@@ -137,6 +141,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                         // --- Now Playing Section ---
                         Text('Now Playing', style: kHeading6),
                         MovieList(
+                          key: const Key('now_playing_list'),
                           movies: nowPlaying,
                           scrollController: _nowPlayingScrollController,
                           hasMore: hasMoreNp,
@@ -152,6 +157,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                               ),
                         ),
                         MovieList(
+                          key: const Key('popular_list'),
                           movies: popular,
                           scrollController: _popularScrollController,
                           hasMore: hasMoreP,
@@ -167,6 +173,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                               ),
                         ),
                         MovieList(
+                          key: const Key('top_rated_list'),
                           movies: topRated,
                           scrollController: _topRatedScrollController,
                           hasMore: hasMoreTr,
@@ -182,6 +189,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                               ),
                         ),
                         MovieList(
+                          key: const Key('up_coming_list'),
                           movies: upcoming,
                           scrollController: _upcomingScrollController,
                           hasMore: hasMoreU,
@@ -191,6 +199,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                   ),
                 Loading() => Center(
                   child: Lottie.asset(
+                    key: Key('loading_bar_lottie'),
                     'assets/image_lottie/loading_bar.json',
                     width: 150,
                     height: 150,

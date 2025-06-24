@@ -148,8 +148,8 @@ Coverage App:
       - SeeMoreTopRatedTvBlocTest (Done)
       
     - presentation/pages
-      - HomeMoviePageTest
-      - SearchMoviePageTest
+      - HomeMoviePageTest (Done)
+      - SearchMoviePageTest (Done)
       - SearchTvPageTest (Done)
       - TvSeriesPageTest (Done)
       - MovieDetailPageTest (Done)
