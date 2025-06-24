@@ -61,13 +61,14 @@ import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_s
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'common/network_info.dart';
+import 'common/ssl_pinning.dart';
 import 'data/datasources/movies/movie_remote_data_source.dart';
 import 'presentation/provider/tv_series/tv_list_notifier.dart';
 import 'presentation/provider/tv_series/watchlist_tv_notifier.dart';
 
 final locator = GetIt.instance;
 
-void init() {
+Future<void> init() async {
   // provider
   locator.registerFactory(
     () => MovieListNotifier(
@@ -220,15 +221,16 @@ void init() {
 
   // data sources
   locator.registerLazySingleton<MovieRemoteDataSource>(
-    () => MovieRemoteDataSourceImpl(client: locator()),
+    () => MovieRemoteDataSourceImpl(client: locator<http.Client>()),
   );
   locator.registerLazySingleton<MovieLocalDataSource>(
     () => MovieLocalDataSourceImpl(databaseHelper: locator()),
   );
 
   locator.registerLazySingleton<TvSeriesRemoteDataSource>(
-    () => TvSeriesRemoteDataSourceImpl(client: locator()),
+    () => TvSeriesRemoteDataSourceImpl(client: locator<http.Client>()),
   );
+
   locator.registerLazySingleton<TvSeriesLocalDatasource>(
     () => TvSeriesLocalDatasourceImpl(databaseHelper: locator()),
   );
@@ -240,6 +242,17 @@ void init() {
   locator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(locator()));
 
   // external
-  locator.registerLazySingleton(() => http.Client());
+  // locator.registerLazySingleton(() => http.Client());
+
+  // locator.registerLazySingleton(() => SslPinning.client);
+  // MENUNGGU HTTP CLIENT SIAP
+  // Kode akan berhenti di sini sampai SslPinning selesai
+  // await locator.isReady<http.Client>();
+
+  locator.registerSingletonAsync<http.Client>(
+    () => SslPinning.createLEClient(),
+  );
+  await locator.allReady();
+
   locator.registerLazySingleton(() => DataConnectionChecker());
 }
