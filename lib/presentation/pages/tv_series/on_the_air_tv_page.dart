@@ -102,7 +102,7 @@ class _OnTheAirTvPageState extends State<OnTheAirTvPage>
                         enablePullUp: true,
                         onRefresh:
                             () => context.read<SeeMoreOnTheAirTvBloc>().add(
-                              const SeeMoreOnTheAirTvEvent.refreshMovies(),
+                              const SeeMoreOnTheAirTvEvent.refreshTv(),
                             ),
                         header: const WaterDropHeader(
                           complete: Row(
@@ -178,7 +178,7 @@ class _OnTheAirTvPageState extends State<OnTheAirTvPage>
                     message: message,
                     onRetry:
                         () => context.read<SeeMoreOnTheAirTvBloc>().add(
-                          const SeeMoreOnTheAirTvEvent.refreshMovies(),
+                          const SeeMoreOnTheAirTvEvent.refreshTv(),
                         ),
                   );
                 }(),

@@ -21,7 +21,7 @@ class SeeMoreOnTheAirTvBloc
     on<FetchInitialOnTheAirTv>(_onFetchInitialOnTheAirTv);
 
     // For Refresh
-    on<RefreshTv>(_onRefreshMovies);
+    on<RefreshTv>(_onRefreshTv);
 
     // For FetchMore
     on<FetchMoreOnTheAirTv>(_onFetchMoreOnTheAirTv, transformer: droppable());
@@ -64,7 +64,7 @@ class SeeMoreOnTheAirTvBloc
     );
   }
 
-  Future<void> _onRefreshMovies(
+  Future<void> _onRefreshTv(
     RefreshTv event,
     Emitter<SeeMoreOnTheAirTvState> emit,
   ) async {

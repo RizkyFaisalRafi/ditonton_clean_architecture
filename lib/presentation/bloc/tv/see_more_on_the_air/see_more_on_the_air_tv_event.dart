@@ -11,5 +11,5 @@ class SeeMoreOnTheAirTvEvent with _$SeeMoreOnTheAirTvEvent {
       FetchMoreOnTheAirTv;
 
   // Event untuk pull-to-refresh
-  const factory SeeMoreOnTheAirTvEvent.refreshMovies() = RefreshTv;
+  const factory SeeMoreOnTheAirTvEvent.refreshTv() = RefreshTv;
 }
