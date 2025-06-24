@@ -12,34 +12,6 @@ import 'package:http/io_client.dart';
  */
 
 class SslPinning {
-  // static Future<IOClient> nowPlayingMovieContext() async {
-  //   // Gunakan nama sertifikat yang benar untuk domainnya
-  //   final sslCert = await rootBundle.load(
-  //     'certificates/the_movie_db_certificate.pem',
-  //   );
-  //
-  //   SecurityContext securityContext = SecurityContext(withTrustedRoots: false);
-  //   securityContext.setTrustedCertificatesBytes(sslCert.buffer.asUint8List());
-  //
-  //   HttpClient httpClient = HttpClient(context: securityContext);
-  //   httpClient.badCertificateCallback =
-  //       (X509Certificate cert, String host, int port) => false;
-  //
-  //   return IOClient(httpClient);
-  // }
-
-  // Singleton manual
-  // static Future<http.Client> get _instance async =>
-  //     _clientInstance ??= await SslPinning.createLEClient();
-  //
-  // static http.Client? _clientInstance;
-  //
-  // static http.Client get client => _clientInstance ?? http.Client();
-  //
-  // static Future<void> init() async {
-  //   _clientInstance = await _instance;
-  // }
-
   static Future<HttpClient> customeHttpClient({bool isTestMode = false}) async {
     // Jangan percaya siapa pun secara default
     final context = SecurityContext(withTrustedRoots: false);
@@ -72,7 +44,6 @@ class SslPinning {
 
       // Satu satunya yang dipercaya adalah sertifikat ini
       context.setTrustedCertificatesBytes(certFileBytes);
-
     } on TlsException catch (e) {
       // Penanganan error teknis jika sertifikat sudah ada
       if (e.osError?.message != null &&

@@ -78,7 +78,6 @@ Future<void> init() async {
       getUpComingMovies: locator(),
     ),
   );
-
   locator.registerFactory(
     () => MovieDetailNotifier(
       getMovieDetail: locator(),
@@ -243,12 +242,6 @@ Future<void> init() async {
 
   // external
   // locator.registerLazySingleton(() => http.Client());
-
-  // locator.registerLazySingleton(() => SslPinning.client);
-  // MENUNGGU HTTP CLIENT SIAP
-  // Kode akan berhenti di sini sampai SslPinning selesai
-  // await locator.isReady<http.Client>();
-
   locator.registerSingletonAsync<http.Client>(
     () => SslPinning.createLEClient(),
   );
