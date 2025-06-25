@@ -8,7 +8,6 @@ import 'package:ditonton_clean_architecture/presentation/pages/movies/search_mov
 import 'package:ditonton_clean_architecture/presentation/pages/movies/top_rated_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/custom_drawer.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -23,13 +22,16 @@ class HomeMoviePage extends StatefulWidget {
   State<HomeMoviePage> createState() => _HomeMoviePageState();
 }
 
-class _HomeMoviePageState extends State<HomeMoviePage> {
+class _HomeMoviePageState extends State<HomeMoviePage> with AutomaticKeepAliveClientMixin<HomeMoviePage>{
   // Deklarasikan semua ScrollController dan RefreshController
   final RefreshController _refreshController = RefreshController();
   late final ScrollController _nowPlayingScrollController;
   late final ScrollController _popularScrollController;
   late final ScrollController _topRatedScrollController;
   late final ScrollController _upcomingScrollController;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -41,9 +43,18 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
     _upcomingScrollController = ScrollController();
     final onScrollC = context.read<MovieListBloc>();
 
-    context.read<MovieListBloc>().add(
-      const MovieListEvent.fetchInitialMovies(),
-    );
+    final movieListBloc = context.read<MovieListBloc>();
+
+    // Hanya fetch data jika state-nya masih initial (belum ada data)
+    // Mencegah BLoC mengambil data dari internet/API jika datanya sudah ada di dalam state BLoC.
+    // Ini adalah jaring pengaman utama yang memastikan data hanya diambil satu kali (kecuali jika di-refresh manual).
+    if (movieListBloc.state is Initial) {
+      movieListBloc.add(const MovieListEvent.fetchInitialMovies());
+    }
+
+    // context.read<MovieListBloc>().add(
+    //   const MovieListEvent.fetchInitialMovies(),
+    // );
 
     // listener untuk setiap controller untuk memicu event 'fetchMore'
     _nowPlayingScrollController.addListener(
@@ -78,6 +89,8 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Movies'),
