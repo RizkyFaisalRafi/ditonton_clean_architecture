@@ -116,7 +116,7 @@ class MyApp extends StatelessWidget {
           create: (context) => di.locator<SeeMoreUpcomingMovieBloc>(),
         ),
         BlocProvider(create: (context) => di.locator<SeeMoreOnTheAirTvBloc>()),
-        BlocProvider(create: (context) => di.locator<SeeMorePopularTvBloc>()),
+        BlocProvider(create: (context) => di.locator<SeeMorePopularTvBloc>()),  
         BlocProvider(create: (context) => di.locator<SeeMoreTopRatedTvBloc>()),
         BlocProvider(create: (context) => di.locator<WatchlistMovieBloc>()),
         BlocProvider(create: (context) => di.locator<WatchlistTvBloc>()),
