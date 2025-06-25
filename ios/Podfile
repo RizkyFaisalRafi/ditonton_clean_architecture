@@ -1,25 +1,31 @@
-# CocoaPods's plugins for Flutter
-flutter_application_path = File.expand_path('..')
-load File.join(flutter_application_path, '.ios', 'Flutter', 'podhelper.rb')
+# Podfile yang lebih robust
+# Menentukan platform target global untuk proyek Anda.
+platform :ios, '14.0'
+
+# Menemukan path ke Flutter SDK dari file local.properties yang dibuat Flutter
+def find_flutter_sdk_path
+  File.read(File.join(File.dirname(__FILE__), '..', '.flutter-plugins-dependencies')).each_line do |line|
+    if line.start_with?('flutter_sdk=')
+      return line.split('=').last.strip
+    end
+  end
+  return nil
+end
+
+flutter_sdk_path = find_flutter_sdk_path
+if flutter_sdk_path.nil?
+  raise 'Could not find Flutter SDK path. Please run `flutter pub get` first.'
+end
+
+load File.join(flutter_sdk_path, 'packages', 'flutter_tools', 'bin', 'podhelper.rb')
 
 target 'Runner' do
   use_modular_headers!
-
-  # Baris ini adalah "sihir" dari Flutter.
-  # Ia akan secara otomatis menambahkan semua Pods yang dibutuhkan
-  # oleh plugin-plugin di pubspec.yaml Anda (seperti firebase, sqflite, dll).
-  flutter_install_all_ios_pods(flutter_application_path)
+  flutter_install_all_ios_pods(File.dirname(flutter_sdk_path))
 end
 
-# Baris ini memastikan semua target pod Anda memiliki pengaturan build
-# yang dibutuhkan oleh Flutter.
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
   end
 end
-
-# BARIS PALING PENTING UNTUK MASALAH ANDA
-# Mendefinisikan platform target global untuk proyek Anda.
-# Ini harus berada di paling atas, di luar blok 'target'.
-platform :ios, '14.0'
