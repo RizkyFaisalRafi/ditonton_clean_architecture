@@ -8,6 +8,7 @@ import 'package:ditonton_clean_architecture/presentation/pages/movies/search_mov
 import 'package:ditonton_clean_architecture/presentation/pages/movies/top_rated_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/pages/movies/up_coming_movies_page.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/custom_drawer.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -89,8 +90,10 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
         ),
         actions: [
           IconButton(
-            onPressed:
-                () => Navigator.pushNamed(context, SearchMoviePage.ROUTE_NAME),
+            onPressed: () {
+              // FirebaseCrashlytics.instance.crash();
+              Navigator.pushNamed(context, SearchMoviePage.ROUTE_NAME);
+            },
             icon: const Icon(Icons.search),
           ),
         ],
@@ -118,7 +121,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               return switch (state) {
                 Initial() => EmptyStateWidget(
                   message:
-                  "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
+                      "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
                 ),
                 Loaded(
                   nowPlaying: final nowPlaying,

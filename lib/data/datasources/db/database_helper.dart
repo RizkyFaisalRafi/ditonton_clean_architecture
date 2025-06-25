@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:ditonton_clean_architecture/data/models/tv_series/cache/tv_series_table.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 import '../../../common/encrypt.dart';
 import '../../models/movies/cache/movie_detail_table.dart';
 import '../../models/movies/cache/movie_table.dart';
 import '../../models/tv_series/cache/tv_series_detail_table.dart';
+import 'package:path/path.dart';
 
 class DatabaseHelper {
   static DatabaseHelper? _databaseHelper;
@@ -17,9 +19,9 @@ class DatabaseHelper {
 
   static Database? _database;
 
-  Future<Database?> get database async {
+  Future<Database> get database async {
     _database ??= await _initDb();
-    return _database;
+    return _database!;
   }
 
   static const String _tblWatchlistMovie = 'watchlist';
@@ -31,19 +33,53 @@ class DatabaseHelper {
 
   Future<Database> _initDb() async {
     final path = await getDatabasesPath();
-    final databasePath = '$path/ditonton.db';
+    // final databasePath = '$path/ditonton.db';
+    final databasePath = join(
+      path,
+      'ditonton.db',
+    ); // Gunakan join agar lebih aman
 
-    /**
-     * database SQLite memiliki satu lapisan keamanan tambahan.
-     * Password ini akan digunakan untuk mengenkripsi database.
-     */
-    var db = await openDatabase(
-      databasePath,
-      version: 1,
-      onCreate: _onCreate,
-      password: encrypt('databaseSecure301201'), // Enkripsi
-    );
-    return db;
+    try {
+      /**
+       * database SQLite memiliki satu lapisan keamanan tambahan.
+       * Password ini akan digunakan untuk mengenkripsi database.
+       */
+      // 1. Mencoba membuka database seperti biasa
+      var db = await openDatabase(
+        databasePath,
+        version: 1,
+        onCreate: _onCreate,
+        password: encrypt('databaseSecure301201'), // Enkripsi
+      );
+      return db;
+    } on DatabaseException catch (e) {
+      // 2. Menangkap error spesifik jika terjadi
+      log('DatabaseHelper: Error saat membuka DB: $e');
+
+      // Memeriksa apakah error disebabkan oleh file korup/bukan database
+      // Kode 26 adalah SQLITE_NOTADB
+      if (e.isOpenFailedError()) {
+        // 3. MEKANISME PEMULIHAN OTOMATIS
+        log(
+          'DatabaseHelper: Database open failed (kemungkinan korup atau password salah). Menghapus dan membuat ulang...',
+        );
+        await deleteDatabase(databasePath);
+
+        // Coba buka lagi setelah file rusak dihapus
+        final db = await openDatabase(
+          databasePath,
+          version: 1,
+          onCreate: _onCreate,
+          password: encrypt('databaseSecure301201'),
+        );
+        log('DatabaseHelper: Database baru berhasil dibuat.');
+        return db;
+      } else {
+        // 4. Jika error lain, tetap lemparkan agar bisa di-debug
+        log('DatabaseHelper: Terjadi error database yang tidak terduga.');
+        rethrow;
+      }
+    }
   }
 
   void _onCreate(Database db, int version) async {
@@ -122,7 +158,7 @@ class DatabaseHelper {
     String category,
   ) async {
     final db = await database;
-    db!.transaction((txn) async {
+    db.transaction((txn) async {
       for (final movie in movies) {
         final movieJson = movie.toJson();
         movieJson['category'] = category;
@@ -144,7 +180,7 @@ class DatabaseHelper {
   // Insert cache MovieDetail
   Future<void> insertCacheMovieDetail(MovieDetailTable movieDetail) async {
     final db = await database;
-    await db!.insert(
+    await db.insert(
       _tblCacheMovieDetail,
       movieDetail.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -154,7 +190,7 @@ class DatabaseHelper {
   // Ambil cache MovieDetail by id
   Future<Map<String, dynamic>?> getCachedMovieDetail(int id) async {
     final db = await database;
-    final results = await db!.query(
+    final results = await db.query(
       _tblCacheMovieDetail,
       where: 'id = ?',
       whereArgs: [id],
@@ -170,7 +206,7 @@ class DatabaseHelper {
   // Insert cache TvDetail
   Future<void> insertCacheTvDetail(TvSeriesDetailTable tvDetail) async {
     final db = await database;
-    await db!.insert(
+    await db.insert(
       _tblCacheTvDetail,
       tvDetail.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -180,7 +216,7 @@ class DatabaseHelper {
   // Ambil cache TvDetail by id
   Future<Map<String, dynamic>?> getCachedTvDetail(int id) async {
     final db = await database;
-    final results = await db!.query(
+    final results = await db.query(
       _tblCacheTvDetail,
       where: 'id = ?',
       whereArgs: [id],
@@ -195,7 +231,7 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getCacheMovies(String category) async {
     final db = await database;
-    final List<Map<String, dynamic>> results = await db!.query(
+    final List<Map<String, dynamic>> results = await db.query(
       _tblCacheMovie,
       where: 'category = ?',
       whereArgs: [category],
@@ -206,7 +242,7 @@ class DatabaseHelper {
 
   Future<int> clearCache(String category) async {
     final db = await database;
-    return await db!.delete(
+    return await db.delete(
       _tblCacheMovie,
       where: 'category = ?',
       whereArgs: [category],
@@ -215,7 +251,7 @@ class DatabaseHelper {
 
   Future<int> insertWatchlistMovie(MovieTable movie) async {
     final db = await database;
-    return await db!.insert(
+    return await db.insert(
       _tblWatchlistMovie,
       movie.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace, // Data lama diganti baru
@@ -224,7 +260,7 @@ class DatabaseHelper {
 
   Future<int> removeWatchlistMovie(MovieTable movie) async {
     final db = await database;
-    return await db!.delete(
+    return await db.delete(
       _tblWatchlistMovie,
       where: 'id = ?',
       whereArgs: [movie.id],
@@ -233,7 +269,7 @@ class DatabaseHelper {
 
   Future<Map<String, dynamic>?> getMovieById(int id) async {
     final db = await database;
-    final results = await db!.query(
+    final results = await db.query(
       _tblWatchlistMovie,
       where: 'id = ?',
       whereArgs: [id],
@@ -248,7 +284,7 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getWatchlistMovies() async {
     final db = await database;
-    final List<Map<String, dynamic>> results = await db!.query(
+    final List<Map<String, dynamic>> results = await db.query(
       _tblWatchlistMovie,
     );
 
@@ -261,7 +297,7 @@ class DatabaseHelper {
     String category,
   ) async {
     final db = await database;
-    db!.transaction((txn) async {
+    db.transaction((txn) async {
       for (final tv in tvSeries) {
         final movieJson = tv.toJson();
         movieJson['category'] = category;
@@ -282,7 +318,7 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getCacheTvSeries(String category) async {
     final db = await database;
-    final List<Map<String, dynamic>> results = await db!.query(
+    final List<Map<String, dynamic>> results = await db.query(
       _tblCacheTv,
       where: 'category = ?',
       whereArgs: [category],
@@ -293,7 +329,7 @@ class DatabaseHelper {
 
   Future<int> clearCacheTvSeries(String category) async {
     final db = await database;
-    return await db!.delete(
+    return await db.delete(
       _tblCacheTv,
       where: 'category = ?',
       whereArgs: [category],
@@ -303,7 +339,7 @@ class DatabaseHelper {
   // untuk insert TV Series ke watchlist
   Future<int> insertWatchlistTv(TvSeriesTable tvTable) async {
     final db = await database;
-    return await db!.insert(
+    return await db.insert(
       _tblWatchlistTv,
       tvTable.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace, // Data lama diganti baru
@@ -313,7 +349,7 @@ class DatabaseHelper {
   // untuk menghapus TV Series dari watchlist
   Future<int> removeWatchlistTv(TvSeriesTable tvTable) async {
     final db = await database;
-    return await db!.delete(
+    return await db.delete(
       _tblWatchlistTv,
       where: 'id = ?',
       whereArgs: [tvTable.id],
@@ -323,7 +359,7 @@ class DatabaseHelper {
   // untuk mendapatkan TV Series berdasarkan ID
   Future<Map<String, dynamic>?> getTvSeriesById(int id) async {
     final db = await database;
-    final results = await db!.query(
+    final results = await db.query(
       _tblWatchlistTv,
       where: 'id = ?',
       whereArgs: [id],
@@ -339,7 +375,7 @@ class DatabaseHelper {
   // untuk mengambil semua data watchlist TV Series
   Future<List<Map<String, dynamic>>> getWatchlistTvSeries() async {
     final db = await database;
-    final List<Map<String, dynamic>> results = await db!.query(_tblWatchlistTv);
+    final List<Map<String, dynamic>> results = await db.query(_tblWatchlistTv);
     return results;
   }
 }

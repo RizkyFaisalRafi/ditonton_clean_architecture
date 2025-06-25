@@ -164,7 +164,7 @@ Coverage App:
       - TopRatedTvPageTest (SeeMore) (Done)
 
 - Menerapkan SSL Pinning (Security) (Done)
-- Integrasi dengan Firebase Analytics & Crashlytics
+- Integrasi dengan Firebase Analytics & Crashlytics (Done)
 - Modularisasi, Membagi aplikasi menjadi modul setidaknya untuk dua fitur movie & TV series(
   Optional)
 
