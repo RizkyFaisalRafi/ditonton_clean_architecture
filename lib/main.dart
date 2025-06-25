@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:ditonton_clean_architecture/common/constants.dart';
 import 'package:ditonton_clean_architecture/common/utils.dart';
 import 'package:ditonton_clean_architecture/data/datasources/movies/movie_local_data_source.dart';
@@ -51,18 +53,36 @@ import 'package:ditonton_clean_architecture/presentation/provider/movies/up_comi
 import 'package:ditonton_clean_architecture/presentation/provider/movies/watchlist_movie_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/provider/tv_series/tv_search_notifier.dart';
 import 'package:ditonton_clean_architecture/presentation/widgets/custom_drawer.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:ditonton_clean_architecture/injection.dart' as di;
 import 'common/ssl_pinning.dart';
+import 'firebase_options.dart';
 import 'presentation/provider/tv_series/tv_list_notifier.dart';
 import 'presentation/provider/tv_series/watchlist_tv_notifier.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  // Pass all uncaught "fatal" errors from the framework to Crashlytics
+  // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
   await di.init();
+
   runApp(MyApp());
 }
 

@@ -22,13 +22,16 @@ class HomeMoviePage extends StatefulWidget {
   State<HomeMoviePage> createState() => _HomeMoviePageState();
 }
 
-class _HomeMoviePageState extends State<HomeMoviePage> {
+class _HomeMoviePageState extends State<HomeMoviePage> with AutomaticKeepAliveClientMixin<HomeMoviePage>{
   // Deklarasikan semua ScrollController dan RefreshController
   final RefreshController _refreshController = RefreshController();
   late final ScrollController _nowPlayingScrollController;
   late final ScrollController _popularScrollController;
   late final ScrollController _topRatedScrollController;
   late final ScrollController _upcomingScrollController;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -40,9 +43,18 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
     _upcomingScrollController = ScrollController();
     final onScrollC = context.read<MovieListBloc>();
 
-    context.read<MovieListBloc>().add(
-      const MovieListEvent.fetchInitialMovies(),
-    );
+    final movieListBloc = context.read<MovieListBloc>();
+
+    // Hanya fetch data jika state-nya masih initial (belum ada data)
+    // Mencegah BLoC mengambil data dari internet/API jika datanya sudah ada di dalam state BLoC.
+    // Ini adalah jaring pengaman utama yang memastikan data hanya diambil satu kali (kecuali jika di-refresh manual).
+    if (movieListBloc.state is Initial) {
+      movieListBloc.add(const MovieListEvent.fetchInitialMovies());
+    }
+
+    // context.read<MovieListBloc>().add(
+    //   const MovieListEvent.fetchInitialMovies(),
+    // );
 
     // listener untuk setiap controller untuk memicu event 'fetchMore'
     _nowPlayingScrollController.addListener(
@@ -77,6 +89,8 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Movies'),
@@ -89,8 +103,10 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
         ),
         actions: [
           IconButton(
-            onPressed:
-                () => Navigator.pushNamed(context, SearchMoviePage.ROUTE_NAME),
+            onPressed: () {
+              // FirebaseCrashlytics.instance.crash();
+              Navigator.pushNamed(context, SearchMoviePage.ROUTE_NAME);
+            },
             icon: const Icon(Icons.search),
           ),
         ],
@@ -118,7 +134,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
               return switch (state) {
                 Initial() => EmptyStateWidget(
                   message:
-                  "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
+                      "Please Check Your Internet and refresh the page by clicking the 'Retry' button or Scroll the Page up",
                 ),
                 Loaded(
                   nowPlaying: final nowPlaying,

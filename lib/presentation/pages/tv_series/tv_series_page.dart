@@ -29,13 +29,17 @@ class TvSeriesPage extends StatefulWidget {
   State<TvSeriesPage> createState() => _TvSeriesPageState();
 }
 
-class _TvSeriesPageState extends State<TvSeriesPage> {
+class _TvSeriesPageState extends State<TvSeriesPage>
+    with AutomaticKeepAliveClientMixin<TvSeriesPage> {
   // Deklarasikan semua ScrollController dan RefreshController
   final RefreshController _refreshController = RefreshController();
   late final ScrollController _airingTodayScrollController;
   late final ScrollController _onTheAirScrollController;
   late final ScrollController _popularScrollController;
   late final ScrollController _topRatedScrollController;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -47,19 +51,40 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
     _popularScrollController = ScrollController();
     _topRatedScrollController = ScrollController();
 
+    final tvAiringTodayBloc = context.read<AiringTodayTvBloc>();
+    final tvOnTheAirBloc = context.read<onTheAirBloc.OnTheAirTvBloc>();
+    final tvPopularBloc = context.read<popularBloc.PopularTvBloc>();
+    final tvTopRatedBloc = context.read<topRatedBloc.TopRatedTvBloc>();
+
+    // Hanya fetch data jika state-nya masih initial (belum ada data)
+    if (tvAiringTodayBloc.state is Initial) {
+      tvAiringTodayBloc.add(const AiringTodayTvEvent.fetchInitialTvS());
+    }
+    if (tvOnTheAirBloc.state is Initial) {
+      tvOnTheAirBloc.add(
+        const onTheAirBloc.OnTheAirTvEvent.fetchInitialOnTheAir(),
+      );
+    }
+    if (tvPopularBloc.state is Initial) {
+      tvPopularBloc.add(const popularBloc.PopularTvEvent.fetchInitialTvS());
+    }
+    if (tvTopRatedBloc.state is Initial) {
+      tvTopRatedBloc.add(const topRatedBloc.TopRatedTvEvent.fetchInitialTvS());
+    }
+
     /// Fetch data awal BLoC
-    context.read<AiringTodayTvBloc>().add(
-      const AiringTodayTvEvent.fetchInitialTvS(),
-    );
-    context.read<onTheAirBloc.OnTheAirTvBloc>().add(
-      const onTheAirBloc.OnTheAirTvEvent.fetchInitialOnTheAir(),
-    );
-    context.read<popularBloc.PopularTvBloc>().add(
-      const popularBloc.PopularTvEvent.fetchInitialTvS(),
-    );
-    context.read<topRatedBloc.TopRatedTvBloc>().add(
-      const topRatedBloc.TopRatedTvEvent.fetchInitialTvS(),
-    );
+    // context.read<AiringTodayTvBloc>().add(
+    //   const AiringTodayTvEvent.fetchInitialTvS(),
+    // );
+    // context.read<onTheAirBloc.OnTheAirTvBloc>().add(
+    //   const onTheAirBloc.OnTheAirTvEvent.fetchInitialOnTheAir(),
+    // );
+    // context.read<popularBloc.PopularTvBloc>().add(
+    //   const popularBloc.PopularTvEvent.fetchInitialTvS(),
+    // );
+    // context.read<topRatedBloc.TopRatedTvBloc>().add(
+    //   const topRatedBloc.TopRatedTvEvent.fetchInitialTvS(),
+    // );
 
     /// listener untuk infinite scroll Airing Today
     _airingTodayScrollController.addListener(() {
@@ -113,6 +138,8 @@ class _TvSeriesPageState extends State<TvSeriesPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       /// Home Content
       appBar: AppBar(
