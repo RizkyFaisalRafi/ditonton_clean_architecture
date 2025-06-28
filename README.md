@@ -168,6 +168,15 @@ Coverage App:
 - Modularisasi, Membagi aplikasi menjadi modul setidaknya untuk dua fitur movie & TV series(
   Optional)
 
+  - Modul about (Done)
+  
+  - Modul core
+  
+  - Modul movies
+  
+  - Modul tv_series
+
+
 ## Tips Submission Awal
 
 Pastikan untuk memeriksa kembali seluruh hasil testing pada submissionmu sebelum dikirimkan. Karena

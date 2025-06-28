@@ -1,0 +1,16 @@
+const customDrawerRoute = '/custom-drawer'; // CustomDrawer
+const homeMovieRoute = '/home-movie'; // HomeMoviePage
+const popularMovieRoute = '/popular-movie'; // PopularMoviesPage
+const topRatedMovieRoute = '/top-rated-movie'; // TopRatedMoviesPage
+const upComingMovieRoute = '/up-coming-movie'; // UpComingMoviesPage
+const movieDetailRoute = '/detail-movie'; // MovieDetailPage
+const searchMovieRoute = '/search-movie'; // SearchMoviePage
+const watchlistMovieRoute = '/watchlist-movie'; // WatchlistMoviesPage
+const aboutRoute = '/about'; // AboutPage
+const tvSeriesRoute = '/tv-series'; // TvSeriesPage
+const tvSeriesDetailRoute = '/detail-tv-series'; // TvSeriesDetailPage
+const searchTvRoute = '/search-tv'; // SearchTvPage
+const watchlistTvRoute = '/watchlist-tv'; // WatchlistTvPage
+const onTheAirTvRoute = '/on-the-air-tv'; // OnTheAirTvPage
+const popularTvRoute = '/popular-tv'; // PopularTvPage
+const topRatedTvRoute = '/top-rated-tv'; // TopRatedTvPage
