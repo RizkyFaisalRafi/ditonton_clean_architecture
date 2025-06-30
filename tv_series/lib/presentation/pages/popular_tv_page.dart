@@ -79,7 +79,7 @@ class _PopularTvPageState extends State<PopularTvPage>
                 InitialPopularTSeeMore() || LoadingPopularTSeeMore() => Center(
                   child: Lottie.asset(
                     key: Key('loading_popular_tv'),
-                    'assets/image_lottie/loading_bar.json',
+                    loadingBarLottiePath,
                     width: 100,
                     height: 100,
                     fit: BoxFit.fill,
@@ -160,7 +160,7 @@ class _PopularTvPageState extends State<PopularTvPage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Lottie.asset(
-                            'assets/image_lottie/no_connection.json',
+                            noConnectionLottiePath,
                             width: 300,
                             height: 300,
                           ),

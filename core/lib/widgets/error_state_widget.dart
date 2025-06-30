@@ -36,24 +36,23 @@ class ErrorStateWidget extends StatelessWidget {
 
     switch (errorType) {
       case ErrorType.noConnection:
-        asset = 'assets/image_lottie/no_connection.json';
+        asset = noConnectionLottiePath;
         displayMessage = 'No Internet Connection!';
-        // AppLocalizations.of(context)!.noInternetConnection,
         break;
       case ErrorType.noResult:
-        asset = 'assets/image_lottie/no_results_found.json';
+        asset = noResultsFoundLottiePath;
         displayMessage = '$title Search Not Found!';
         break;
       case ErrorType.invalidQuery:
-        asset = 'assets/image_lottie/error.json';
+        asset = errorLottiePath;
         displayMessage = 'Invalid Character $title Search!';
         break;
       case ErrorType.emptyQuery:
-        asset = 'assets/image_lottie/where_query.json';
+        asset = whereQueryLottiePath;
         displayMessage = '$title Search Cannot be empty!';
         break;
       case ErrorType.serverError:
-        asset = 'assets/image_lottie/error.json';
+        asset = errorLottiePath;
         displayMessage = '$title Server Failure!';
         break;
     }
@@ -63,6 +62,7 @@ class ErrorStateWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Lottie.asset(asset, width: 300, height: 300),
+
             Text(displayMessage, style: kSubtitle),
           ],
         ),
@@ -76,10 +76,10 @@ class ErrorStateWidget2 extends StatelessWidget {
   final VoidCallback onRetry;
 
   const ErrorStateWidget2({
-    Key? key,
+    super.key,
     required this.message,
     required this.onRetry,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,9 @@ class ErrorStateWidget2 extends StatelessWidget {
             SizedBox(height: 16),
             ElevatedButton(
               key: Key('elevated_button_ErrorStateWidget2'),
-                onPressed: onRetry, child: Text('Retry')),
+              onPressed: onRetry,
+              child: Text('Retry'),
+            ),
           ],
         ),
       ),
@@ -118,11 +120,7 @@ class EmptyStateWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Lottie.asset(
-            'assets/image_lottie/where_query.json',
-            width: 180,
-            height: 150,
-          ),
+          Lottie.asset(whereQueryLottiePath, width: 180, height: 150),
           Text(
             message,
             style: kSubtitle.copyWith(fontSize: 16, color: Colors.grey[600]),

@@ -67,7 +67,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               ),
               LoadingMovieDetail() => Center(
                 child: Lottie.asset(
-                  'assets/image_lottie/loading_bar.json',
+                  loadingBarLottiePath,
                   width: 150,
                   height: 150,
                 ),

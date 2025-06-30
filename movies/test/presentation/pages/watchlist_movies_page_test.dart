@@ -7,10 +7,6 @@ import 'package:movies/module/movies.dart';
 import '../../dummy_data/dummy_objects_movie.dart';
 import '../../helpers/test_helper_movie.mocks.dart';
 
-// @GenerateNiceMocks([
-//   MockSpec<WatchlistMovieBloc>(),
-//   MockSpec<NavigatorObserver>(),
-// ])
 void main() {
   late MockNavigatorObserver mockObserver;
   // Deklarasikan mock dengan tipe dari file .mocks.dart
@@ -20,6 +16,9 @@ void main() {
   setUp(() {
     mockObserver = MockNavigatorObserver();
     mockWatchlistMovieBloc = MockWatchlistMovieBloc();
+
+    // Memberikan respons null ketika getter 'navigator' dipanggil
+    when(mockObserver.navigator).thenReturn(null);
   });
 
   // Widget helper untuk membungkus halaman (tidak ada perubahan)
@@ -68,9 +67,9 @@ void main() {
     WidgetTester tester,
   ) async {
     // Arrange
-    when(
-      mockWatchlistMovieBloc.state,
-    ).thenReturn(WatchlistMovieState.loadedWatchlistMovie(watchlistMovie: testMovieList));
+    when(mockWatchlistMovieBloc.state).thenReturn(
+      WatchlistMovieState.loadedWatchlistMovie(watchlistMovie: testMovieList),
+    );
     when(mockWatchlistMovieBloc.stream).thenAnswer((_) => Stream.empty());
 
     // Act
@@ -88,9 +87,9 @@ void main() {
     'Page should display EmptyStateWidget when state is Loaded but data is empty',
     (WidgetTester tester) async {
       // Arrange
-      when(
-        mockWatchlistMovieBloc.state,
-      ).thenReturn(const WatchlistMovieState.loadedWatchlistMovie(watchlistMovie: []));
+      when(mockWatchlistMovieBloc.state).thenReturn(
+        const WatchlistMovieState.loadedWatchlistMovie(watchlistMovie: []),
+      );
       when(mockWatchlistMovieBloc.stream).thenAnswer((_) => Stream.empty());
 
       // Act
@@ -131,9 +130,9 @@ void main() {
     WidgetTester tester,
   ) async {
     // Arrange
-    when(
-      mockWatchlistMovieBloc.state,
-    ).thenReturn(WatchlistMovieState.loadedWatchlistMovie(watchlistMovie: testMovieList));
+    when(mockWatchlistMovieBloc.state).thenReturn(
+      WatchlistMovieState.loadedWatchlistMovie(watchlistMovie: testMovieList),
+    );
     when(mockWatchlistMovieBloc.stream).thenAnswer((_) => Stream.empty());
 
     // Act

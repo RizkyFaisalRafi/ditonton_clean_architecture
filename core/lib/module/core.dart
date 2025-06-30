@@ -12,6 +12,7 @@ export 'package:core/styles/colors.dart';
 export 'package:core/styles/text_styles.dart';
 
 // Utils Folder
+export 'package:core/utils/assets_path.dart';
 export 'package:core/utils/encrypt.dart';
 export 'package:core/utils/exception.dart';
 export 'package:core/utils/failure.dart';

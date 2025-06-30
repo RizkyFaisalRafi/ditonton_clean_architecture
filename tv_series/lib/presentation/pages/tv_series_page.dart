@@ -129,9 +129,9 @@ class _TvSeriesPageState extends State<TvSeriesPage>
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () {
-            final customDrawerState =
-                context.findRootAncestorStateOfType<CustomDrawerState>();
-            customDrawerState?.toggle();
+            // final customDrawerState = context.findRootAncestorStateOfType<CustomDrawerState>();
+            // customDrawerState?.toggle();
+            context.read<CustomDrawerNotifier>().toggle();
           },
         ),
         actions: [
@@ -259,7 +259,7 @@ class _TvSeriesPageState extends State<TvSeriesPage>
                         LoadingAtTv() => Center(
                           child: Lottie.asset(
                             key: Key('loading_bar_lottie'),
-                            'assets/image_lottie/loading_bar.json',
+                            loadingBarLottiePath,
                             width: 100,
                             height: 100,
                             fit: BoxFit.fill,
@@ -272,7 +272,7 @@ class _TvSeriesPageState extends State<TvSeriesPage>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Lottie.asset(
-                                      'assets/image_lottie/no_connection.json',
+                                      noConnectionLottiePath,
                                       width: 300,
                                       height: 300,
                                     ),
@@ -330,7 +330,7 @@ class _TvSeriesPageState extends State<TvSeriesPage>
                         LoadingOtaTv() => Center(
                           child: Lottie.asset(
                             key: Key('loading_bar_lottie'),
-                            'assets/image_lottie/loading_bar.json',
+                            loadingBarLottiePath,
                             width: 100,
                             height: 100,
                             fit: BoxFit.fill,
@@ -387,7 +387,7 @@ class _TvSeriesPageState extends State<TvSeriesPage>
                         LoadingPopularTv() => Center(
                           child: Lottie.asset(
                             key: Key('loading_bar_lottie'),
-                            'assets/image_lottie/loading_bar.json',
+                            loadingBarLottiePath,
                             width: 100,
                             height: 100,
                             fit: BoxFit.fill,
@@ -444,7 +444,7 @@ class _TvSeriesPageState extends State<TvSeriesPage>
                         LoadingTrTv() => Center(
                           child: Lottie.asset(
                             key: Key('loading_bar_lottie'),
-                            'assets/image_lottie/loading_bar.json',
+                            loadingBarLottiePath,
                             width: 100,
                             height: 100,
                             fit: BoxFit.fill,

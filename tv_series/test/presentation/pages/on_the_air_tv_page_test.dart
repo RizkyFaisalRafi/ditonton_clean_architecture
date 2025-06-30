@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:core/module/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,9 +6,10 @@ import 'package:lottie/lottie.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:tv_series/module/tv_series.dart';
 import '../../dummy_data/dummy_objects_tv.dart';
 import '../../helpers/test_helper_tv.mocks.dart';
+import 'package:tv_series/module/tv_series.dart';
+import 'package:core/module/core.dart';
 
 // @GenerateMocks([SeeMoreOnTheAirTvBloc])
 void main() {

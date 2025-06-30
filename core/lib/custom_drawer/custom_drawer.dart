@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../utils/assets_path.dart';
 import 'custom_drawer_notifier.dart';
 import 'package:movies/module/movies.dart';
 import 'package:tv_series/module/tv_series.dart';
@@ -42,10 +43,10 @@ class CustomDrawerState extends State<CustomDrawer>
     );
   }
 
-  void toggle() =>
-      _animationController.isDismissed
-          ? _animationController.forward()
-          : _animationController.reverse();
+  // void toggle() =>
+  //     _animationController.isDismissed
+  //         ? _animationController.forward()
+  //         : _animationController.reverse();
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +119,7 @@ class CustomDrawerState extends State<CustomDrawer>
         children: [
           UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/circle-g.png'),
+              backgroundImage: AssetImage('packages/about/assets/circle_g.png'),
               backgroundColor: Colors.grey.shade900,
             ),
             accountName: Text('Ditonton'),

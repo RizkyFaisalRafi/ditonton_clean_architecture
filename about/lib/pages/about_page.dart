@@ -1,5 +1,6 @@
 import 'package:core/module/core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /*
  * Setelah membahas struktur objek Domain dan Data, selanjutnya kita akan masuk ke
@@ -21,9 +22,11 @@ class AboutPage extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () {
-            final customDrawerState =
-                context.findRootAncestorStateOfType<CustomDrawerState>();
-            customDrawerState?.toggle();
+            // final customDrawerState =
+            //     context.findRootAncestorStateOfType<CustomDrawerState>();
+            // customDrawerState?.toggle();
+            context.read<CustomDrawerNotifier>().toggle();
+
           },
         ),
       ),
@@ -35,10 +38,7 @@ class AboutPage extends StatelessWidget {
                 child: Container(
                   color: kPrussianBlue,
                   child: Center(
-                    child: Image.asset(
-                      'assets/images/circle-g.png',
-                      width: 128,
-                    ),
+                    child: Image.asset('packages/about/assets/circle_g.png', width: 128),
                   ),
                 ),
               ),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:tv_series/module/tv_series.dart';
 import '../../module/movies.dart';
 
 class UpComingMoviesPage extends StatefulWidget {
@@ -85,7 +84,7 @@ class _UpComingMoviesPageState extends State<UpComingMoviesPage>
                 LoadingUpComingMSeeMore() => Center(
                   child: Lottie.asset(
                     key: Key('loading_up_coming_movie'),
-                    'assets/image_lottie/loading_bar.json',
+                    loadingBarLottiePath,
                     width: 100,
                     height: 100,
                     fit: BoxFit.fill,
@@ -166,7 +165,7 @@ class _UpComingMoviesPageState extends State<UpComingMoviesPage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Lottie.asset(
-                            'assets/image_lottie/no_connection.json',
+                            noConnectionLottiePath,
                             width: 300,
                             height: 300,
                           ),

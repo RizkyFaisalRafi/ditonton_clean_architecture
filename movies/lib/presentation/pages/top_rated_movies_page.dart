@@ -4,7 +4,6 @@ import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../module/movies.dart';
 import 'package:core/module/core.dart';
-import 'package:tv_series/module/tv_series.dart';
 
 class TopRatedMoviesPage extends StatefulWidget {
   const TopRatedMoviesPage({super.key});
@@ -86,7 +85,7 @@ class _TopRatedMoviesPageState extends State<TopRatedMoviesPage>
                 LoadingTopRatedMSeeMore() => Center(
                   child: Lottie.asset(
                     key: Key('loading_top_rated_movie'),
-                    'assets/image_lottie/loading_bar.json',
+                    loadingBarLottiePath,
                     width: 100,
                     height: 100,
                     fit: BoxFit.fill,
@@ -167,7 +166,7 @@ class _TopRatedMoviesPageState extends State<TopRatedMoviesPage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Lottie.asset(
-                            'assets/image_lottie/no_connection.json',
+                            noConnectionLottiePath,
                             width: 300,
                             height: 300,
                           ),

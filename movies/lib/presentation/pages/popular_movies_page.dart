@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:movies/module/movies.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:tv_series/module/tv_series.dart';
 
 class PopularMoviesPage extends StatefulWidget {
   const PopularMoviesPage({super.key});
@@ -78,7 +77,7 @@ class _PopularMoviesPageState extends State<PopularMoviesPage>
                 InitialPopularMSeeMore() || LoadingPopularMSeeMore() => Center(
                   child: Lottie.asset(
                     key: Key('loading_popular_movie'),
-                    'assets/image_lottie/loading_bar.json',
+                    loadingBarLottiePath,
                     width: 100,
                     height: 100,
                     fit: BoxFit.fill,
@@ -159,7 +158,7 @@ class _PopularMoviesPageState extends State<PopularMoviesPage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Lottie.asset(
-                            'assets/image_lottie/no_connection.json',
+                            noConnectionLottiePath,
                             width: 300,
                             height: 300,
                           ),

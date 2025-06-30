@@ -14,7 +14,7 @@ class CustomDrawerNotifier extends ChangeNotifier {
     } else {
       animationController.reverse();
     }
-    notifyListeners();
+    // notifyListeners();
   }
 
   void changePage(

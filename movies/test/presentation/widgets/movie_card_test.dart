@@ -2,35 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/module/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:mocktail_image_network/mocktail_image_network.dart';
+import 'package:mockito/mockito.dart';
 import 'package:movies/module/movies.dart';
-
-// Mock untuk NavigatorObserver agar bisa memverifikasi navigasi
-class MockNavigatorObserver extends Mock implements NavigatorObserver {}
-
-// Fake Route untuk registerFallbackValue
-class FakeRoute extends Fake implements Route<dynamic> {}
+import '../../dummy_data/dummy_objects_movie.dart';
+import '../../helpers/test_helper_movie.mocks.dart';
 
 void main() {
-  // Definisikan Movie dummy untuk testing
-  final tMovie = Movie(
-    adult: false,
-    backdropPath: '/muth4OYamXf41G2evdrLEg8d3om.jpg',
-    genreIds: const [14, 28],
-    id: 557,
-    originalTitle: 'Spider-Man',
-    overview:
-        'After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.',
-    popularity: 60.441,
-    posterPath: '/rweIrveL43TaxUN0akQEaAXL6x0.jpg',
-    releaseDate: '2002-05-01',
-    title: 'Spider-Man',
-    video: false,
-    voteAverage: 7.2,
-    voteCount: 13507,
-  );
-
   final tMovieWithNulls = Movie(
     adult: false,
     backdropPath: null,
@@ -52,32 +29,26 @@ void main() {
 
   late MockNavigatorObserver mockNavigatorObserver;
 
-  setUpAll(() {
-    registerFallbackValue(FakeRoute());
-  });
-
   setUp(() {
     mockNavigatorObserver = MockNavigatorObserver();
+    when(mockNavigatorObserver.navigator).thenReturn(null);
   });
 
   // Helper widget yang lebih robust, menyertakan Scaffold
-  Widget makeMoreRobustTestableWidget(Widget body) {
+  Widget makeTestableWidget(Widget body) {
     return MaterialApp(
-      // Pastikan kHeading6 adalah TextStyle yang valid dan diimpor dari constants.dart
-      // Jika kHeading6 menyebabkan masalah, coba hapus sementara bagian theme ini untuk diagnosis.
-      theme: ThemeData(
-        textTheme: TextTheme(
-          titleLarge: kHeading6, // kHeading6 harus berupa TextStyle
-        ),
-      ),
-      home: Scaffold(
-        // Menambahkan Scaffold di sini
-        body: body,
-      ),
+      theme: ThemeData(textTheme: TextTheme(titleLarge: kHeading6)),
+      home: Scaffold(body: body),
       navigatorObservers: [mockNavigatorObserver],
-      routes: {
-        movieDetailRoute:
-            (context) => const Scaffold(body: Text('Movie Detail Page')),
+      // Gunakan onGenerateRoute untuk menangani argumen dengan lebih baik
+      onGenerateRoute: (settings) {
+        if (settings.name == movieDetailRoute) {
+          return MaterialPageRoute(
+            builder: (_) => const Scaffold(body: Text('Movie Detail Page')),
+            settings: settings,
+          );
+        }
+        return null;
       },
     );
   }
@@ -87,12 +58,12 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      await tester.pumpWidget(makeMoreRobustTestableWidget(MovieCard(tMovie)));
+      await tester.pumpWidget(makeTestableWidget(MovieCard(testMovie)));
 
       // Act & Assert
-      // Pastikan teks judul sesuai dengan tMovie.title
+      // Pastikan teks judul sesuai
       expect(find.text('Spider-Man'), findsOneWidget);
-      expect(find.text(tMovie.overview!), findsOneWidget);
+      expect(find.text(testMovie.overview!), findsOneWidget);
       expect(find.byType(CachedNetworkImage), findsOneWidget);
     });
 
@@ -100,9 +71,7 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      await tester.pumpWidget(
-        makeMoreRobustTestableWidget(MovieCard(tMovieWithNulls)),
-      );
+      await tester.pumpWidget(makeTestableWidget(MovieCard(tMovieWithNulls)));
 
       // Act & Assert
       expect(find.text('-'), findsNWidgets(2));
@@ -112,9 +81,7 @@ void main() {
       'should display CachedNetworkImage with correct imageUrl and show placeholder initially',
       (WidgetTester tester) async {
         // Arrange
-        await tester.pumpWidget(
-          makeMoreRobustTestableWidget(MovieCard(tMovie)),
-        );
+        await tester.pumpWidget(makeTestableWidget(MovieCard(testMovie)));
 
         // Act
         final cachedNetworkImageFinder = find.byType(CachedNetworkImage);
@@ -126,11 +93,9 @@ void main() {
         // Assert
         expect(
           cachedNetworkImage.imageUrl,
-          '$baseImageUrl${tMovie.posterPath}',
+          '$baseImageUrl${testMovie.posterPath}',
         );
 
-        // Placeholder harus muncul saat gambar sedang dimuat (atau sebelum gagal)
-        // Mungkin perlu tester.pump() jika placeholder tidak langsung muncul
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
       },
     );
@@ -138,9 +103,8 @@ void main() {
     testWidgets(
       'should display error icon when posterPath is null or image fails to load',
       (WidgetTester tester) async {
-        await mockNetworkImages(() async {
           await tester.pumpWidget(
-            makeMoreRobustTestableWidget(MovieCard(tMovieWithNulls)),
+            makeTestableWidget(MovieCard(tMovieWithNulls)),
           );
 
           await tester.pumpAndSettle(); // Increased duration slightly
@@ -148,7 +112,6 @@ void main() {
           // Assert that the error icon is present and the circular progress indicator is gone.
           expect(find.byIcon(Icons.error), findsOneWidget);
           expect(find.byType(CircularProgressIndicator), findsNothing);
-        });
       },
     );
 
@@ -156,31 +119,34 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      await tester.pumpWidget(makeMoreRobustTestableWidget(MovieCard(tMovie)));
+      await tester.pumpWidget(makeTestableWidget(MovieCard(testMovie)));
+
+      // Bersihkan interaksi setelah render awal, sebelum aksi tap
+      clearInteractions(mockNavigatorObserver);
 
       // Act
       await tester.tap(find.byType(InkWell));
       await tester.pumpAndSettle();
 
       // Assert
-      final captured =
-          verify(
-            () => mockNavigatorObserver.didPush(captureAny(), any()),
-          ).captured;
+      // captureAny akan menangkap argumen yang dikirim saat didPush dipanggil
+      final verification = verify(
+        mockNavigatorObserver.didPush(captureAny, any),
+      );
 
-      // Cek ada setidaknya 2 navigasi
-      expect(captured.length, greaterThanOrEqualTo(2));
+      // Verifikasi bahwa navigasi terjadi setidaknya sekali
+      verification.called(1);
 
-      final pushedRoute = captured.last as Route; // Navigasi Terakhir
-      expect(pushedRoute.settings.name, movieDetailRoute);
-      expect(pushedRoute.settings.arguments, tMovie.id);
+      final capturedRoute = verification.captured.first as Route;
+      expect(capturedRoute.settings.name, movieDetailRoute);
+      expect(capturedRoute.settings.arguments, testMovie.id);
     });
 
     testWidgets('should have correct margin for the main container', (
       WidgetTester tester,
     ) async {
       // Arrange
-      await tester.pumpWidget(makeMoreRobustTestableWidget(MovieCard(tMovie)));
+      await tester.pumpWidget(makeTestableWidget(MovieCard(testMovie)));
 
       // Act
 
@@ -203,11 +169,11 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      await tester.pumpWidget(makeMoreRobustTestableWidget(MovieCard(tMovie)));
+      await tester.pumpWidget(makeTestableWidget(MovieCard(testMovie)));
 
       // Act
-      final titleText = tester.widget<Text>(find.text(tMovie.title!));
-      final overviewText = tester.widget<Text>(find.text(tMovie.overview!));
+      final titleText = tester.widget<Text>(find.text(testMovie.title!));
+      final overviewText = tester.widget<Text>(find.text(testMovie.overview!));
 
       // Assert
       expect(titleText.maxLines, 1);

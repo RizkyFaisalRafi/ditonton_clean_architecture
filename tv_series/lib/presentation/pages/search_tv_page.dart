@@ -39,7 +39,7 @@ class SearchTvPage extends StatelessWidget {
                     child: Center(
                       child: Lottie.asset(
                         key: Key('loading_state_lottie'),
-                        'assets/image_lottie/loading_elephant.json',
+                        loadingElephantLottiePath,
                         width: 300,
                         height: 300,
                         fit: BoxFit.fill,
@@ -86,7 +86,7 @@ class SearchTvPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Lottie.asset(
-                              'assets/image_lottie/animation_movie.json',
+                              animationMovieLottiePath,
                               width: 300,
                               height: 300,
                               fit: BoxFit.fill,

@@ -7,7 +7,6 @@ import 'package:tv_series/module/tv_series.dart';
 import '../../dummy_data/dummy_objects_tv.dart';
 import '../../helpers/test_helper_tv.mocks.dart';
 
-// @GenerateNiceMocks([MockSpec<WatchlistTvBloc>(), MockSpec<NavigatorObserver>()])
 void main() {
   late MockNavigatorObserver mockObserver;
   late MockWatchlistTvBloc mockWatchlistTvBloc;
@@ -15,6 +14,7 @@ void main() {
   setUp(() {
     mockObserver = MockNavigatorObserver();
     mockWatchlistTvBloc = MockWatchlistTvBloc();
+    when(mockObserver.navigator).thenReturn(null);
   });
 
   // Widget helper untuk membungkus halaman (tidak ada perubahan)

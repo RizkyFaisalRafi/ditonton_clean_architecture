@@ -167,15 +167,10 @@ Coverage App:
 - Integrasi dengan Firebase Analytics & Crashlytics (Done)
 - Modularisasi, Membagi aplikasi menjadi modul setidaknya untuk dua fitur movie & TV series(
   Optional)
-
-  - Modul about (Done)
-  
+  - Modul about
   - Modul core
-  
   - Modul movies
-  
   - Modul tv_series
-
 
 ## Tips Submission Awal
 

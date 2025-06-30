@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:core/module/core.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
@@ -27,9 +28,7 @@ class SslPinning {
         try {
           // ambil dari file 'certificates/the_movie_db_certificate.pem'
           certFileBytes =
-              (await rootBundle.load(
-                'certificates/the_movie_db_certificate.pem',
-              )).buffer.asInt8List();
+              (await rootBundle.load(certificatesSSLPath)).buffer.asInt8List();
           log(
             'Successfully access and load the_movie_db_certificate.pem file!',
           );

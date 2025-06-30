@@ -1,5 +1,6 @@
 import 'package:core/module/core.dart';
-import 'package:tv_series/module/tv_series.dart';
+
+// import 'package:tv_series/module/tv_series.dart';
 import '../../module/movies.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,7 +41,7 @@ class SearchMoviePage extends StatelessWidget {
                     child: Center(
                       child: Lottie.asset(
                         key: Key('loading_state_lottie'),
-                        'assets/image_lottie/loading_elephant.json',
+                        loadingElephantLottiePath,
                         width: 300,
                         height: 300,
                         fit: BoxFit.fill,
@@ -87,7 +88,7 @@ class SearchMoviePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Lottie.asset(
-                              'assets/image_lottie/animation_movie.json',
+                              animationMovieLottiePath,
                               width: 300,
                               height: 300,
                               fit: BoxFit.fill,

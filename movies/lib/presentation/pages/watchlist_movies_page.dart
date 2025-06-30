@@ -45,9 +45,10 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () {
-            final customDrawerState =
-                context.findRootAncestorStateOfType<CustomDrawerState>();
-            customDrawerState?.toggle();
+            // final customDrawerState =
+            //     context.findRootAncestorStateOfType<CustomDrawerState>();
+            // customDrawerState?.toggle();
+            context.read<CustomDrawerNotifier>().toggle();
           },
         ),
       ),
@@ -60,7 +61,7 @@ class _WatchlistMoviesPageState extends State<WatchlistMoviesPage>
               InitialWatchlistMovie() || LoadingWatchlistMovie() => Center(
                 child: Lottie.asset(
                   key: Key('loading_watchlist_movie'),
-                  'assets/image_lottie/loading_bar.json',
+                  loadingBarLottiePath,
                   width: 100,
                   height: 100,
                   fit: BoxFit.fill,

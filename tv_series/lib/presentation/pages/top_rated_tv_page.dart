@@ -81,7 +81,7 @@ class _TopRatedTvPageState extends State<TopRatedTvPage>
                 LoadingTopRatedTSeeMore() => Center(
                   child: Lottie.asset(
                     key: Key('loading_top_rated_tv'),
-                    'assets/image_lottie/loading_bar.json',
+                    loadingBarLottiePath,
                     width: 100,
                     height: 100,
                     fit: BoxFit.fill,
@@ -162,7 +162,7 @@ class _TopRatedTvPageState extends State<TopRatedTvPage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Lottie.asset(
-                            'assets/image_lottie/no_connection.json',
+                            noConnectionLottiePath,
                             width: 300,
                             height: 300,
                           ),

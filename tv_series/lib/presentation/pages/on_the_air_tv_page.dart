@@ -75,10 +75,10 @@ class _OnTheAirTvPageState extends State<OnTheAirTvPage>
           child: BlocBuilder<SeeMoreOnTheAirTvBloc, SeeMoreOnTheAirTvState>(
             builder: (context, state) {
               return switch (state) {
-                InitialOnTheAirTSeeMore() || LoadedOnTheAirTSeeMore() => Center(
+                InitialOnTheAirTSeeMore() || LoadingOnTheAirTSeeMore() => Center(
                   child: Lottie.asset(
                     key: Key('loading_on_the_air_tv'),
-                    'assets/image_lottie/loading_bar.json',
+                    loadingBarLottiePath,
                     width: 100,
                     height: 100,
                     fit: BoxFit.fill,
@@ -159,7 +159,7 @@ class _OnTheAirTvPageState extends State<OnTheAirTvPage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Lottie.asset(
-                            'assets/image_lottie/no_connection.json',
+                            noConnectionLottiePath,
                             width: 300,
                             height: 300,
                           ),

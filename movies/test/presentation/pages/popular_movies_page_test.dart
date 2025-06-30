@@ -11,26 +11,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../dummy_data/dummy_objects_movie.dart';
 import '../../helpers/test_helper_movie.mocks.dart';
 
-// @GenerateMocks([PopularMoviesNotifier, SeeMorePopularMovieBloc])
 void main() {
   // late MockPopularMoviesNotifier mockNotifier;
   late MockSeeMorePopularMovieBloc mockSeeMorePopularMovieBloc;
 
   setUp(() {
-    // mockNotifier = MockPopularMoviesNotifier();
-    // Setup properties
-    // when(mockNotifier.refreshC).thenReturn(RefreshController());
-    // when(mockNotifier.scrollController).thenReturn(ScrollController());
-
     mockSeeMorePopularMovieBloc = MockSeeMorePopularMovieBloc();
   });
-
-  // Widget _makeTestableWidget(Widget body) {
-  //   return ChangeNotifierProvider<PopularMoviesNotifier>.value(
-  //     value: mockNotifier,
-  //     child: MaterialApp(home: body),
-  //   );
-  // }
 
   Widget _makeTestableWidget(Widget body) {
     return BlocProvider<SeeMorePopularMovieBloc>.value(

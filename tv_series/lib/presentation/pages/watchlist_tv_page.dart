@@ -38,7 +38,7 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
     context.read<WatchlistTvBloc>().add(
       const WatchlistTvEvent.fetchInitialWatchlistTv(),
     );
-    super.didPopNext(); // Sebaiknya panggil super juga
+    super.didPopNext();
   }
 
   @override
@@ -50,9 +50,10 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
           icon: Icon(Icons.menu),
           onPressed: () {
             // drawerKey.currentState?.toggle();
-            final customDrawerState =
-                context.findRootAncestorStateOfType<CustomDrawerState>();
-            customDrawerState?.toggle();
+            // final customDrawerState = context.findRootAncestorStateOfType<CustomDrawerState>();
+            // customDrawerState?.toggle();
+
+            context.read<CustomDrawerNotifier>().toggle();
           },
         ),
       ),
@@ -65,7 +66,7 @@ class WatchlistTvPageState extends State<WatchlistTvPage> with RouteAware {
               InitialWatchlistTv() || LoadingWatchlistTv() => Center(
                 child: Lottie.asset(
                   key: Key('loading_watchlist_tv'),
-                  'assets/image_lottie/loading_bar.json',
+                  loadingBarLottiePath,
                   width: 100,
                   height: 100,
                   fit: BoxFit.fill,

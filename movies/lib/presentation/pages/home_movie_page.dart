@@ -91,7 +91,8 @@ class _HomeMoviePageState extends State<HomeMoviePage>
           icon: const Icon(Icons.menu),
           onPressed: () {
             // Logika untuk membuka drawer
-            context.findRootAncestorStateOfType<CustomDrawerState>()?.toggle();
+            // context.findRootAncestorStateOfType<CustomDrawerState>()?.toggle();
+            context.read<CustomDrawerNotifier>().toggle();
           },
         ),
         actions: [
@@ -209,7 +210,7 @@ class _HomeMoviePageState extends State<HomeMoviePage>
                 LoadingMovieList() => Center(
                   child: Lottie.asset(
                     key: Key('loading_bar_lottie'),
-                    'assets/image_lottie/loading_bar.json',
+                    loadingBarLottiePath,
                     width: 150,
                     height: 150,
                   ),
@@ -222,7 +223,7 @@ class _HomeMoviePageState extends State<HomeMoviePage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Lottie.asset(
-                            'assets/image_lottie/no_connection.json',
+                            noConnectionLottiePath,
                             width: 300,
                             height: 300,
                           ),
