@@ -2,10 +2,26 @@
 
 # Github: https://github.com/RizkyFaisalRafi/ditonton_clean_architecture/tree/Second-Submission
 
-# [![Codemagic build status](https://api.codemagic.io/apps/6379c4a01063f44db75df13a/6379c4a01063f44db75df139/status_badge.svg)](https://codemagic.io/apps/6379c4a01063f44db75df13a/6379c4a01063f44db75df139/latest_build)
+# [![Codemagic build status](https://api.codemagic.io/apps/6848c13e5b1935263639ea9e/6890d0c89cf5f5a9b02b97bc/status_badge.svg)](https://codemagic.io/apps/6848c13e5b1935263639ea9e/6890d0c89cf5f5a9b02b97bc/latest_build)
 
-Repository ini merupakan project awal dan akhir submission kelas Flutter Expert Dicoding Indonesia
-2025.
+https://codemagic.io/app/6848c13e5b1935263639ea9e/build/6890d0c89cf5f5a9b02b97bc
+
+# Screenshoot Coverage berdasarkan Modularization (tv_series, movies, core, about)
+<img width="1852" height="821" alt="Cuplikan layar 2025-08-04 232607" src="https://github.com/user-attachments/assets/d44151ed-1389-4c1d-b934-a8be4602d2ab" />
+<img width="1849" height="666" alt="Cuplikan layar 2025-08-04 232633" src="https://github.com/user-attachments/assets/098422b3-2903-479e-850c-4c77c7b43229" />
+<img width="1849" height="452" alt="Cuplikan layar 2025-08-04 232657" src="https://github.com/user-attachments/assets/02c0757e-72be-41de-b17f-50416cbd060d" />
+<img width="1858" height="338" alt="Cuplikan layar 2025-08-04 232717" src="https://github.com/user-attachments/assets/c2e4a9a2-4cac-410b-8609-89cc4a5085e7" />
+
+# Screenshoot CodeMagic:
+<img width="1915" height="970" alt="Cuplikan layar 2025-08-04 233100" src="https://github.com/user-attachments/assets/d6cec819-f128-4cbb-ae6b-8f383f4d292b" />
+
+# Screenshoot Firebase
+<img width="1920" height="1080" alt="Screenshot (147)" src="https://github.com/user-attachments/assets/a448a315-3396-4066-b95f-14f1cafbbb4a" />
+<img width="1920" height="1080" alt="Screenshot (148)" src="https://github.com/user-attachments/assets/3d02f7d5-685a-4056-8850-2d3e6330a4b8" />
+<img width="1920" height="1080" alt="Screenshot (149)" src="https://github.com/user-attachments/assets/a34919dd-c491-4029-9aeb-fcb225b0bcd7" />
+
+
+Repository ini merupakan project awal dan akhir submission kelas Flutter Expert Dicoding Indonesia 2025.
 
 ---
 Negative Case:
