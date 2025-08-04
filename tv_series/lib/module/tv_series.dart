@@ -1,4 +1,4 @@
-library tv_series;
+library;
 
 /// Data Folder
 // data/datasources

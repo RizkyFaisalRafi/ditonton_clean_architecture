@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../module/movies.dart';
 
-/**
+/*
  * Logic Holders berperan untuk memproses input yang diberikan oleh pengguna melalui UI
  * lalu menyediakan data yang akan ditampilkan pada UI. Jika Anda familiar dengan pattern
  * Model-View-ViewModel (MVVM), bagian ini memiliki fungsi yang sama seperti ViewModel.
@@ -30,7 +30,7 @@ class MovieDetailNotifier extends ChangeNotifier {
 
   MovieDetail? get movie => _movie;
 
-  RequestState _movieState = RequestState.Empty;
+  RequestState _movieState = RequestState.empty;
 
   RequestState get movieState => _movieState;
 
@@ -38,7 +38,7 @@ class MovieDetailNotifier extends ChangeNotifier {
 
   List<Movie> get movieRecommendations => _movieRecommendations;
 
-  RequestState _recommendationState = RequestState.Empty;
+  RequestState _recommendationState = RequestState.empty;
 
   RequestState get recommendationState => _recommendationState;
 
@@ -51,31 +51,31 @@ class MovieDetailNotifier extends ChangeNotifier {
   bool get isAddedToWatchlist => _isAddedtoWatchlist;
 
   Future<void> fetchMovieDetail(int id) async {
-    _movieState = RequestState.Loading;
+    _movieState = RequestState.loading;
     notifyListeners();
     final detailResult = await getMovieDetail.execute(id);
     final recommendationResult = await getMovieRecommendations.execute(id);
     detailResult.fold(
       (failure) {
-        _movieState = RequestState.Error;
+        _movieState = RequestState.error;
         _message = failure.message;
         notifyListeners();
       },
       (movie) {
-        _recommendationState = RequestState.Loading;
+        _recommendationState = RequestState.loading;
         _movie = movie;
         notifyListeners();
         recommendationResult.fold(
           (failure) {
-            _recommendationState = RequestState.Error;
+            _recommendationState = RequestState.error;
             _message = failure.message;
           },
           (movies) {
-            _recommendationState = RequestState.Loaded;
+            _recommendationState = RequestState.loaded;
             _movieRecommendations = movies;
           },
         );
-        _movieState = RequestState.Loaded;
+        _movieState = RequestState.loaded;
         notifyListeners();
       },
     );

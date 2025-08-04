@@ -42,10 +42,10 @@ void main() {
 
   group('Initial State', () {
     test('should have initial empty state', () {
-      expect(provider.airingTodayState, RequestState.Empty);
-      expect(provider.onTheAirState, RequestState.Empty);
-      expect(provider.popularTvState, RequestState.Empty);
-      expect(provider.topRatedTvState, RequestState.Empty);
+      expect(provider.airingTodayState, RequestState.empty);
+      expect(provider.onTheAirState, RequestState.empty);
+      expect(provider.popularTvState, RequestState.empty);
+      expect(provider.topRatedTvState, RequestState.empty);
       expect(provider.airingTodayTvSeries, isEmpty);
       expect(provider.onTheAirTvSeries, isEmpty);
       expect(provider.popularTvSeries, isEmpty);
@@ -64,7 +64,7 @@ void main() {
       await provider.fetchTvSeriesAiringToday();
 
       // assert
-      expect(provider.airingTodayState, RequestState.Loaded);
+      expect(provider.airingTodayState, RequestState.loaded);
       expect(provider.airingTodayTvSeries, tTvSeries);
       expect(listenerCallCount, 1);
     });
@@ -92,7 +92,7 @@ void main() {
       await provider.fetchTvSeriesAiringToday();
 
       // assert
-      expect(provider.airingTodayState, RequestState.Error);
+      expect(provider.airingTodayState, RequestState.error);
       expect(provider.message, 'Error');
       expect(listenerCallCount, 1);
     });
@@ -109,7 +109,7 @@ void main() {
       await provider.fetchTvSeriesOnTheAir();
 
       // assert
-      expect(provider.onTheAirState, RequestState.Loaded);
+      expect(provider.onTheAirState, RequestState.loaded);
       expect(provider.onTheAirTvSeries, tTvSeries);
       expect(listenerCallCount, 1);
     });
@@ -124,7 +124,7 @@ void main() {
       await provider.fetchTvSeriesOnTheAir();
 
       // assert
-      expect(provider.onTheAirState, RequestState.Error);
+      expect(provider.onTheAirState, RequestState.error);
       expect(provider.message, 'Error');
       expect(listenerCallCount, 1);
     });
@@ -141,7 +141,7 @@ void main() {
       await provider.fetchTvSeriesPopularTv();
 
       // assert
-      expect(provider.popularTvState, RequestState.Loaded);
+      expect(provider.popularTvState, RequestState.loaded);
       expect(provider.popularTvSeries, tTvSeries);
       expect(listenerCallCount, 1);
     });
@@ -156,7 +156,7 @@ void main() {
       await provider.fetchTvSeriesPopularTv();
 
       // assert
-      expect(provider.popularTvState, RequestState.Error);
+      expect(provider.popularTvState, RequestState.error);
       expect(provider.message, 'Error');
       expect(listenerCallCount, 1);
     });
@@ -173,7 +173,7 @@ void main() {
       await provider.fetchTvSeriesTopRatedTv();
 
       // assert
-      expect(provider.topRatedTvState, RequestState.Loaded);
+      expect(provider.topRatedTvState, RequestState.loaded);
       expect(provider.topRatedTvSeries, tTvSeries);
       expect(listenerCallCount, 1);
     });
@@ -188,7 +188,7 @@ void main() {
       await provider.fetchTvSeriesTopRatedTv();
 
       // assert
-      expect(provider.topRatedTvState, RequestState.Error);
+      expect(provider.topRatedTvState, RequestState.error);
       expect(provider.message, 'Error');
       expect(listenerCallCount, 1);
     });
@@ -214,10 +214,10 @@ void main() {
       await provider.onRefresh();
 
       // assert
-      expect(provider.airingTodayState, RequestState.Loaded);
-      expect(provider.onTheAirState, RequestState.Loaded);
-      expect(provider.popularTvState, RequestState.Loaded);
-      expect(provider.topRatedTvState, RequestState.Loaded);
+      expect(provider.airingTodayState, RequestState.loaded);
+      expect(provider.onTheAirState, RequestState.loaded);
+      expect(provider.popularTvState, RequestState.loaded);
+      expect(provider.topRatedTvState, RequestState.loaded);
       expect(provider.refreshC.isRefresh, false);
     });
 
@@ -231,7 +231,7 @@ void main() {
       await provider.onRefresh();
 
       // assert
-      expect(provider.airingTodayState, RequestState.Error);
+      expect(provider.airingTodayState, RequestState.error);
       expect(provider.refreshC.isRefresh, false);
     });
   });

@@ -29,13 +29,13 @@ void main() {
   group('Query Validation', () {
     test('should reject empty query', () async {
       await provider.fetchTvSearch('');
-      expect(provider.state, RequestState.Error);
+      expect(provider.state, RequestState.error);
       expect(provider.message, 'Query cannot be empty');
     });
 
     test('should reject special characters', () async {
       await provider.fetchTvSearch('query@123');
-      expect(provider.state, RequestState.Error);
+      expect(provider.state, RequestState.error);
     });
   });
 
@@ -58,7 +58,7 @@ void main() {
       // act
       provider.fetchTvSearch(tQuery);
       // assert
-      expect(provider.state, RequestState.Loading);
+      expect(provider.state, RequestState.loading);
       expect(listenerCallCount, 1);
     });
 
@@ -72,7 +72,7 @@ void main() {
         // act
         await provider.fetchTvSearch(tQuery);
         // assert
-        expect(provider.state, RequestState.Loaded);
+        expect(provider.state, RequestState.loaded);
         expect(provider.searchResult, testTvList);
         expect(listenerCallCount, 2);
       },
@@ -85,7 +85,7 @@ void main() {
 
       await provider.fetchTvSearch(tQuery);
 
-      expect(provider.state, RequestState.Loaded);
+      expect(provider.state, RequestState.loaded);
       expect(provider.searchResult, isEmpty);
     });
 
@@ -97,7 +97,7 @@ void main() {
       // act
       await provider.fetchTvSearch(tQuery);
       // assert
-      expect(provider.state, RequestState.Error);
+      expect(provider.state, RequestState.error);
       expect(provider.message, 'Server Failure');
       expect(listenerCallCount, 2);
     });

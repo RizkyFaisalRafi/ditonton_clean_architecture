@@ -21,7 +21,7 @@ void main() {
 
   // Helper function untuk membuat widget yang bisa ditest.
   // Ini membungkus SearchTvPage dengan BlocProvider dan MaterialApp.
-  Widget _makeTestableWidget(Widget body) {
+  Widget makeTestableWidget(Widget body) {
     return BlocProvider<TvSearchBloc>.value(
       value: mockTvSearchBloc,
       child: MaterialApp(home: Scaffold(body: body)),
@@ -44,7 +44,7 @@ void main() {
       arrangeBlocState(SearchEmpty());
 
       // Act: Render widget SearchTvPage
-      await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
+      await tester.pumpWidget(makeTestableWidget(const SearchTvPage()));
 
       // Assert: Verifikasi bahwa TextField, Lottie, dan teks awal ada di layar
       expect(find.byType(TextField), findsOneWidget);
@@ -60,7 +60,7 @@ void main() {
       arrangeBlocState(SearchLoading());
 
       // Act: Render widget
-      await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
+      await tester.pumpWidget(makeTestableWidget(const SearchTvPage()));
 
       // Assert: Verifikasi bahwa Lottie loading ditampilkan
       final lottieFinder = find.byType(Lottie);
@@ -76,7 +76,7 @@ void main() {
       arrangeBlocState(SearchHasData(testTvList));
 
       // Act: Render widget
-      await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
+      await tester.pumpWidget(makeTestableWidget(const SearchTvPage()));
 
       // Assert: Verifikasi bahwa ListView dan TvCard ditampilkan
       expect(find.byType(ListView), findsOneWidget);
@@ -95,7 +95,7 @@ void main() {
       arrangeBlocState(SearchHasData(const []));
 
       // Act: Render widget
-      await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
+      await tester.pumpWidget(makeTestableWidget(const SearchTvPage()));
 
       // Assert: Verifikasi bahwa ErrorStateWidget dengan pesan 'No results found' ditampilkan
       expect(find.byType(ErrorStateWidget), findsOneWidget);
@@ -112,7 +112,7 @@ void main() {
       arrangeBlocState(const SearchError(errorMessage));
 
       // Act: Render widget
-      await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
+      await tester.pumpWidget(makeTestableWidget(const SearchTvPage()));
 
       // Assert: Verifikasi bahwa ErrorStateWidget dengan pesan error yang sesuai ditampilkan
       expect(find.byType(ErrorStateWidget), findsOneWidget);
@@ -128,7 +128,7 @@ void main() {
         arrangeBlocState(SearchEmpty());
 
         // Act: Render widget, masukkan teks ke TextField
-        await tester.pumpWidget(_makeTestableWidget(const SearchTvPage()));
+        await tester.pumpWidget(makeTestableWidget(const SearchTvPage()));
 
         // Cari TextField dan masukkan teks
         final textField = find.byType(TextField);

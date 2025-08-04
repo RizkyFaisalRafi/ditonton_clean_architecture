@@ -66,7 +66,7 @@ class TvDetailBloc extends Bloc<TvDetailEvent, TvDetailState> {
               TvDetailState.loadedTvDetail(
                 tvDetail: tvDetail,
                 tvRecommendations: [],
-                recommendationState: RequestState.Error,
+                recommendationState: RequestState.error,
                 isAddedToWatchlist: isAdded,
               ),
             );
@@ -76,7 +76,7 @@ class TvDetailBloc extends Bloc<TvDetailEvent, TvDetailState> {
               TvDetailState.loadedTvDetail(
                 tvDetail: tvDetail,
                 tvRecommendations: recommendations,
-                recommendationState: RequestState.Loaded,
+                recommendationState: RequestState.loaded,
                 isAddedToWatchlist: isAdded,
               ),
             );

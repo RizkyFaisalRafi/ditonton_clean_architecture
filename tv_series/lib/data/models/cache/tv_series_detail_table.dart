@@ -16,7 +16,7 @@ class TvSeriesDetailTable extends Equatable {
   final String? lastEpisodeToAir;
   final String? nextEpisodeToAir;
 
-  TvSeriesDetailTable({
+  const TvSeriesDetailTable({
     required this.id,
     required this.name,
     required this.posterPath,
@@ -76,40 +76,40 @@ class TvSeriesDetailTable extends Equatable {
         lastEpisodeToAir: jsonEncode(
           tvDetail.lastEpisodeToAir != null
               ? {
-                'id': tvDetail.lastEpisodeToAir!.id,
-                'name': tvDetail.lastEpisodeToAir!.name,
-                'overview': tvDetail.lastEpisodeToAir!.overview,
-                'vote_average': tvDetail.lastEpisodeToAir!.voteAverage,
-                'vote_count': tvDetail.lastEpisodeToAir!.voteCount,
-                'air_date': tvDetail.lastEpisodeToAir!.airDate,
-                'episode_number': tvDetail.lastEpisodeToAir!.episodeNumber,
-                'episode_type': tvDetail.lastEpisodeToAir!.episodeType,
-                'production_code': tvDetail.lastEpisodeToAir!.productionCode,
-                'runtime': tvDetail.lastEpisodeToAir!.runtime,
-                'season_number': tvDetail.lastEpisodeToAir!.seasonNumber,
-                'show_id': tvDetail.lastEpisodeToAir!.showId,
-                'still_path': tvDetail.lastEpisodeToAir!.stillPath,
-              }
+                  'id': tvDetail.lastEpisodeToAir!.id,
+                  'name': tvDetail.lastEpisodeToAir!.name,
+                  'overview': tvDetail.lastEpisodeToAir!.overview,
+                  'vote_average': tvDetail.lastEpisodeToAir!.voteAverage,
+                  'vote_count': tvDetail.lastEpisodeToAir!.voteCount,
+                  'air_date': tvDetail.lastEpisodeToAir!.airDate,
+                  'episode_number': tvDetail.lastEpisodeToAir!.episodeNumber,
+                  'episode_type': tvDetail.lastEpisodeToAir!.episodeType,
+                  'production_code': tvDetail.lastEpisodeToAir!.productionCode,
+                  'runtime': tvDetail.lastEpisodeToAir!.runtime,
+                  'season_number': tvDetail.lastEpisodeToAir!.seasonNumber,
+                  'show_id': tvDetail.lastEpisodeToAir!.showId,
+                  'still_path': tvDetail.lastEpisodeToAir!.stillPath,
+                }
               : null,
         ),
 
         nextEpisodeToAir: jsonEncode(
           tvDetail.nextEpisodeToAir != null
               ? {
-                'id': tvDetail.nextEpisodeToAir!.id,
-                'name': tvDetail.nextEpisodeToAir!.name,
-                'overview': tvDetail.nextEpisodeToAir!.overview,
-                'vote_average': tvDetail.nextEpisodeToAir!.voteAverage,
-                'vote_count': tvDetail.nextEpisodeToAir!.voteCount,
-                'air_date': tvDetail.nextEpisodeToAir!.airDate,
-                'episode_number': tvDetail.nextEpisodeToAir!.episodeNumber,
-                'episode_type': tvDetail.nextEpisodeToAir!.episodeType,
-                'production_code': tvDetail.nextEpisodeToAir!.productionCode,
-                'runtime': tvDetail.nextEpisodeToAir!.runtime,
-                'season_number': tvDetail.nextEpisodeToAir!.seasonNumber,
-                'show_id': tvDetail.nextEpisodeToAir!.showId,
-                'still_path': tvDetail.nextEpisodeToAir!.stillPath,
-              }
+                  'id': tvDetail.nextEpisodeToAir!.id,
+                  'name': tvDetail.nextEpisodeToAir!.name,
+                  'overview': tvDetail.nextEpisodeToAir!.overview,
+                  'vote_average': tvDetail.nextEpisodeToAir!.voteAverage,
+                  'vote_count': tvDetail.nextEpisodeToAir!.voteCount,
+                  'air_date': tvDetail.nextEpisodeToAir!.airDate,
+                  'episode_number': tvDetail.nextEpisodeToAir!.episodeNumber,
+                  'episode_type': tvDetail.nextEpisodeToAir!.episodeType,
+                  'production_code': tvDetail.nextEpisodeToAir!.productionCode,
+                  'runtime': tvDetail.nextEpisodeToAir!.runtime,
+                  'season_number': tvDetail.nextEpisodeToAir!.seasonNumber,
+                  'show_id': tvDetail.nextEpisodeToAir!.showId,
+                  'still_path': tvDetail.nextEpisodeToAir!.stillPath,
+                }
               : null,
         ),
       );
@@ -172,39 +172,39 @@ class TvSeriesDetailTable extends Equatable {
         lastEpisodeToAir: jsonEncode(
           detail.lastEpisodeToAir != null
               ? {
-                'id': detail.lastEpisodeToAir?.id,
-                'name': detail.lastEpisodeToAir?.name,
-                'overview': detail.lastEpisodeToAir?.overview,
-                'vote_average': detail.lastEpisodeToAir?.voteAverage,
-                'vote_count': detail.lastEpisodeToAir?.voteCount,
-                'air_date': detail.lastEpisodeToAir?.airDate,
-                'episode_number': detail.lastEpisodeToAir?.episodeNumber,
-                'episode_type': detail.lastEpisodeToAir?.episodeType,
-                'production_code': detail.lastEpisodeToAir?.productionCode,
-                'runtime': detail.lastEpisodeToAir?.runtime,
-                'season_number': detail.lastEpisodeToAir?.seasonNumber,
-                'show_id': detail.lastEpisodeToAir?.showId,
-                'still_path': detail.lastEpisodeToAir?.stillPath,
-              }
+                  'id': detail.lastEpisodeToAir?.id,
+                  'name': detail.lastEpisodeToAir?.name,
+                  'overview': detail.lastEpisodeToAir?.overview,
+                  'vote_average': detail.lastEpisodeToAir?.voteAverage,
+                  'vote_count': detail.lastEpisodeToAir?.voteCount,
+                  'air_date': detail.lastEpisodeToAir?.airDate,
+                  'episode_number': detail.lastEpisodeToAir?.episodeNumber,
+                  'episode_type': detail.lastEpisodeToAir?.episodeType,
+                  'production_code': detail.lastEpisodeToAir?.productionCode,
+                  'runtime': detail.lastEpisodeToAir?.runtime,
+                  'season_number': detail.lastEpisodeToAir?.seasonNumber,
+                  'show_id': detail.lastEpisodeToAir?.showId,
+                  'still_path': detail.lastEpisodeToAir?.stillPath,
+                }
               : null,
         ),
         nextEpisodeToAir: jsonEncode(
           detail.nextEpisodeToAir != null
               ? {
-                'id': detail.nextEpisodeToAir?.id,
-                'name': detail.nextEpisodeToAir?.name,
-                'overview': detail.nextEpisodeToAir?.overview,
-                'vote_average': detail.nextEpisodeToAir?.voteAverage,
-                'vote_count': detail.nextEpisodeToAir?.voteCount,
-                'air_date': detail.nextEpisodeToAir?.airDate,
-                'episode_number': detail.nextEpisodeToAir?.episodeNumber,
-                'episode_type': detail.nextEpisodeToAir?.episodeType,
-                'production_code': detail.nextEpisodeToAir?.productionCode,
-                'runtime': detail.nextEpisodeToAir?.runtime,
-                'season_number': detail.nextEpisodeToAir?.seasonNumber,
-                'show_id': detail.nextEpisodeToAir?.showId,
-                'still_path': detail.nextEpisodeToAir?.stillPath,
-              }
+                  'id': detail.nextEpisodeToAir?.id,
+                  'name': detail.nextEpisodeToAir?.name,
+                  'overview': detail.nextEpisodeToAir?.overview,
+                  'vote_average': detail.nextEpisodeToAir?.voteAverage,
+                  'vote_count': detail.nextEpisodeToAir?.voteCount,
+                  'air_date': detail.nextEpisodeToAir?.airDate,
+                  'episode_number': detail.nextEpisodeToAir?.episodeNumber,
+                  'episode_type': detail.nextEpisodeToAir?.episodeType,
+                  'production_code': detail.nextEpisodeToAir?.productionCode,
+                  'runtime': detail.nextEpisodeToAir?.runtime,
+                  'season_number': detail.nextEpisodeToAir?.seasonNumber,
+                  'show_id': detail.nextEpisodeToAir?.showId,
+                  'still_path': detail.nextEpisodeToAir?.stillPath,
+                }
               : null,
         ),
       );
@@ -231,88 +231,83 @@ class TvSeriesDetailTable extends Equatable {
     backdropPath: backdropPath,
     overview: overview,
     voteAverage: voteAverage,
-    genres:
-        genres != null
-            ? (jsonDecode(genres!) as List)
-                .map((g) => Genre(id: g['id'], name: g['name']))
-                .toList()
-            : [],
+    genres: genres != null
+        ? (jsonDecode(genres!) as List)
+              .map((g) => Genre(id: g['id'], name: g['name']))
+              .toList()
+        : [],
     popularity: popularity,
-    createdBy:
-        createdBy != null
-            ? (jsonDecode(createdBy!) as List)
-                .map(
-                  (g) => CreatedBy(
-                    id: g['id'],
-                    creditId: g['credit_id'],
-                    name: g['name'],
-                    originalName: g['original_name'],
-                    gender: g['gender'],
-                    profilePath: g['profile_path'],
-                  ),
-                )
-                .toList()
-            : [],
-    seasons:
-        seasons != null
-            ? (jsonDecode(seasons!) as List)
-                .map(
-                  (g) => Season(
-                    airDate: g['air_date'],
-                    episodeCount: g['episode_count'],
-                    id: g['id'],
-                    name: g['name'],
-                    overview: g['overview'],
-                    posterPath: g['poster_path'],
-                    seasonNumber: g['season_number'],
-                    voteAverage: g['vote_average'],
-                  ),
-                )
-                .toList()
-            : [],
-    lastEpisodeToAir:
-        lastEpisodeToAir != null
-            ? () {
-              final g = jsonDecode(lastEpisodeToAir!);
-              return EpisodeToAir(
-                id: g['id'],
-                name: g['name'],
-                overview: g['overview'],
-                voteAverage: g['vote_average'],
-                voteCount: g['vote_count'],
-                airDate: g['air_date'],
-                episodeNumber: g['episode_number'],
-                episodeType: g['episode_type'],
-                productionCode: g['production_code'],
-                runtime: g['runtime'],
-                seasonNumber: g['season_number'],
-                showId: g['show_id'],
-                stillPath: g['still_path'],
-              );
-            }()
-            : null,
+    createdBy: createdBy != null
+        ? (jsonDecode(createdBy!) as List)
+              .map(
+                (g) => CreatedBy(
+                  id: g['id'],
+                  creditId: g['credit_id'],
+                  name: g['name'],
+                  originalName: g['original_name'],
+                  gender: g['gender'],
+                  profilePath: g['profile_path'],
+                ),
+              )
+              .toList()
+        : [],
+    seasons: seasons != null
+        ? (jsonDecode(seasons!) as List)
+              .map(
+                (g) => Season(
+                  airDate: g['air_date'],
+                  episodeCount: g['episode_count'],
+                  id: g['id'],
+                  name: g['name'],
+                  overview: g['overview'],
+                  posterPath: g['poster_path'],
+                  seasonNumber: g['season_number'],
+                  voteAverage: g['vote_average'],
+                ),
+              )
+              .toList()
+        : [],
+    lastEpisodeToAir: lastEpisodeToAir != null
+        ? () {
+            final g = jsonDecode(lastEpisodeToAir!);
+            return EpisodeToAir(
+              id: g['id'],
+              name: g['name'],
+              overview: g['overview'],
+              voteAverage: g['vote_average'],
+              voteCount: g['vote_count'],
+              airDate: g['air_date'],
+              episodeNumber: g['episode_number'],
+              episodeType: g['episode_type'],
+              productionCode: g['production_code'],
+              runtime: g['runtime'],
+              seasonNumber: g['season_number'],
+              showId: g['show_id'],
+              stillPath: g['still_path'],
+            );
+          }()
+        : null,
 
-    nextEpisodeToAir:
-        nextEpisodeToAir != null
-            ? () {
-              final g = jsonDecode(nextEpisodeToAir!);
-              return EpisodeToAir(
-                id: g['id'],
-                name: g['name'],
-                overview: g['overview'],
-                voteAverage: g['vote_average'],
-                voteCount: g['vote_count'],
-                airDate: g['air_date'],
-                episodeNumber: g['episode_number'],
-                episodeType: g['episode_type'],
-                productionCode: g['production_code'],
-                runtime: g['runtime'],
-                seasonNumber: g['season_number'],
-                showId: g['show_id'],
-                stillPath: g['still_path'],
-              );
-            }()
-            : null,
+    nextEpisodeToAir: nextEpisodeToAir != null
+        ? () {
+            final g = jsonDecode(nextEpisodeToAir!);
+            return EpisodeToAir(
+              id: g['id'],
+              name: g['name'],
+              overview: g['overview'],
+              voteAverage: g['vote_average'],
+              voteCount: g['vote_count'],
+              airDate: g['air_date'],
+              episodeNumber: g['episode_number'],
+              episodeType: g['episode_type'],
+              productionCode: g['production_code'],
+              runtime: g['runtime'],
+              seasonNumber: g['season_number'],
+              showId: g['show_id'],
+              stillPath: g['still_path'],
+            );
+          }()
+        : null,
   );
 
   @override

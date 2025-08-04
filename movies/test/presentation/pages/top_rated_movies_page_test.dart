@@ -28,14 +28,14 @@ void main() {
   //   );
   // }
 
-  Widget _makeTestableWidget(Widget body) {
+  Widget makeTestableWidget(Widget body) {
     return BlocProvider<SeeMoreTopRatedMovieBloc>.value(
       value: mockSeeMoreTopRatedMovieBloc,
       child: MaterialApp(home: body),
     );
   }
 
-  void _arrangeBlocState(SeeMoreTopRatedMovieState state) {
+  void arrangeBlocState(SeeMoreTopRatedMovieState state) {
     when(mockSeeMoreTopRatedMovieBloc.state).thenReturn(state);
     when(
       mockSeeMoreTopRatedMovieBloc.stream,
@@ -47,12 +47,12 @@ void main() {
     'Page should display Lottie loading indicator when state is Loading',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         const SeeMoreTopRatedMovieState.loadingTopRatedMSeeMore(),
       );
 
       // Act
-      await tester.pumpWidget(_makeTestableWidget(TopRatedMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(TopRatedMoviesPage()));
 
       // Assert
       final progressBarFinder = find.byKey(Key('loading_top_rated_movie'));
@@ -67,7 +67,7 @@ void main() {
     WidgetTester tester,
   ) async {
     // Arrange
-    _arrangeBlocState(
+    arrangeBlocState(
       SeeMoreTopRatedMovieState.loadedTopRatedMSeeMore(
         topRated: testMovieList,
         topRatedPage: 1,
@@ -77,7 +77,7 @@ void main() {
 
     // Act
     await mockNetworkImages(() async {
-      await tester.pumpWidget(_makeTestableWidget(TopRatedMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(TopRatedMoviesPage()));
       await tester.pump();
       // PERBAIKAN: Pump lagi dengan durasi untuk menyelesaikan timer dari pull_to_refresh.
       // Log error menunjukkan timer 600ms, jadi 1 detik sudah aman.
@@ -99,7 +99,7 @@ void main() {
     'Page should display EmptyStateWidget when state is Loaded but data is empty',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         const SeeMoreTopRatedMovieState.loadedTopRatedMSeeMore(
           topRated: [],
           topRatedPage: 1,
@@ -108,7 +108,7 @@ void main() {
       );
 
       // Act
-      await tester.pumpWidget(_makeTestableWidget(TopRatedMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(TopRatedMoviesPage()));
 
       // Assert
       final emptyMessageFinder = find.text(
@@ -123,14 +123,14 @@ void main() {
     'Page should display No Internet error message when state is Error with network message',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         SeeMoreTopRatedMovieState.errorTopRatedMSeeMore(
           'Failed to connect to the network',
         ),
       );
 
       // Act
-      await tester.pumpWidget(_makeTestableWidget(TopRatedMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(TopRatedMoviesPage()));
       await tester.pump(); // pump again to ensure the state propagates
 
       // Assert
@@ -146,12 +146,12 @@ void main() {
     WidgetTester tester,
   ) async {
     // Arrange
-    _arrangeBlocState(
+    arrangeBlocState(
       const SeeMoreTopRatedMovieState.errorTopRatedMSeeMore('Server Error'),
     );
 
     // Act
-    await tester.pumpWidget(_makeTestableWidget(TopRatedMoviesPage()));
+    await tester.pumpWidget(makeTestableWidget(TopRatedMoviesPage()));
     await tester.pump(); // pump again to ensure the state propagates
 
     // Assert
@@ -164,11 +164,11 @@ void main() {
     'Page should dispatch refreshMovies event when retry button is pressed on error state',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         const SeeMoreTopRatedMovieState.errorTopRatedMSeeMore('Server Failure'),
       );
 
-      await tester.pumpWidget(_makeTestableWidget(TopRatedMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(TopRatedMoviesPage()));
 
       // Ensure the error widget is visible
       final errorMessageFinder = find.text('Server Failure');

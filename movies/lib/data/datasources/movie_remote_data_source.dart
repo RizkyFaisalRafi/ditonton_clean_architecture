@@ -20,8 +20,8 @@ abstract class MovieRemoteDataSource {
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
-  static const API_KEY = 'api_key=2174d146bb9c0eab47529b2e77d6b526';
-  static const BASE_URL = 'https://api.themoviedb.org/3';
+  static const apiKey = 'api_key=2174d146bb9c0eab47529b2e77d6b526';
+  static const baseUrl = 'https://api.themoviedb.org/3';
 
   final http.Client client;
 
@@ -33,7 +33,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/movie/now_playing?$API_KEY&page=$page'),
+        Uri.parse('$baseUrl/movie/now_playing?$apiKey&page=$page'),
       );
 
       if (response.statusCode == 200) {
@@ -48,7 +48,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
   @override
   Future<MovieDetailResponse> getMovieDetail(int id) async {
-    final url = Uri.parse('$BASE_URL/movie/$id?$API_KEY');
+    final url = Uri.parse('$baseUrl/movie/$id?$apiKey');
 
     try {
       final response = await client.get(url);
@@ -67,7 +67,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   Future<List<MovieModel>> getMovieRecommendations(int id) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/movie/$id/recommendations?$API_KEY'),
+        Uri.parse('$baseUrl/movie/$id/recommendations?$apiKey'),
       );
 
       if (response.statusCode == 200) {
@@ -86,7 +86,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/movie/popular?$API_KEY&page=$page'),
+        Uri.parse('$baseUrl/movie/popular?$apiKey&page=$page'),
       );
 
       if (response.statusCode == 200) {
@@ -105,7 +105,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/movie/top_rated?$API_KEY&page=$page'),
+        Uri.parse('$baseUrl/movie/top_rated?$apiKey&page=$page'),
       );
 
       if (response.statusCode == 200) {
@@ -124,7 +124,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/movie/upcoming?$API_KEY&page=$page'),
+        Uri.parse('$baseUrl/movie/upcoming?$apiKey&page=$page'),
       );
 
       if (response.statusCode == 200) {
@@ -141,7 +141,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   Future<List<MovieModel>> searchMovies(String query) async {
     try {
       final response = await client.get(
-        Uri.parse('$BASE_URL/search/movie?$API_KEY&query=$query'),
+        Uri.parse('$baseUrl/search/movie?$apiKey&query=$query'),
       );
 
       if (response.statusCode == 200) {

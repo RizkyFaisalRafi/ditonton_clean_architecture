@@ -4,7 +4,8 @@
 
 [//]: # (# [![Codemagic build status]&#40;https://api.codemagic.io/apps/6379c4a01063f44db75df13a/6379c4a01063f44db75df139/status_badge.svg&#41;]&#40;https://codemagic.io/apps/6379c4a01063f44db75df13a/6379c4a01063f44db75df139/latest_build&#41;)
 
-Repository ini merupakan project awal dan akhir submission kelas Flutter Expert Dicoding Indonesia 2025.
+Repository ini merupakan project awal dan akhir submission kelas Flutter Expert Dicoding Indonesia
+2025.
 
 ---
 Negative Case:
@@ -66,8 +67,8 @@ Coverage App:
 - dart run build_runner build --delete-conflicting-outputs
 - flutter test --machine > tests.output
 - flutter test --coverage
-- genhtml coverage/lcov.info -o coverage/html --legend -t "Clean Architecture Submission Awal
-  Expert (Faisal)" --function-coverage
+- genhtml coverage/lcov.info -o coverage/html --legend -t "Clean Architecture Submission Expert (
+  Faisal)" --function-coverage
 
 ## Ketentuaan Submission Awal
 
@@ -89,88 +90,88 @@ Coverage App:
 
 - Menerapkan Continuous Integration (Done)
 - Menggunakan Library BLoC (Done)
-  - lib
-    - presentation/bloc
-      - Movie List (Merge) (Done)
-      - Movie Search (Done)
-      - TvSeries List (Done)
-        - AiringTodayTv
-        - OnTheAirTv
-        - PopularTv
-        - TopRatedTv
-      - Tv Search (Done)
-      - MovieDetail (Done)
-      - TvDetail (Done)
-      - SeeMorePopularMovieBloc (Done)
-      - SeeMoreTopRatedMovieBloc (Done)
-      - SeeMoreUpComingMovieBloc (Done)
-      - WatchlistMovieBloc (Done)
-      - WatchlistTvBloc (Done)
-      - SeeMoreOnTheAirTvBloc (Done)
-      - SeeMorePopularTvBloc (Done)
-      - SeeMoreTopRatedTvBloc (Done)
-      
-    - presentation/pages
-      - HomeMoviePage (Done)
-      - SearchMoviePage (Done)
-      - SearchTvPage (Done)
-      - TvSeriesPage (Done)
-      - MovieDetailPage (Done)
-      - TvSeriesDetailPage (Done)
-      - PopularMoviesPage (SeeMore) (Done)
-      - TopRatedMoviesPage (SeeMore) (Done)
-      - UpComingMoviesPage (SeeMore) (Done)
-      - WatchlistMoviesPage (Done)
-      - WatchlistTvPage (Done)
-      - OnTheAirTvPage (SeeMore) (Done)
-      - PopularTvPage (SeeMore) (Done)
-      - TopRatedTvPage (SeeMore) (Done)
-    
-  - Testing
-    - presentation/bloc
-      - MovieListBloc (Merge) (Done)
-      - MovieSearchBloc (Done)
-      - TvSeries List (Done)
-        - AiringTodayTvBlocTest
-        - OnTheAirTvBlocTest
-        - PopularTvBlocTest
-        - TopRatedTvBlocTest
-      - TvSearchBlocTest (Done)
-      - MovieDetailBlocTest (Done)
-      - TvDetailBlocTest (Done)
-      - SeeMorePopularMovieBlocTest (Done)
-      - SeeMoreTopRatedMovieBlocTest (Done)
-      - SeeMoreUpComingMovieBlocTest (Done)
-      - WatchlistMovieBlocTest (Done)
-      - WatchlistTvBlocTest (Done)
-      - SeeMoreOnTheAirTvBlocTest (SeeMore) (Done)
-      - SeeMorePopularTvBlocTest (SeeMore) (Done)
-      - SeeMoreTopRatedTvBlocTest (Done)
-      
-    - presentation/pages
-      - HomeMoviePageTest (Done)
-      - SearchMoviePageTest (Done)
-      - SearchTvPageTest (Done)
-      - TvSeriesPageTest (Done)
-      - MovieDetailPageTest (Done)
-      - TvSeriesDetailPage (Done)
-      - PopularMoviesPageTest (SeeMore) (Done)
-      - TopRatedMoviesPageTest (SeeMore) (Done)
-      - UpComingMoviesPageTest (SeeMore) (Done)
-      - WatchlistMoviesPageTest (Done)
-      - WatchlistTvPageTest (Done)
-      - OnTheAirTvPageTest (SeeMore) (Done)
-      - PopularTvPageTest (SeeMore) (Done)
-      - TopRatedTvPageTest (SeeMore) (Done)
+    - lib
+        - presentation/bloc
+            - Movie List (Merge) (Done)
+            - Movie Search (Done)
+            - TvSeries List (Done)
+                - AiringTodayTv
+                - OnTheAirTv
+                - PopularTv
+                - TopRatedTv
+            - Tv Search (Done)
+            - MovieDetail (Done)
+            - TvDetail (Done)
+            - SeeMorePopularMovieBloc (Done)
+            - SeeMoreTopRatedMovieBloc (Done)
+            - SeeMoreUpComingMovieBloc (Done)
+            - WatchlistMovieBloc (Done)
+            - WatchlistTvBloc (Done)
+            - SeeMoreOnTheAirTvBloc (Done)
+            - SeeMorePopularTvBloc (Done)
+            - SeeMoreTopRatedTvBloc (Done)
+
+        - presentation/pages
+            - HomeMoviePage (Done)
+            - SearchMoviePage (Done)
+            - SearchTvPage (Done)
+            - TvSeriesPage (Done)
+            - MovieDetailPage (Done)
+            - TvSeriesDetailPage (Done)
+            - PopularMoviesPage (SeeMore) (Done)
+            - TopRatedMoviesPage (SeeMore) (Done)
+            - UpComingMoviesPage (SeeMore) (Done)
+            - WatchlistMoviesPage (Done)
+            - WatchlistTvPage (Done)
+            - OnTheAirTvPage (SeeMore) (Done)
+            - PopularTvPage (SeeMore) (Done)
+            - TopRatedTvPage (SeeMore) (Done)
+
+    - Testing
+        - presentation/bloc
+            - MovieListBloc (Merge) (Done)
+            - MovieSearchBloc (Done)
+            - TvSeries List (Done)
+                - AiringTodayTvBlocTest
+                - OnTheAirTvBlocTest
+                - PopularTvBlocTest
+                - TopRatedTvBlocTest
+            - TvSearchBlocTest (Done)
+            - MovieDetailBlocTest (Done)
+            - TvDetailBlocTest (Done)
+            - SeeMorePopularMovieBlocTest (Done)
+            - SeeMoreTopRatedMovieBlocTest (Done)
+            - SeeMoreUpComingMovieBlocTest (Done)
+            - WatchlistMovieBlocTest (Done)
+            - WatchlistTvBlocTest (Done)
+            - SeeMoreOnTheAirTvBlocTest (SeeMore) (Done)
+            - SeeMorePopularTvBlocTest (SeeMore) (Done)
+            - SeeMoreTopRatedTvBlocTest (Done)
+
+        - presentation/pages
+            - HomeMoviePageTest (Done)
+            - SearchMoviePageTest (Done)
+            - SearchTvPageTest (Done)
+            - TvSeriesPageTest (Done)
+            - MovieDetailPageTest (Done)
+            - TvSeriesDetailPage (Done)
+            - PopularMoviesPageTest (SeeMore) (Done)
+            - TopRatedMoviesPageTest (SeeMore) (Done)
+            - UpComingMoviesPageTest (SeeMore) (Done)
+            - WatchlistMoviesPageTest (Done)
+            - WatchlistTvPageTest (Done)
+            - OnTheAirTvPageTest (SeeMore) (Done)
+            - PopularTvPageTest (SeeMore) (Done)
+            - TopRatedTvPageTest (SeeMore) (Done)
 
 - Menerapkan SSL Pinning (Security) (Done)
 - Integrasi dengan Firebase Analytics & Crashlytics (Done)
 - Modularisasi, Membagi aplikasi menjadi modul setidaknya untuk dua fitur movie & TV series(
   Optional)
-  - Modul about
-  - Modul core
-  - Modul movies
-  - Modul tv_series
+    - Modul about
+    - Modul core
+    - Modul movies
+    - Modul tv_series
 
 ## Tips Submission Awal
 

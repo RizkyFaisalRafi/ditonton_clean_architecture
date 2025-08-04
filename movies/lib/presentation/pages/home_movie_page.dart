@@ -117,10 +117,9 @@ class _HomeMoviePageState extends State<HomeMoviePage>
         },
         child: SmartRefresher(
           controller: _refreshController,
-          onRefresh:
-              () => context.read<MovieListBloc>().add(
-                const MovieListEvent.refreshMovies(),
-              ),
+          onRefresh: () => context.read<MovieListBloc>().add(
+            const MovieListEvent.refreshMovies(),
+          ),
           header: const WaterDropHeader(),
           child: BlocBuilder<MovieListBloc, MovieListState>(
             builder: (context, state) {
@@ -160,11 +159,8 @@ class _HomeMoviePageState extends State<HomeMoviePage>
                         // --- Popular Section ---
                         _buildSubHeading(
                           title: 'Popular',
-                          onTap:
-                              () => Navigator.pushNamed(
-                                context,
-                                popularMovieRoute,
-                              ),
+                          onTap: () =>
+                              Navigator.pushNamed(context, popularMovieRoute),
                         ),
                         MovieList(
                           key: const Key('popular_list'),
@@ -176,11 +172,8 @@ class _HomeMoviePageState extends State<HomeMoviePage>
                         // --- Top Rated Section ---
                         _buildSubHeading(
                           title: 'Top Rated',
-                          onTap:
-                              () => Navigator.pushNamed(
-                                context,
-                                topRatedMovieRoute,
-                              ),
+                          onTap: () =>
+                              Navigator.pushNamed(context, topRatedMovieRoute),
                         ),
                         MovieList(
                           key: const Key('top_rated_list'),
@@ -192,11 +185,8 @@ class _HomeMoviePageState extends State<HomeMoviePage>
                         // --- Upcoming Section ---
                         _buildSubHeading(
                           title: 'Upcoming', // Konsistensi nama
-                          onTap:
-                              () => Navigator.pushNamed(
-                                context,
-                                upComingMovieRoute,
-                              ),
+                          onTap: () =>
+                              Navigator.pushNamed(context, upComingMovieRoute),
                         ),
                         MovieList(
                           key: const Key('up_coming_list'),
@@ -234,10 +224,9 @@ class _HomeMoviePageState extends State<HomeMoviePage>
                   }
                   return ErrorStateWidget2(
                     message: message,
-                    onRetry:
-                        () => context.read<MovieListBloc>().add(
-                          const MovieListEvent.refreshMovies(),
-                        ),
+                    onRetry: () => context.read<MovieListBloc>().add(
+                      const MovieListEvent.refreshMovies(),
+                    ),
                   );
                 }(),
                 // Tambahkan case default untuk memastikan switch bersifat exhaustive
@@ -338,9 +327,8 @@ class MovieList extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(16)),
                 child: CachedNetworkImage(
                   imageUrl: '$baseImageUrl${movie.posterPath}',
-                  placeholder:
-                      (context, url) =>
-                          Center(child: CircularProgressIndicator()),
+                  placeholder: (context, url) =>
+                      Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),

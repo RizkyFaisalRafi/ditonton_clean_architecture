@@ -8,7 +8,7 @@ import 'package:core/module/core.dart';
 class TopRatedTvNotifier extends ChangeNotifier {
   final GetTopRatedTv getTopRatedTv;
 
-  RequestState _state = RequestState.Empty;
+  RequestState _state = RequestState.empty;
 
   RequestState get state => _state;
 
@@ -68,7 +68,7 @@ class TopRatedTvNotifier extends ChangeNotifier {
 
   /// Load awal saat widget pertama kali dibuka
   Future<void> loadTvSeries() async {
-    _state = RequestState.Loading;
+    _state = RequestState.loading;
     log('Load Tv Series State: $_state');
 
     notifyListeners();
@@ -76,7 +76,7 @@ class TopRatedTvNotifier extends ChangeNotifier {
       await onRefresh(); // Pakai fungsi refresh
     } catch (e) {
       // Jika gagal, tampilkan error
-      _state = RequestState.Error;
+      _state = RequestState.error;
       _message = e.toString();
       notifyListeners();
     }
@@ -109,12 +109,12 @@ class TopRatedTvNotifier extends ChangeNotifier {
     final result = await getTopRatedTv.execute(_topRatedPage);
     result.fold(
           (failure) {
-        _state = RequestState.Error;
+        _state = RequestState.error;
         _message = failure.message;
         notifyListeners();
       },
           (tvSeriesData) {
-        _state = RequestState.Loaded;
+        _state = RequestState.loaded;
         log('fetchTvSeriesTopRated State: $_state');
 
         if (tvSeriesData.isNotEmpty) {

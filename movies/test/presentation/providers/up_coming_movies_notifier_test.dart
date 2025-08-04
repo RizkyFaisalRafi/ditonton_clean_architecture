@@ -47,7 +47,7 @@ void main() {
     // Act
     await notifier.fetchUpComingMovies();
     // Assert
-    expect(notifier.state, RequestState.Loaded);
+    expect(notifier.state, RequestState.loaded);
     expect(notifier.movies, tMovieList);
     expect(listenerCallCount, 1);
   });
@@ -60,7 +60,7 @@ void main() {
     // Act
     await notifier.fetchUpComingMovies();
     // Assert
-    expect(notifier.state, RequestState.Error);
+    expect(notifier.state, RequestState.error);
     expect(notifier.message, 'Server Failure');
     expect(listenerCallCount, 1);
   });

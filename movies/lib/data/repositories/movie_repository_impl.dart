@@ -9,7 +9,7 @@ import '../../domain/repositories/movie_repository.dart';
 import '../datasources/movie_remote_data_source.dart';
 import '../models/cache/movie_detail_table.dart';
 
-/**
+/*
  * Repository pada data layer merupakan implementasi dari kontrak yang dibuat sebelumnya.
  * Repository akan bertugas untuk menyediakan data yang dibutuhkan oleh use case.
  * Bagian ini juga merupakan facade yang menggabungkan data dari sumber data (data source)
@@ -46,7 +46,7 @@ class MovieRepositoryImpl implements MovieRepository {
   //   }
   // }
 
-  /**
+  /*
    * Penanganan untuk SocketException sudah tidak diperlukan lagi karena akan
    * terdeteksi pada NetworkInfo. Kita bisa menghapusnya untuk mengurangi duplikasi.
    */
@@ -237,7 +237,7 @@ class MovieRepositoryImpl implements MovieRepository {
     } on DatabaseException catch (e) {
       return Left(DatabaseFailure(e.message));
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

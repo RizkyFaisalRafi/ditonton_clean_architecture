@@ -5,7 +5,7 @@ import 'package:core/module/core.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
-/**
+/*
  * Tujuan utama dari kelas SslPinning ini adalah untuk membuat sebuah "konektor internet"
  * (sebuah http.Client) yang SUPER AMAN. Konektor ini hanya akan mau berbicara
  * dengan server api.themoviedb.org yang ASLI dan menolak semua koneksi dari

@@ -94,7 +94,7 @@ class TvSeriesLocalDatasourceImpl implements TvSeriesLocalDatasource {
   Future<List<TvSeriesTable>> getCachedAiringTodayTv() async {
     try {
       final result = await databaseHelper.getCacheTvSeries('airing today');
-      if (result.length > 0) {
+      if (result.isNotEmpty) {
         return result.map((data) => TvSeriesTable.fromMap(data)).toList();
       } else {
         throw CacheException("Can't get the data :(");
@@ -122,7 +122,7 @@ class TvSeriesLocalDatasourceImpl implements TvSeriesLocalDatasource {
   Future<List<TvSeriesTable>> getCachedOnTheAirTv() async {
     try {
       final result = await databaseHelper.getCacheTvSeries('on the air');
-      if (result.length > 0) {
+      if (result.isNotEmpty) {
         return result.map((data) => TvSeriesTable.fromMap(data)).toList();
       } else {
         throw CacheException("Can't get the data :(");
@@ -150,7 +150,7 @@ class TvSeriesLocalDatasourceImpl implements TvSeriesLocalDatasource {
   Future<List<TvSeriesTable>> getCachedPopularTv() async {
     try {
       final result = await databaseHelper.getCacheTvSeries('popular');
-      if (result.length > 0) {
+      if (result.isNotEmpty) {
         return result.map((data) => TvSeriesTable.fromMap(data)).toList();
       } else {
         throw CacheException("Can't get the data :(");
@@ -178,7 +178,7 @@ class TvSeriesLocalDatasourceImpl implements TvSeriesLocalDatasource {
   Future<List<TvSeriesTable>> getCachedTopRatedTv() async {
     try {
       final result = await databaseHelper.getCacheTvSeries('top rated tv');
-      if (result.length > 0) {
+      if (result.isNotEmpty) {
         return result.map((data) => TvSeriesTable.fromMap(data)).toList();
       } else {
         throw CacheException("Can't get the data :(");

@@ -8,7 +8,7 @@ class CreatedBy extends Equatable {
   final int? gender;
   final String? profilePath;
 
-  CreatedBy({
+  const CreatedBy({
     required this.id,
     required this.creditId,
     required this.name,

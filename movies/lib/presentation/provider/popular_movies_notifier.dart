@@ -7,7 +7,7 @@ import '../../module/movies.dart';
 class PopularMoviesNotifier extends ChangeNotifier {
   final GetPopularMovies getPopularMovies;
 
-  RequestState _state = RequestState.Empty;
+  RequestState _state = RequestState.empty;
 
   RequestState get state => _state;
 
@@ -96,13 +96,13 @@ class PopularMoviesNotifier extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        _state = RequestState.Error;
+        _state = RequestState.error;
         _message = failure.message;
         notifyListeners();
         log('failure fetchPopularMovies: $_message');
       },
       (moviesData) {
-        _state = RequestState.Loaded;
+        _state = RequestState.loaded;
         log('fetchPopularMovies State: $_state');
 
         if (moviesData.isNotEmpty) {
@@ -123,7 +123,7 @@ class PopularMoviesNotifier extends ChangeNotifier {
 
   /// Load awal saat widget pertama kali dibuka
   Future<void> loadMovies() async {
-    _state = RequestState.Loading;
+    _state = RequestState.loading;
     log('Load Movies _popularMoviesState: $_state');
 
     notifyListeners();
@@ -131,7 +131,7 @@ class PopularMoviesNotifier extends ChangeNotifier {
       await onRefresh(); // Pakai fungsi refresh
     } catch (e) {
       // Jika gagal, tampilkan error
-      _state = RequestState.Error;
+      _state = RequestState.error;
       _message = e.toString();
       notifyListeners();
     }

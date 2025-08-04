@@ -11,7 +11,7 @@ class UpComingMoviesNotifier extends ChangeNotifier {
     _init();
   }
 
-  RequestState _state = RequestState.Empty;
+  RequestState _state = RequestState.empty;
 
   RequestState get state => _state;
 
@@ -67,7 +67,7 @@ class UpComingMoviesNotifier extends ChangeNotifier {
 
   /// Load awal saat widget pertama kali dibuka
   Future<void> loadMovies() async {
-    _state = RequestState.Loading;
+    _state = RequestState.loading;
     log('Load Movies _upComingMoviesState: $_state');
 
     notifyListeners();
@@ -75,7 +75,7 @@ class UpComingMoviesNotifier extends ChangeNotifier {
       await onRefresh(); // Pakai fungsi refresh
     } catch (e) {
       // Jika gagal, tampilkan error
-      _state = RequestState.Error;
+      _state = RequestState.error;
       _message = e.toString();
       notifyListeners();
     }
@@ -113,12 +113,12 @@ class UpComingMoviesNotifier extends ChangeNotifier {
     result.fold(
       (failure) {
         _message = failure.message;
-        _state = RequestState.Error;
+        _state = RequestState.error;
         notifyListeners();
         log('failure fetchUpComingMovies: $_message');
       },
       (moviesData) {
-        _state = RequestState.Loaded;
+        _state = RequestState.loaded;
         if (moviesData.isNotEmpty) {
           if (_upComingPage == 1) {
             _movies = moviesData; // reset di page 1

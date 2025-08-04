@@ -10,7 +10,7 @@ import 'package:equatable/equatable.dart';
  * maka yang dibandingkan adalah alamat memorinya.
  */
 class Genre extends Equatable {
-  Genre({required this.id, required this.name});
+  const Genre({required this.id, required this.name});
 
   final int id;
   final String name;

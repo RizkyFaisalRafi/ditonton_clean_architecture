@@ -278,11 +278,11 @@ class DetailContent extends StatelessWidget {
                                     recommendationState: final recState,
                                     movieRecommendations: final recs,
                                   ) =>
-                                    recState == RequestState.Loading
+                                    recState == RequestState.loading
                                         ? const Center(
                                           child: CircularProgressIndicator(),
                                         )
-                                        : recState == RequestState.Loaded
+                                        : recState == RequestState.loaded
                                         ? SizedBox(
                                           height: 150,
                                           child: ListView.builder(

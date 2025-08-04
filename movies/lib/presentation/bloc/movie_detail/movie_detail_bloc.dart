@@ -60,7 +60,7 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
               MovieDetailState.loadedMovieDetail(
                 movieDetail: movie,
                 movieRecommendations: [],
-                recommendationState: RequestState.Error,
+                recommendationState: RequestState.error,
                 isAddedToWatchlist: isAdded,
               ),
             );
@@ -70,7 +70,7 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
               MovieDetailState.loadedMovieDetail(
                 movieDetail: movie,
                 movieRecommendations: recommendations,
-                recommendationState: RequestState.Loaded,
+                recommendationState: RequestState.loaded,
                 isAddedToWatchlist: isAdded,
               ),
             );

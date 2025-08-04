@@ -19,14 +19,14 @@ void main() {
     mockSeeMoreTopRatedTvBloc = MockSeeMoreTopRatedTvBloc();
   });
 
-  Widget _makeTestableWidget(Widget body) {
+  Widget makeTestableWidget(Widget body) {
     return BlocProvider<SeeMoreTopRatedTvBloc>.value(
       value: mockSeeMoreTopRatedTvBloc,
       child: MaterialApp(home: body),
     );
   }
 
-  void _arrangeBlocState(SeeMoreTopRatedTvState state) {
+  void arrangeBlocState(SeeMoreTopRatedTvState state) {
     when(mockSeeMoreTopRatedTvBloc.state).thenReturn(state);
     when(
       mockSeeMoreTopRatedTvBloc.stream,
@@ -38,10 +38,10 @@ void main() {
     'Page should display Lottie loading indicator when state is Loading',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(const SeeMoreTopRatedTvState.loadingTopRatedTSeeMore());
+      arrangeBlocState(const SeeMoreTopRatedTvState.loadingTopRatedTSeeMore());
 
       // Act
-      await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+      await tester.pumpWidget(makeTestableWidget(TopRatedTvPage()));
 
       // Assert
       final progressBarFinder = find.byKey(Key('loading_top_rated_tv'));
@@ -56,7 +56,7 @@ void main() {
     WidgetTester tester,
   ) async {
     // Arrange
-    _arrangeBlocState(
+    arrangeBlocState(
       SeeMoreTopRatedTvState.loadedTopRatedTSeeMore(
         topRatedTv: testTvList,
         topRatedTvPage: 1,
@@ -66,7 +66,7 @@ void main() {
 
     // Act
     await mockNetworkImages(() async {
-      await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+      await tester.pumpWidget(makeTestableWidget(TopRatedTvPage()));
       await tester.pump();
       // PERBAIKAN: Pump lagi dengan durasi untuk menyelesaikan timer dari pull_to_refresh.
       // Log error menunjukkan timer 600ms, jadi 1 detik sudah aman.
@@ -88,7 +88,7 @@ void main() {
     'Page should display EmptyStateWidget when state is Loaded but data is empty',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         const SeeMoreTopRatedTvState.loadedTopRatedTSeeMore(
           topRatedTv: [],
           topRatedTvPage: 1,
@@ -97,7 +97,7 @@ void main() {
       );
 
       // Act
-      await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+      await tester.pumpWidget(makeTestableWidget(TopRatedTvPage()));
 
       // Assert
       final emptyMessageFinder = find.text(
@@ -112,14 +112,14 @@ void main() {
     'Page should display No Internet error message when state is Error with network message',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         SeeMoreTopRatedTvState.errorTopRatedTSeeMore(
           'Failed to connect to the network',
         ),
       );
 
       // Act
-      await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+      await tester.pumpWidget(makeTestableWidget(TopRatedTvPage()));
       await tester.pump(); // pump again to ensure the state propagates
 
       // Assert
@@ -135,12 +135,12 @@ void main() {
     WidgetTester tester,
   ) async {
     // Arrange
-    _arrangeBlocState(
+    arrangeBlocState(
       const SeeMoreTopRatedTvState.errorTopRatedTSeeMore('Server Error'),
     );
 
     // Act
-    await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+    await tester.pumpWidget(makeTestableWidget(TopRatedTvPage()));
     await tester.pump(); // pump again to ensure the state propagates
 
     // Assert
@@ -153,11 +153,11 @@ void main() {
     'Page should dispatch refreshTv event when retry button is pressed on error state',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         const SeeMoreTopRatedTvState.errorTopRatedTSeeMore('Server Failure'),
       );
 
-      await tester.pumpWidget(_makeTestableWidget(TopRatedTvPage()));
+      await tester.pumpWidget(makeTestableWidget(TopRatedTvPage()));
 
       // Ensure the error widget is visible
       final errorMessageFinder = find.text('Server Failure');

@@ -1,5 +1,4 @@
 import 'package:core/module/core.dart';
-import 'package:tv_series/module/tv_series.dart';
 import '../../module/movies.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -19,14 +19,14 @@ void main() {
     mockSeeMorePopularMovieBloc = MockSeeMorePopularMovieBloc();
   });
 
-  Widget _makeTestableWidget(Widget body) {
+  Widget makeTestableWidget(Widget body) {
     return BlocProvider<SeeMorePopularMovieBloc>.value(
       value: mockSeeMorePopularMovieBloc,
       child: MaterialApp(home: body),
     );
   }
 
-  void _arrangeBlocState(SeeMorePopularMovieState state) {
+  void arrangeBlocState(SeeMorePopularMovieState state) {
     when(mockSeeMorePopularMovieBloc.state).thenReturn(state);
     when(
       mockSeeMorePopularMovieBloc.stream,
@@ -38,12 +38,12 @@ void main() {
     'Page should display Lottie loading indicator when state is Loading',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         const SeeMorePopularMovieState.loadingPopularMSeeMore(),
       );
 
       // Act
-      await tester.pumpWidget(_makeTestableWidget(PopularMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(PopularMoviesPage()));
 
       // Assert
       final progressBarFinder = find.byKey(Key('loading_popular_movie'));
@@ -58,7 +58,7 @@ void main() {
     WidgetTester tester,
   ) async {
     // Arrange
-    _arrangeBlocState(
+    arrangeBlocState(
       SeeMorePopularMovieState.loadedPopularMSeeMore(
         popular: testMovieList,
         popularPage: 1,
@@ -68,7 +68,7 @@ void main() {
 
     // Act
     await mockNetworkImages(() async {
-      await tester.pumpWidget(_makeTestableWidget(PopularMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(PopularMoviesPage()));
       await tester.pump();
       // PERBAIKAN: Pump lagi dengan durasi untuk menyelesaikan timer dari pull_to_refresh.
       // Log error menunjukkan timer 600ms, jadi 1 detik sudah aman.
@@ -89,7 +89,7 @@ void main() {
     'Page should display EmptyStateWidget when state is Loaded but data is empty',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         const SeeMorePopularMovieState.loadedPopularMSeeMore(
           popular: [],
           popularPage: 1,
@@ -98,7 +98,7 @@ void main() {
       );
 
       // Act
-      await tester.pumpWidget(_makeTestableWidget(PopularMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(PopularMoviesPage()));
 
       // Assert
       final emptyMessageFinder = find.text(
@@ -113,14 +113,14 @@ void main() {
     'Page should display No Internet error message when state is Error with network message',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         SeeMorePopularMovieState.errorPopularMSeeMore(
           'Failed to connect to the network',
         ),
       );
 
       // Act
-      await tester.pumpWidget(_makeTestableWidget(PopularMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(PopularMoviesPage()));
       await tester.pump(); // pump again to ensure the state propagates
 
       // Assert
@@ -136,12 +136,12 @@ void main() {
     WidgetTester tester,
   ) async {
     // Arrange
-    _arrangeBlocState(
+    arrangeBlocState(
       const SeeMorePopularMovieState.errorPopularMSeeMore('Server Error'),
     );
 
     // Act
-    await tester.pumpWidget(_makeTestableWidget(PopularMoviesPage()));
+    await tester.pumpWidget(makeTestableWidget(PopularMoviesPage()));
     await tester.pump(); // pump again to ensure the state propagates
 
     // Assert
@@ -154,11 +154,11 @@ void main() {
     'Page should dispatch refreshMovies event when retry button is pressed on error state',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         const SeeMorePopularMovieState.errorPopularMSeeMore('Server Failure'),
       );
 
-      await tester.pumpWidget(_makeTestableWidget(PopularMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(PopularMoviesPage()));
 
       // Ensure the error widget is visible
       final errorMessageFinder = find.text('Server Failure');

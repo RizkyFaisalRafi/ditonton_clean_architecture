@@ -1,6 +1,6 @@
 part of 'movie_search_bloc.dart';
 
-/**
+/*
  * SearchEvent berdasarkan event yang terjadi. Misalnya pada fitur pencarian
  * adalah perubahan query.
  */

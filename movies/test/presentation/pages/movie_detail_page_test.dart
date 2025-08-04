@@ -27,7 +27,7 @@ void main() {
   // }
 
   // Helper untuk membuat widget yang bisa diuji
-  Widget _makeTestableWidget2(Widget body) {
+  Widget makeTestableWidget2(Widget body) {
     return BlocProvider<MovieDetailBloc>.value(
       value: mockMovieDetailBloc,
       child: MaterialApp(home: body),
@@ -35,7 +35,7 @@ void main() {
   }
 
   // Helper untuk stub state dan stream dari BLoC menggunakan Mockito
-  void _arrangeBlocState(MovieDetailState state) {
+  void arrangeBlocState(MovieDetailState state) {
     when(mockMovieDetailBloc.state).thenReturn(state);
     when(mockMovieDetailBloc.stream).thenAnswer((_) => Stream.value(state));
   }
@@ -47,11 +47,11 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      _arrangeBlocState(const MovieDetailState.initialMovieDetail());
+      arrangeBlocState(const MovieDetailState.initialMovieDetail());
 
       // Act
       await tester.pumpWidget(
-        _makeTestableWidget2(const MovieDetailPage(id: tId)),
+        makeTestableWidget2(const MovieDetailPage(id: tId)),
       );
 
       // Assert
@@ -62,11 +62,11 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      _arrangeBlocState(const MovieDetailState.loadingMovieDetail());
+      arrangeBlocState(const MovieDetailState.loadingMovieDetail());
 
       // Act
       await tester.pumpWidget(
-        _makeTestableWidget2(const MovieDetailPage(id: tId)),
+        makeTestableWidget2(const MovieDetailPage(id: tId)),
       );
 
       // Assert
@@ -77,11 +77,11 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         MovieDetailState.loadedMovieDetail(
           movieDetail: testMovieDetail,
           movieRecommendations: [testMovie],
-          recommendationState: RequestState.Loaded,
+          recommendationState: RequestState.loaded,
           isAddedToWatchlist: false,
         ),
       );
@@ -89,7 +89,7 @@ void main() {
       // Act
       await mockNetworkImages(() async {
         await tester.pumpWidget(
-          _makeTestableWidget2(const MovieDetailPage(id: tId)),
+          makeTestableWidget2(const MovieDetailPage(id: tId)),
         );
       });
 
@@ -105,13 +105,13 @@ void main() {
       WidgetTester tester,
     ) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         const MovieDetailState.errorMovieDetail('Failed to load data'),
       );
 
       // Act
       await tester.pumpWidget(
-        _makeTestableWidget2(const MovieDetailPage(id: tId)),
+        makeTestableWidget2(const MovieDetailPage(id: tId)),
       );
 
       // Assert
@@ -123,11 +123,11 @@ void main() {
       'should call AddToWatchlist event when watchlist button is tapped and not in watchlist',
       (WidgetTester tester) async {
         // Arrange
-        _arrangeBlocState(
+        arrangeBlocState(
           MovieDetailState.loadedMovieDetail(
             movieDetail: testMovieDetail,
             movieRecommendations: const [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: false,
           ),
         );
@@ -135,7 +135,7 @@ void main() {
         // Act
         await mockNetworkImages(() async {
           await tester.pumpWidget(
-            _makeTestableWidget2(const MovieDetailPage(id: tId)),
+            makeTestableWidget2(const MovieDetailPage(id: tId)),
           );
         });
 
@@ -155,11 +155,11 @@ void main() {
       'should call RemoveFromWatchlist event when watchlist button is tapped and already in watchlist',
       (WidgetTester tester) async {
         // Arrange
-        _arrangeBlocState(
+        arrangeBlocState(
           MovieDetailState.loadedMovieDetail(
             movieDetail: testMovieDetail,
             movieRecommendations: [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: true,
           ),
         );
@@ -167,7 +167,7 @@ void main() {
         // Act
         await mockNetworkImages(() async {
           await tester.pumpWidget(
-            _makeTestableWidget2(const MovieDetailPage(id: tId)),
+            makeTestableWidget2(const MovieDetailPage(id: tId)),
           );
         });
 
@@ -193,7 +193,7 @@ void main() {
           MovieDetailState.loadedMovieDetail(
             movieDetail: testMovieDetail,
             movieRecommendations: const [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: false,
           ),
         );
@@ -204,7 +204,7 @@ void main() {
             MovieDetailState.loadedMovieDetail(
               movieDetail: testMovieDetail,
               movieRecommendations: [],
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: true,
               watchlistMessage: 'Added to Watchlist',
             ),
@@ -214,7 +214,7 @@ void main() {
         // Act
         await mockNetworkImages(() async {
           await tester.pumpWidget(
-            _makeTestableWidget2(const MovieDetailPage(id: tId)),
+            makeTestableWidget2(const MovieDetailPage(id: tId)),
           );
           // Pump frame tambahan untuk memproses state dari stream
           await tester.pump();

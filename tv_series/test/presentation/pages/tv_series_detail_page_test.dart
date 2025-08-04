@@ -27,7 +27,7 @@ void main() {
     );
   }
 
-  void _arrangeBlocState(TvDetailState state) {
+  void arrangeBlocState(TvDetailState state) {
     when(mockTvDetailBloc.state).thenReturn(state);
     when(mockTvDetailBloc.stream).thenAnswer((_) => Stream.value(state));
   }
@@ -122,7 +122,7 @@ void main() {
       widgetTester,
     ) async {
       // Arrange
-      _arrangeBlocState(const TvDetailState.initialTvDetail());
+      arrangeBlocState(const TvDetailState.initialTvDetail());
 
       // Act
       await widgetTester.pumpWidget(
@@ -139,7 +139,7 @@ void main() {
       widgetTester,
     ) async {
       // Arrange
-      _arrangeBlocState(const TvDetailState.loadingTvDetail());
+      arrangeBlocState(const TvDetailState.loadingTvDetail());
 
       // Act
       await widgetTester.pumpWidget(
@@ -155,11 +155,11 @@ void main() {
       widgetTester,
     ) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         TvDetailState.loadedTvDetail(
           tvDetail: testTvDetail,
           tvRecommendations: testTvList,
-          recommendationState: RequestState.Loaded,
+          recommendationState: RequestState.loaded,
           isAddedToWatchlist: false,
         ),
       );
@@ -185,7 +185,7 @@ void main() {
       widgetTester,
     ) async {
       // Arrange
-      _arrangeBlocState(const TvDetailState.errorTvDetail('Failed to load data'));
+      arrangeBlocState(const TvDetailState.errorTvDetail('Failed to load data'));
 
       // Act
       await widgetTester.pumpWidget(
@@ -202,11 +202,11 @@ void main() {
       'should call AddToWatchlist event when watchlist button is tapped and not in watchlist',
       (WidgetTester tester) async {
         // Arrange
-        _arrangeBlocState(
+        arrangeBlocState(
           TvDetailState.loadedTvDetail(
             tvDetail: testTvDetail,
             tvRecommendations: const [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: false,
           ),
         );
@@ -233,11 +233,11 @@ void main() {
       'should call RemoveFromWatchlist event when watchlist button is tapped and already in watchlist',
       (WidgetTester tester) async {
         // Arrange
-        _arrangeBlocState(
+        arrangeBlocState(
           TvDetailState.loadedTvDetail(
             tvDetail: testTvDetail,
             tvRecommendations: [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: true,
           ),
         );
@@ -265,11 +265,11 @@ void main() {
       'should show SnackBar when watchlist message is a success message',
       (WidgetTester tester) async {
         // Arrange
-        _arrangeBlocState(
+        arrangeBlocState(
           TvDetailState.loadedTvDetail(
             tvDetail: testTvDetail,
             tvRecommendations: [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: false,
           ),
         );
@@ -280,7 +280,7 @@ void main() {
             TvDetailState.loadedTvDetail(
               tvDetail: testTvDetail,
               tvRecommendations: [],
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: true,
               watchlistMessage: 'Added to Watchlist',
             ),

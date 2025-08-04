@@ -8,7 +8,7 @@ import 'package:core/module/core.dart';
 class OnTheAirNotifier extends ChangeNotifier {
   final GetOnTheAirTv getOnTheAirTv;
 
-  RequestState _state = RequestState.Empty;
+  RequestState _state = RequestState.empty;
 
   RequestState get state => _state;
 
@@ -68,7 +68,7 @@ class OnTheAirNotifier extends ChangeNotifier {
 
   /// Load awal saat widget pertama kali dibuka
   Future<void> loadTvSeries() async {
-    _state = RequestState.Loading;
+    _state = RequestState.loading;
     log('Load Tv Series State: $_state');
 
     notifyListeners();
@@ -76,7 +76,7 @@ class OnTheAirNotifier extends ChangeNotifier {
       await onRefresh(); // Pakai fungsi refresh
     } catch (e) {
       // Jika gagal, tampilkan error
-      _state = RequestState.Error;
+      _state = RequestState.error;
       _message = e.toString();
       notifyListeners();
     }
@@ -112,12 +112,12 @@ class OnTheAirNotifier extends ChangeNotifier {
     final result = await getOnTheAirTv.execute(_onTheAirPage);
     result.fold(
       (failure) {
-        _state = RequestState.Error;
+        _state = RequestState.error;
         _message = failure.message;
         notifyListeners();
       },
       (tvSeriesData) {
-        _state = RequestState.Loaded;
+        _state = RequestState.loaded;
         log('fetchTvSeriesOnTheAir State: $_state');
 
         if (tvSeriesData.isNotEmpty) {

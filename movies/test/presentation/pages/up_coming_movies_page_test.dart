@@ -20,14 +20,14 @@ void main() {
     mockSeeMoreUpcomingMovieBloc = MockSeeMoreUpcomingMovieBloc();
   });
 
-  Widget _makeTestableWidget(Widget body) {
+  Widget makeTestableWidget(Widget body) {
     return BlocProvider<SeeMoreUpcomingMovieBloc>.value(
       value: mockSeeMoreUpcomingMovieBloc,
       child: MaterialApp(home: body),
     );
   }
 
-  void _arrangeBlocState(SeeMoreUpcomingMovieState state) {
+  void arrangeBlocState(SeeMoreUpcomingMovieState state) {
     when(mockSeeMoreUpcomingMovieBloc.state).thenReturn(state);
     when(
       mockSeeMoreUpcomingMovieBloc.stream,
@@ -39,10 +39,10 @@ void main() {
     'Page should display Lottie loading indicator when state is loading',
     (widgetTester) async {
       // Arrange
-      _arrangeBlocState(const SeeMoreUpcomingMovieState.loadingUpComingMSeeMore());
+      arrangeBlocState(const SeeMoreUpcomingMovieState.loadingUpComingMSeeMore());
 
       // Act
-      await widgetTester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+      await widgetTester.pumpWidget(makeTestableWidget(UpComingMoviesPage()));
 
       // Assert
       final progressBarFinder = find.byKey(Key('loading_up_coming_movie'));
@@ -57,7 +57,7 @@ void main() {
     widgetTester,
   ) async {
     // Arrange
-    _arrangeBlocState(
+    arrangeBlocState(
       SeeMoreUpcomingMovieState.loadedUpComingMSeeMore(
         upComing: testMovieList,
         upComingPage: 1,
@@ -67,7 +67,7 @@ void main() {
 
     // Act
     await mockNetworkImages(() async {
-      await widgetTester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+      await widgetTester.pumpWidget(makeTestableWidget(UpComingMoviesPage()));
       await widgetTester.pump();
       await widgetTester.pump(const Duration(seconds: 1));
     });
@@ -87,7 +87,7 @@ void main() {
     'Page should display EmptyStateWidget when state is Loaded but data is empty',
     (widgetTester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         const SeeMoreUpcomingMovieState.loadedUpComingMSeeMore(
           upComing: [],
           upComingPage: 1,
@@ -96,7 +96,7 @@ void main() {
       );
 
       // Act
-      await widgetTester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+      await widgetTester.pumpWidget(makeTestableWidget(UpComingMoviesPage()));
 
       // Assert
       final emptyMessageFinder = find.text(
@@ -111,12 +111,12 @@ void main() {
     'Page should display No Internet error message when state is Error with network message',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         SeeMoreUpcomingMovieState.errorUpComingMSeeMore('Failed to connect to the network'),
       );
 
       // Act
-      await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(UpComingMoviesPage()));
       await tester.pump(); // pump again to ensure the state propagates
 
       // Assert
@@ -132,10 +132,10 @@ void main() {
     WidgetTester tester,
   ) async {
     // Arrange
-    _arrangeBlocState(const SeeMoreUpcomingMovieState.errorUpComingMSeeMore('Server Error'));
+    arrangeBlocState(const SeeMoreUpcomingMovieState.errorUpComingMSeeMore('Server Error'));
 
     // Act
-    await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+    await tester.pumpWidget(makeTestableWidget(UpComingMoviesPage()));
     await tester.pump(); // pump again to ensure the state propagates
 
     // Assert
@@ -148,11 +148,11 @@ void main() {
     'Page should dispatch refreshMovies event when retry button is pressed on error state',
     (WidgetTester tester) async {
       // Arrange
-      _arrangeBlocState(
+      arrangeBlocState(
         const SeeMoreUpcomingMovieState.errorUpComingMSeeMore('Server Failure'),
       );
 
-      await tester.pumpWidget(_makeTestableWidget(UpComingMoviesPage()));
+      await tester.pumpWidget(makeTestableWidget(UpComingMoviesPage()));
 
       // Ensure the error widget is visible
       final errorMessageFinder = find.text('Server Failure');

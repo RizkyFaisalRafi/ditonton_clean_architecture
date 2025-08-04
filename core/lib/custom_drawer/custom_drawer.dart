@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../utils/assets_path.dart';
 import 'custom_drawer_notifier.dart';
 import 'package:movies/module/movies.dart';
 import 'package:tv_series/module/tv_series.dart';

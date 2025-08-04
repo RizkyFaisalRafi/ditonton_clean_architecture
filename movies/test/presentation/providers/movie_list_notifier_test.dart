@@ -57,10 +57,10 @@ void main() {
 
   group('Initial State', () {
     test('should have initial empty state', () {
-      expect(provider.nowPlayingState, RequestState.Empty);
-      expect(provider.popularMoviesState, RequestState.Empty);
-      expect(provider.topRatedMoviesState, RequestState.Empty);
-      expect(provider.upComingMoviesState, RequestState.Empty);
+      expect(provider.nowPlayingState, RequestState.empty);
+      expect(provider.popularMoviesState, RequestState.empty);
+      expect(provider.topRatedMoviesState, RequestState.empty);
+      expect(provider.upComingMoviesState, RequestState.empty);
       expect(provider.nowPlayingMovies, isEmpty);
       expect(provider.popularMovies, isEmpty);
       expect(provider.topRatedMovies, isEmpty);
@@ -79,7 +79,7 @@ void main() {
       await provider.fetchNowPlayingMovies();
 
       // assert
-      expect(provider.nowPlayingState, RequestState.Loaded);
+      expect(provider.nowPlayingState, RequestState.loaded);
       expect(provider.nowPlayingMovies, tMovieList);
       expect(listenerCallCount, 1);
     });
@@ -107,7 +107,7 @@ void main() {
       await provider.fetchNowPlayingMovies();
 
       // assert
-      expect(provider.nowPlayingState, RequestState.Error);
+      expect(provider.nowPlayingState, RequestState.error);
       expect(provider.message, 'Error');
       expect(listenerCallCount, 1);
     });
@@ -124,7 +124,7 @@ void main() {
       await provider.fetchPopularMovies();
 
       // assert
-      expect(provider.popularMoviesState, RequestState.Loaded);
+      expect(provider.popularMoviesState, RequestState.loaded);
       expect(provider.popularMovies, tMovieList);
       expect(listenerCallCount, 1);
     });
@@ -139,7 +139,7 @@ void main() {
       await provider.fetchPopularMovies();
 
       // assert
-      expect(provider.popularMoviesState, RequestState.Error);
+      expect(provider.popularMoviesState, RequestState.error);
       expect(provider.message, 'Error');
       expect(listenerCallCount, 1);
     });
@@ -156,7 +156,7 @@ void main() {
       await provider.fetchTopRatedMovies();
 
       // assert
-      expect(provider.topRatedMoviesState, RequestState.Loaded);
+      expect(provider.topRatedMoviesState, RequestState.loaded);
       expect(provider.topRatedMovies, tMovieList);
       expect(listenerCallCount, 1);
     });
@@ -171,7 +171,7 @@ void main() {
       await provider.fetchTopRatedMovies();
 
       // assert
-      expect(provider.topRatedMoviesState, RequestState.Error);
+      expect(provider.topRatedMoviesState, RequestState.error);
       expect(provider.message, 'Error');
       expect(listenerCallCount, 1);
     });
@@ -188,7 +188,7 @@ void main() {
       await provider.fetchUpComingMovies();
 
       // assert
-      expect(provider.upComingMoviesState, RequestState.Loaded);
+      expect(provider.upComingMoviesState, RequestState.loaded);
       expect(provider.upComingMovies, tMovieList);
       expect(listenerCallCount, 1);
     });
@@ -203,7 +203,7 @@ void main() {
       await provider.fetchUpComingMovies();
 
       // assert
-      expect(provider.upComingMoviesState, RequestState.Error);
+      expect(provider.upComingMoviesState, RequestState.error);
       expect(provider.message, 'Error');
       expect(listenerCallCount, 1);
     });
@@ -229,10 +229,10 @@ void main() {
       await provider.onRefresh();
 
       // assert
-      expect(provider.nowPlayingState, RequestState.Loaded);
-      expect(provider.popularMoviesState, RequestState.Loaded);
-      expect(provider.topRatedMoviesState, RequestState.Loaded);
-      expect(provider.upComingMoviesState, RequestState.Loaded);
+      expect(provider.nowPlayingState, RequestState.loaded);
+      expect(provider.popularMoviesState, RequestState.loaded);
+      expect(provider.topRatedMoviesState, RequestState.loaded);
+      expect(provider.upComingMoviesState, RequestState.loaded);
       expect(provider.refreshC.isRefresh, false);
     });
 
@@ -246,7 +246,7 @@ void main() {
       await provider.onRefresh();
 
       // assert
-      expect(provider.nowPlayingState, RequestState.Error);
+      expect(provider.nowPlayingState, RequestState.error);
       expect(provider.refreshC.isRefresh, false);
     });
   });

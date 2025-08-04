@@ -1,12 +1,9 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:tv_series/module/tv_series.dart';
-import '../../../domain/entities/movie_detail.dart';
-import '../movie_detail_model.dart';
 import 'package:movies/module/movies.dart';
-import 'package:tv_series/module/tv_series.dart';
 
-/**
+/*
  * MovieDetailTable adalah model tabel lokal (biasanya untuk SQLite atau
  * penyimpanan lokal) yang merepresentasikan detail film.
  * Model ini menjembatani antara:

@@ -14,7 +14,7 @@ class MovieListNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  RequestState _nowPlayingState = RequestState.Empty;
+  RequestState _nowPlayingState = RequestState.empty;
 
   RequestState get nowPlayingState => _nowPlayingState;
 
@@ -22,7 +22,7 @@ class MovieListNotifier extends ChangeNotifier {
 
   List<Movie> get popularMovies => _popularMovies;
 
-  RequestState _popularMoviesState = RequestState.Empty;
+  RequestState _popularMoviesState = RequestState.empty;
 
   RequestState get popularMoviesState => _popularMoviesState;
 
@@ -34,11 +34,11 @@ class MovieListNotifier extends ChangeNotifier {
 
   List<Movie> get upComingMovies => _upComingMovies;
 
-  RequestState _topRatedMoviesState = RequestState.Empty;
+  RequestState _topRatedMoviesState = RequestState.empty;
 
   RequestState get topRatedMoviesState => _topRatedMoviesState;
 
-  RequestState _upComingMoviesState = RequestState.Empty;
+  RequestState _upComingMoviesState = RequestState.empty;
 
   RequestState get upComingMoviesState => _upComingMoviesState;
 
@@ -140,10 +140,10 @@ class MovieListNotifier extends ChangeNotifier {
 
   /// Load awal saat widget pertama kali dibuka
   Future<void> loadMovies() async {
-    _nowPlayingState = RequestState.Loading;
-    _popularMoviesState = RequestState.Loading;
-    _topRatedMoviesState = RequestState.Loading;
-    _upComingMoviesState = RequestState.Loading;
+    _nowPlayingState = RequestState.loading;
+    _popularMoviesState = RequestState.loading;
+    _topRatedMoviesState = RequestState.loading;
+    _upComingMoviesState = RequestState.loading;
     log('Load Movies _nowPlayingState: $_nowPlayingState');
     log('Load Movies _popularMoviesState: $_popularMoviesState');
     log('Load Movies _topRatedMoviesState: $_topRatedMoviesState');
@@ -154,10 +154,10 @@ class MovieListNotifier extends ChangeNotifier {
       await onRefresh(); // Pakai fungsi refresh
     } catch (e) {
       // Jika gagal, tampilkan error
-      _nowPlayingState = RequestState.Error;
-      _popularMoviesState = RequestState.Error;
-      _topRatedMoviesState = RequestState.Error;
-      _upComingMoviesState = RequestState.Error;
+      _nowPlayingState = RequestState.error;
+      _popularMoviesState = RequestState.error;
+      _topRatedMoviesState = RequestState.error;
+      _upComingMoviesState = RequestState.error;
       _message = e.toString();
       notifyListeners();
     }
@@ -241,10 +241,10 @@ class MovieListNotifier extends ChangeNotifier {
       _upComingMovies.clear();
 
       // Set loading state
-      _nowPlayingState = RequestState.Loading;
-      _popularMoviesState = RequestState.Loading;
-      _topRatedMoviesState = RequestState.Loading;
-      _upComingMoviesState = RequestState.Loading;
+      _nowPlayingState = RequestState.loading;
+      _popularMoviesState = RequestState.loading;
+      _topRatedMoviesState = RequestState.loading;
+      _upComingMoviesState = RequestState.loading;
       notifyListeners();
 
       // Jalankan semua secara paralel
@@ -272,12 +272,12 @@ class MovieListNotifier extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        _nowPlayingState = RequestState.Error;
+        _nowPlayingState = RequestState.error;
         _message = failure.message;
         notifyListeners();
       },
       (moviesData) {
-        _nowPlayingState = RequestState.Loaded;
+        _nowPlayingState = RequestState.loaded;
         if (moviesData.isNotEmpty) {
           if (_nowPlayingPage == 1) {
             _nowPlayingMovies = moviesData; // reset di page 1
@@ -303,12 +303,12 @@ class MovieListNotifier extends ChangeNotifier {
     final result = await getPopularMovies.execute(_popularPage);
     result.fold(
       (failure) {
-        _popularMoviesState = RequestState.Error;
+        _popularMoviesState = RequestState.error;
         _message = failure.message;
         notifyListeners();
       },
       (moviesData) {
-        _popularMoviesState = RequestState.Loaded;
+        _popularMoviesState = RequestState.loaded;
         if (moviesData.isNotEmpty) {
           if (_popularPage == 1) {
             _popularMovies = moviesData; // reset di page 1
@@ -334,12 +334,12 @@ class MovieListNotifier extends ChangeNotifier {
     final result = await getTopRatedMovies.execute(_topRatedPage);
     result.fold(
       (failure) {
-        _topRatedMoviesState = RequestState.Error;
+        _topRatedMoviesState = RequestState.error;
         _message = failure.message;
         notifyListeners();
       },
       (moviesData) {
-        _topRatedMoviesState = RequestState.Loaded;
+        _topRatedMoviesState = RequestState.loaded;
 
         if (moviesData.isNotEmpty) {
           if (_topRatedPage == 1) {
@@ -366,12 +366,12 @@ class MovieListNotifier extends ChangeNotifier {
     final result = await getUpComingMovies.execute(_upComingPage);
     result.fold(
       (failure) {
-        _upComingMoviesState = RequestState.Error;
+        _upComingMoviesState = RequestState.error;
         _message = failure.message;
         notifyListeners();
       },
       (moviesData) {
-        _upComingMoviesState = RequestState.Loaded;
+        _upComingMoviesState = RequestState.loaded;
 
         if (moviesData.isNotEmpty) {
           if (_upComingPage == 1) {

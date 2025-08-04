@@ -63,8 +63,8 @@ void main() {
 
   group('Fetch TV Detail', () {
     test('should initialize with empty state', () {
-      expect(provider.tvState, RequestState.Empty);
-      expect(provider.recommendationState, RequestState.Empty);
+      expect(provider.tvState, RequestState.empty);
+      expect(provider.recommendationState, RequestState.empty);
       expect(provider.tvDetail, isNull);
       expect(provider.tvRecommendations, isEmpty);
     });
@@ -89,7 +89,7 @@ void main() {
       provider.fetchTvDetail(tId);
 
       // Assert
-      expect(provider.tvState, RequestState.Loading);
+      expect(provider.tvState, RequestState.loading);
       expect(listenerCallCount, 1);
     });
 
@@ -101,8 +101,8 @@ void main() {
       await provider.fetchTvDetail(tId);
 
       // Assert
-      expect(provider.tvState, RequestState.Loaded);
-      expect(provider.recommendationState, RequestState.Loaded);
+      expect(provider.tvState, RequestState.loaded);
+      expect(provider.recommendationState, RequestState.loaded);
       expect(provider.tvDetail, testTvDetail);
       expect(provider.tvRecommendations, tTvSeries);
       expect(
@@ -124,7 +124,7 @@ void main() {
       await provider.fetchTvDetail(tId);
 
       // Assert
-      expect(provider.tvState, RequestState.Error);
+      expect(provider.tvState, RequestState.error);
       expect(provider.message, 'Server Error');
       expect(listenerCallCount, 2); // Loading -> Error
     });
@@ -142,9 +142,9 @@ void main() {
       await provider.fetchTvDetail(tId);
 
       // Assert
-      expect(provider.recommendationState, RequestState.Error);
+      expect(provider.recommendationState, RequestState.error);
       expect(provider.message, 'Recommendation Error');
-      expect(provider.tvState, RequestState.Loaded); // Detail still loaded
+      expect(provider.tvState, RequestState.loaded); // Detail still loaded
       expect(
         listenerCallCount,
         3,

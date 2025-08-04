@@ -28,19 +28,19 @@ class TvListNotifier extends ChangeNotifier {
 
   List<TvSeries> get topRatedTvSeries => _topRatedTvSeries;
 
-  RequestState _airingTodayState = RequestState.Empty;
+  RequestState _airingTodayState = RequestState.empty;
 
   RequestState get airingTodayState => _airingTodayState;
 
-  RequestState _onTheAirState = RequestState.Empty;
+  RequestState _onTheAirState = RequestState.empty;
 
   RequestState get onTheAirState => _onTheAirState;
 
-  RequestState _popularTvState = RequestState.Empty;
+  RequestState _popularTvState = RequestState.empty;
 
   RequestState get popularTvState => _popularTvState;
 
-  RequestState _topRatedTvState = RequestState.Empty;
+  RequestState _topRatedTvState = RequestState.empty;
 
   RequestState get topRatedTvState => _topRatedTvState;
 
@@ -147,10 +147,10 @@ class TvListNotifier extends ChangeNotifier {
 
   /// Load awal saat widget pertama kali dibuka
   Future<void> loadTvSeries() async {
-    _airingTodayState = RequestState.Loading;
-    _onTheAirState = RequestState.Loading;
-    _popularTvState = RequestState.Loading;
-    _topRatedTvState = RequestState.Loading;
+    _airingTodayState = RequestState.loading;
+    _onTheAirState = RequestState.loading;
+    _popularTvState = RequestState.loading;
+    _topRatedTvState = RequestState.loading;
     log('Load Movies _airingTodayState: $_airingTodayState');
     log('Load Movies _onTheAirState: $_onTheAirState');
     log('Load Movies _popularTvState: $_popularTvState');
@@ -161,10 +161,10 @@ class TvListNotifier extends ChangeNotifier {
       await onRefresh(); // Pakai fungsi refresh
     } catch (e) {
       // Jika gagal, tampilkan error
-      _airingTodayState = RequestState.Error;
-      _onTheAirState = RequestState.Error;
-      _popularTvState = RequestState.Error;
-      _topRatedTvState = RequestState.Error;
+      _airingTodayState = RequestState.error;
+      _onTheAirState = RequestState.error;
+      _popularTvState = RequestState.error;
+      _topRatedTvState = RequestState.error;
       _message = e.toString();
       notifyListeners();
     }
@@ -251,10 +251,10 @@ class TvListNotifier extends ChangeNotifier {
       _topRatedTvSeries.clear();
 
       // Set loading state
-      _airingTodayState = RequestState.Loading;
-      _onTheAirState = RequestState.Loading;
-      _popularTvState = RequestState.Loading;
-      _topRatedTvState = RequestState.Loading;
+      _airingTodayState = RequestState.loading;
+      _onTheAirState = RequestState.loading;
+      _popularTvState = RequestState.loading;
+      _topRatedTvState = RequestState.loading;
       notifyListeners();
 
       // Jalankan semua secara paralel
@@ -281,12 +281,12 @@ class TvListNotifier extends ChangeNotifier {
     final result = await getAiringTodayTv.execute(_airingTodayPage);
     result.fold(
       (failure) {
-        _airingTodayState = RequestState.Error;
+        _airingTodayState = RequestState.error;
         _message = failure.message;
         notifyListeners();
       },
       (tvSeriesData) {
-        _airingTodayState = RequestState.Loaded;
+        _airingTodayState = RequestState.loaded;
         // _airingTodayTvSeries = tvSeriesData;
 
         if (tvSeriesData.isNotEmpty) {
@@ -294,7 +294,7 @@ class TvListNotifier extends ChangeNotifier {
           _airingTodayPage++;
         } else {
           _hasMoreAiringToday = false;
-          _airingTodayState = RequestState.Empty;
+          _airingTodayState = RequestState.empty;
         }
 
         // if (tvSeriesData.isNotEmpty) {
@@ -321,12 +321,12 @@ class TvListNotifier extends ChangeNotifier {
     final result = await getOnTheAirTv.execute(_onTheAirPage);
     result.fold(
       (failure) {
-        _onTheAirState = RequestState.Error;
+        _onTheAirState = RequestState.error;
         _message = failure.message;
         notifyListeners();
       },
       (tvSeriesData) {
-        _onTheAirState = RequestState.Loaded;
+        _onTheAirState = RequestState.loaded;
         // _onTheAirTvSeries = tvSeriesData;
         if (tvSeriesData.isNotEmpty) {
           if (_onTheAirPage == 1) {
@@ -352,12 +352,12 @@ class TvListNotifier extends ChangeNotifier {
     final result = await getPopularTv.execute(_popularPage);
     result.fold(
       (failure) {
-        _popularTvState = RequestState.Error;
+        _popularTvState = RequestState.error;
         _message = failure.message;
         notifyListeners();
       },
       (tvSeriesData) {
-        _popularTvState = RequestState.Loaded;
+        _popularTvState = RequestState.loaded;
         // _popularTvSeries = tvSeriesData;
 
         if (tvSeriesData.isNotEmpty) {
@@ -384,12 +384,12 @@ class TvListNotifier extends ChangeNotifier {
     final result = await getTopRatedTv.execute(_topRatedPage);
     result.fold(
       (failure) {
-        _topRatedTvState = RequestState.Error;
+        _topRatedTvState = RequestState.error;
         _message = failure.message;
         notifyListeners();
       },
       (tvSeriesData) {
-        _topRatedTvState = RequestState.Loaded;
+        _topRatedTvState = RequestState.loaded;
         // _topRatedTvSeries = tvSeriesData;
 
         if (tvSeriesData.isNotEmpty) {

@@ -472,11 +472,11 @@ class DetailContents extends StatelessWidget {
                                   final recState = state.recommendationState;
                                   final recs = state.tvRecommendations;
 
-                                  if (recState == RequestState.Loading) {
+                                  if (recState == RequestState.loading) {
                                     return const Center(
                                       child: CircularProgressIndicator(),
                                     );
-                                  } else if (recState == RequestState.Loaded) {
+                                  } else if (recState == RequestState.loaded) {
                                     return SizedBox(
                                       key: Key('LoadedState Recommendation'),
                                       height: 150,

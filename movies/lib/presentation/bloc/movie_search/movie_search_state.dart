@@ -1,6 +1,6 @@
 part of 'movie_search_bloc.dart';
 
-/**
+/*
  *
     Pada search_state.dart, tambahkan state yang bisa terjadi,
     sebagai contoh kondisi halaman kosong, loading, sukses mendapatkan data,

@@ -11,7 +11,7 @@ class TopRatedMoviesNotifier extends ChangeNotifier {
     _init();
   }
 
-  RequestState _state = RequestState.Empty;
+  RequestState _state = RequestState.empty;
 
   RequestState get state => _state;
 
@@ -67,7 +67,7 @@ class TopRatedMoviesNotifier extends ChangeNotifier {
 
   /// Load awal saat widget pertama kali dibuka
   Future<void> loadMovies() async {
-    _state = RequestState.Loading;
+    _state = RequestState.loading;
     log('Load Movies _popularMoviesState: $_state');
 
     notifyListeners();
@@ -75,7 +75,7 @@ class TopRatedMoviesNotifier extends ChangeNotifier {
       await onRefresh(); // Pakai fungsi refresh
     } catch (e) {
       // Jika gagal, tampilkan error
-      _state = RequestState.Error;
+      _state = RequestState.error;
       _message = e.toString();
       notifyListeners();
     }
@@ -114,12 +114,12 @@ class TopRatedMoviesNotifier extends ChangeNotifier {
     result.fold(
       (failure) {
         _message = failure.message;
-        _state = RequestState.Error;
+        _state = RequestState.error;
         notifyListeners();
         log('failure fetchTopRatedMovies: $_message');
       },
       (moviesData) {
-        _state = RequestState.Loaded;
+        _state = RequestState.loaded;
         log('fetchTopRatedMovies State: $_state');
 
         if (moviesData.isNotEmpty) {

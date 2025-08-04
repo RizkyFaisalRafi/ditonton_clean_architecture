@@ -61,8 +61,8 @@ void main() {
 
   group('Fetch Movie Detail', () {
     test('should initialize with empty state', () {
-      expect(provider.movieState, RequestState.Empty);
-      expect(provider.recommendationState, RequestState.Empty);
+      expect(provider.movieState, RequestState.empty);
+      expect(provider.recommendationState, RequestState.empty);
       expect(provider.movie, isNull);
       expect(provider.movieRecommendations, isEmpty);
     });
@@ -87,7 +87,7 @@ void main() {
       provider.fetchMovieDetail(tId);
 
       // Assert
-      expect(provider.movieState, RequestState.Loading);
+      expect(provider.movieState, RequestState.loading);
       expect(listenerCallCount, 1);
     });
 
@@ -101,8 +101,8 @@ void main() {
         await provider.fetchMovieDetail(tId);
 
         // Assert
-        expect(provider.movieState, RequestState.Loaded);
-        expect(provider.recommendationState, RequestState.Loaded);
+        expect(provider.movieState, RequestState.loaded);
+        expect(provider.recommendationState, RequestState.loaded);
         expect(provider.movie, testMovieDetail);
         expect(provider.movieRecommendations, tMovies);
         expect(
@@ -125,7 +125,7 @@ void main() {
       await provider.fetchMovieDetail(tId);
 
       // Assert
-      expect(provider.movieState, RequestState.Error);
+      expect(provider.movieState, RequestState.error);
       expect(provider.message, 'Server Error');
       expect(listenerCallCount, 2); // Loading -> Error
     });
@@ -143,9 +143,9 @@ void main() {
       await provider.fetchMovieDetail(tId);
 
       // Assert
-      expect(provider.recommendationState, RequestState.Error);
+      expect(provider.recommendationState, RequestState.error);
       expect(provider.message, 'Recommendation Error');
-      expect(provider.movieState, RequestState.Loaded); // Detail still loaded
+      expect(provider.movieState, RequestState.loaded); // Detail still loaded
       expect(
         listenerCallCount,
         3,

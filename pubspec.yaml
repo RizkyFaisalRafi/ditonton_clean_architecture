@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.2
+  sdk: ^3.8.1
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  google_fonts: ^6.2.1
+  google_fonts: ^6.3.0
   http: ^1.2.2
   provider: ^6.1.2
   dartz: ^0.10.1
@@ -83,7 +83,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.3
   change_app_package_name: ^1.5.0
   rename_app: ^1.6.3
-  freezed: ^3.0.6 
+  freezed: ^3.0.6
   bloc_test: ^10.0.0
   flutter_test: # Widget test dan unit test yang bergantung pada Flutter framework.
     sdk: flutter
@@ -100,7 +100,7 @@ flutter_launcher_icons:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -118,7 +118,7 @@ flutter:
 #    - assets/images/
 #    - assets/image_lottie/
 #    - certificates/
-    
+
 #    - assets/fonts
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

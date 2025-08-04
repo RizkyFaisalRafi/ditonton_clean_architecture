@@ -70,7 +70,7 @@ void main() {
             MovieDetailState.loadedMovieDetail(
               movieDetail: testMovieDetail,
               movieRecommendations: tMovies,
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: true,
             ),
           ],
@@ -125,7 +125,7 @@ void main() {
             MovieDetailState.loadedMovieDetail(
               movieDetail: testMovieDetail,
               movieRecommendations: [],
-              recommendationState: RequestState.Error,
+              recommendationState: RequestState.error,
               isAddedToWatchlist: false,
             ),
           ],
@@ -149,7 +149,7 @@ void main() {
           () => MovieDetailState.loadedMovieDetail(
             movieDetail: testMovieDetail,
             movieRecommendations: [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: false,
           ),
       act: (bloc) => bloc.add(MovieDetailEvent.addToWatchlist(testMovieDetail)),
@@ -158,7 +158,7 @@ void main() {
             MovieDetailState.loadedMovieDetail(
               movieDetail: testMovieDetail,
               movieRecommendations: [],
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: true,
               watchlistMessage: 'Added to Watchlist',
             ),
@@ -181,7 +181,7 @@ void main() {
           () => MovieDetailState.loadedMovieDetail(
             movieDetail: testMovieDetail,
             movieRecommendations: [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: false,
           ),
       act: (bloc) => bloc.add(MovieDetailEvent.addToWatchlist(testMovieDetail)),
@@ -190,7 +190,7 @@ void main() {
             MovieDetailState.loadedMovieDetail(
               movieDetail: testMovieDetail,
               movieRecommendations: [],
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: false,
               watchlistMessage: 'Database Failure',
             ),
@@ -214,7 +214,7 @@ void main() {
           () => MovieDetailState.loadedMovieDetail(
             movieDetail: testMovieDetail,
             movieRecommendations: [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: true,
           ),
       act:
@@ -225,7 +225,7 @@ void main() {
             MovieDetailState.loadedMovieDetail(
               movieDetail: testMovieDetail,
               movieRecommendations: [],
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: false,
               watchlistMessage: 'Removed from Watchlist',
             ),
@@ -248,7 +248,7 @@ void main() {
           () => MovieDetailState.loadedMovieDetail(
             movieDetail: testMovieDetail,
             movieRecommendations: [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: true,
           ),
       act:
@@ -259,7 +259,7 @@ void main() {
             MovieDetailState.loadedMovieDetail(
               movieDetail: testMovieDetail,
               movieRecommendations: [],
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: true,
               watchlistMessage: 'Database Failure',
             ),

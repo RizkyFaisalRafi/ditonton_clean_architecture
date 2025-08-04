@@ -1,4 +1,4 @@
-library core;
+library;
 
 // Custom Drawer
 export 'package:core/custom_drawer/custom_drawer.dart';

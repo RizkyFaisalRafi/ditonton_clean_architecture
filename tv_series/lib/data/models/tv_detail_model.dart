@@ -197,7 +197,7 @@ class TvDetailResponse extends Equatable {
       createdBy: createdBy?.map((createdBy) => createdBy.toEntity()).toList(),
       episodeRunTime: episodeRunTime,
       firstAirDate: firstAirDate,
-      genres: this.genres.map((genre) => genre.toEntity()).toList(),
+      genres: genres.map((genre) => genre.toEntity()).toList(),
       homepage: homepage,
       id: id,
       inProduction: inProduction,

@@ -2,10 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:core/module/core.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:tv_series/module/tv_series.dart';
-
 import '../../../../dummy_data/dummy_objects_tv.dart';
 import '../../../../helpers/test_helper_tv.mocks.dart';
 
@@ -63,7 +61,7 @@ void main() {
             TvDetailState.loadedTvDetail(
               tvDetail: testTvDetail,
               tvRecommendations: testTvList,
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: true,
             ),
           ],
@@ -118,7 +116,7 @@ void main() {
             TvDetailState.loadedTvDetail(
               tvDetail: testTvDetail,
               tvRecommendations: [],
-              recommendationState: RequestState.Error,
+              recommendationState: RequestState.error,
               isAddedToWatchlist: false,
             ),
           ],
@@ -142,7 +140,7 @@ void main() {
           () => TvDetailState.loadedTvDetail(
             tvDetail: testTvDetail,
             tvRecommendations: [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: false,
           ),
       act: (bloc) => bloc.add(TvDetailEvent.addToWatchlist(testTvDetail)),
@@ -151,7 +149,7 @@ void main() {
             TvDetailState.loadedTvDetail(
               tvDetail: testTvDetail,
               tvRecommendations: [],
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: true,
               watchlistMessage: 'Added to Watchlist',
             ),
@@ -174,7 +172,7 @@ void main() {
           () => TvDetailState.loadedTvDetail(
             tvDetail: testTvDetail,
             tvRecommendations: [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: false,
           ),
       act: (bloc) => bloc.add(TvDetailEvent.addToWatchlist(testTvDetail)),
@@ -183,7 +181,7 @@ void main() {
             TvDetailState.loadedTvDetail(
               tvDetail: testTvDetail,
               tvRecommendations: [],
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: false,
               watchlistMessage: 'Database Failure',
             ),
@@ -207,7 +205,7 @@ void main() {
           () => TvDetailState.loadedTvDetail(
             tvDetail: testTvDetail,
             tvRecommendations: [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: true,
           ),
       act: (bloc) => bloc.add(TvDetailEvent.removeFromWatchlist(testTvDetail)),
@@ -216,7 +214,7 @@ void main() {
             TvDetailState.loadedTvDetail(
               tvDetail: testTvDetail,
               tvRecommendations: [],
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: false,
               watchlistMessage: 'Removed from Watchlist',
             ),
@@ -239,7 +237,7 @@ void main() {
           () => TvDetailState.loadedTvDetail(
             tvDetail: testTvDetail,
             tvRecommendations: [],
-            recommendationState: RequestState.Loaded,
+            recommendationState: RequestState.loaded,
             isAddedToWatchlist: true,
           ),
       act: (bloc) => bloc.add(TvDetailEvent.removeFromWatchlist(testTvDetail)),
@@ -248,7 +246,7 @@ void main() {
             TvDetailState.loadedTvDetail(
               tvDetail: testTvDetail,
               tvRecommendations: [],
-              recommendationState: RequestState.Loaded,
+              recommendationState: RequestState.loaded,
               isAddedToWatchlist: true,
               watchlistMessage: 'Database Failure',
             ),

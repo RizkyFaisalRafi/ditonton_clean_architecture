@@ -143,7 +143,7 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
   Future<List<MovieTable>> getCachedPopularMovies() async {
     try {
       final result = await databaseHelper.getCacheMovies('popular');
-      if (result.length > 0) {
+      if (result.isNotEmpty) {
         return result.map((data) => MovieTable.fromMap(data)).toList();
       } else {
         throw CacheException("Can't get the data :(");
@@ -171,7 +171,7 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
   Future<List<MovieTable>> getCachedTopRatedMovies() async {
     try {
       final result = await databaseHelper.getCacheMovies('top rated');
-      if (result.length > 0) {
+      if (result.isNotEmpty) {
         return result.map((data) => MovieTable.fromMap(data)).toList();
       } else {
         throw CacheException("Can't get the data :(");
@@ -199,7 +199,7 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
   Future<List<MovieTable>> getCachedUpComingMovies() async {
     try {
       final result = await databaseHelper.getCacheMovies('up coming');
-      if (result.length > 0) {
+      if (result.isNotEmpty) {
         return result.map((data) => MovieTable.fromMap(data)).toList();
       } else {
         throw CacheException("Can't get the data :(");
