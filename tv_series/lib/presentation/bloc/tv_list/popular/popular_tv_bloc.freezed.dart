@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -41,6 +40,148 @@ class $PopularTvEventCopyWith<$Res>  {
 $PopularTvEventCopyWith(PopularTvEvent _, $Res Function(PopularTvEvent) __);
 }
 
+
+/// Adds pattern-matching-related methods to [PopularTvEvent].
+extension PopularTvEventPatterns on PopularTvEvent {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( FetchInitialPopularTv value)?  fetchInitialPopularTv,TResult Function( FetchMorePopularTv value)?  fetchMorePopularTv,TResult Function( RefreshPTv value)?  refreshPTv,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case FetchInitialPopularTv() when fetchInitialPopularTv != null:
+return fetchInitialPopularTv(_that);case FetchMorePopularTv() when fetchMorePopularTv != null:
+return fetchMorePopularTv(_that);case RefreshPTv() when refreshPTv != null:
+return refreshPTv(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( FetchInitialPopularTv value)  fetchInitialPopularTv,required TResult Function( FetchMorePopularTv value)  fetchMorePopularTv,required TResult Function( RefreshPTv value)  refreshPTv,}){
+final _that = this;
+switch (_that) {
+case FetchInitialPopularTv():
+return fetchInitialPopularTv(_that);case FetchMorePopularTv():
+return fetchMorePopularTv(_that);case RefreshPTv():
+return refreshPTv(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( FetchInitialPopularTv value)?  fetchInitialPopularTv,TResult? Function( FetchMorePopularTv value)?  fetchMorePopularTv,TResult? Function( RefreshPTv value)?  refreshPTv,}){
+final _that = this;
+switch (_that) {
+case FetchInitialPopularTv() when fetchInitialPopularTv != null:
+return fetchInitialPopularTv(_that);case FetchMorePopularTv() when fetchMorePopularTv != null:
+return fetchMorePopularTv(_that);case RefreshPTv() when refreshPTv != null:
+return refreshPTv(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetchInitialPopularTv,TResult Function()?  fetchMorePopularTv,TResult Function()?  refreshPTv,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case FetchInitialPopularTv() when fetchInitialPopularTv != null:
+return fetchInitialPopularTv();case FetchMorePopularTv() when fetchMorePopularTv != null:
+return fetchMorePopularTv();case RefreshPTv() when refreshPTv != null:
+return refreshPTv();case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetchInitialPopularTv,required TResult Function()  fetchMorePopularTv,required TResult Function()  refreshPTv,}) {final _that = this;
+switch (_that) {
+case FetchInitialPopularTv():
+return fetchInitialPopularTv();case FetchMorePopularTv():
+return fetchMorePopularTv();case RefreshPTv():
+return refreshPTv();case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetchInitialPopularTv,TResult? Function()?  fetchMorePopularTv,TResult? Function()?  refreshPTv,}) {final _that = this;
+switch (_that) {
+case FetchInitialPopularTv() when fetchInitialPopularTv != null:
+return fetchInitialPopularTv();case FetchMorePopularTv() when fetchMorePopularTv != null:
+return fetchMorePopularTv();case RefreshPTv() when refreshPTv != null:
+return refreshPTv();case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 
@@ -167,6 +308,154 @@ class $PopularTvStateCopyWith<$Res>  {
 $PopularTvStateCopyWith(PopularTvState _, $Res Function(PopularTvState) __);
 }
 
+
+/// Adds pattern-matching-related methods to [PopularTvState].
+extension PopularTvStatePatterns on PopularTvState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( InitialPopularTv value)?  initialPopularTv,TResult Function( LoadingPopularTv value)?  loadingPopularTv,TResult Function( LoadedPopularTv value)?  loadedPopularTv,TResult Function( ErrorPopularTv value)?  errorPopularTv,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case InitialPopularTv() when initialPopularTv != null:
+return initialPopularTv(_that);case LoadingPopularTv() when loadingPopularTv != null:
+return loadingPopularTv(_that);case LoadedPopularTv() when loadedPopularTv != null:
+return loadedPopularTv(_that);case ErrorPopularTv() when errorPopularTv != null:
+return errorPopularTv(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( InitialPopularTv value)  initialPopularTv,required TResult Function( LoadingPopularTv value)  loadingPopularTv,required TResult Function( LoadedPopularTv value)  loadedPopularTv,required TResult Function( ErrorPopularTv value)  errorPopularTv,}){
+final _that = this;
+switch (_that) {
+case InitialPopularTv():
+return initialPopularTv(_that);case LoadingPopularTv():
+return loadingPopularTv(_that);case LoadedPopularTv():
+return loadedPopularTv(_that);case ErrorPopularTv():
+return errorPopularTv(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( InitialPopularTv value)?  initialPopularTv,TResult? Function( LoadingPopularTv value)?  loadingPopularTv,TResult? Function( LoadedPopularTv value)?  loadedPopularTv,TResult? Function( ErrorPopularTv value)?  errorPopularTv,}){
+final _that = this;
+switch (_that) {
+case InitialPopularTv() when initialPopularTv != null:
+return initialPopularTv(_that);case LoadingPopularTv() when loadingPopularTv != null:
+return loadingPopularTv(_that);case LoadedPopularTv() when loadedPopularTv != null:
+return loadedPopularTv(_that);case ErrorPopularTv() when errorPopularTv != null:
+return errorPopularTv(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initialPopularTv,TResult Function()?  loadingPopularTv,TResult Function( List<TvSeries> popular,  int popularPage,  bool hasMorePopular,  String? minorError)?  loadedPopularTv,TResult Function( String message)?  errorPopularTv,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case InitialPopularTv() when initialPopularTv != null:
+return initialPopularTv();case LoadingPopularTv() when loadingPopularTv != null:
+return loadingPopularTv();case LoadedPopularTv() when loadedPopularTv != null:
+return loadedPopularTv(_that.popular,_that.popularPage,_that.hasMorePopular,_that.minorError);case ErrorPopularTv() when errorPopularTv != null:
+return errorPopularTv(_that.message);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initialPopularTv,required TResult Function()  loadingPopularTv,required TResult Function( List<TvSeries> popular,  int popularPage,  bool hasMorePopular,  String? minorError)  loadedPopularTv,required TResult Function( String message)  errorPopularTv,}) {final _that = this;
+switch (_that) {
+case InitialPopularTv():
+return initialPopularTv();case LoadingPopularTv():
+return loadingPopularTv();case LoadedPopularTv():
+return loadedPopularTv(_that.popular,_that.popularPage,_that.hasMorePopular,_that.minorError);case ErrorPopularTv():
+return errorPopularTv(_that.message);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initialPopularTv,TResult? Function()?  loadingPopularTv,TResult? Function( List<TvSeries> popular,  int popularPage,  bool hasMorePopular,  String? minorError)?  loadedPopularTv,TResult? Function( String message)?  errorPopularTv,}) {final _that = this;
+switch (_that) {
+case InitialPopularTv() when initialPopularTv != null:
+return initialPopularTv();case LoadingPopularTv() when loadingPopularTv != null:
+return loadingPopularTv();case LoadedPopularTv() when loadedPopularTv != null:
+return loadedPopularTv(_that.popular,_that.popularPage,_that.hasMorePopular,_that.minorError);case ErrorPopularTv() when errorPopularTv != null:
+return errorPopularTv(_that.message);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 

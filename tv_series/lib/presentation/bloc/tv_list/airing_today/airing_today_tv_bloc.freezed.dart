@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -41,6 +40,148 @@ class $AiringTodayTvEventCopyWith<$Res>  {
 $AiringTodayTvEventCopyWith(AiringTodayTvEvent _, $Res Function(AiringTodayTvEvent) __);
 }
 
+
+/// Adds pattern-matching-related methods to [AiringTodayTvEvent].
+extension AiringTodayTvEventPatterns on AiringTodayTvEvent {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( FetchInitialAiringToday value)?  fetchInitialAiringToday,TResult Function( FetchMoreAiringTodayTv value)?  fetchMoreAiringTodayTv,TResult Function( RefreshTvAt value)?  refreshTvAt,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case FetchInitialAiringToday() when fetchInitialAiringToday != null:
+return fetchInitialAiringToday(_that);case FetchMoreAiringTodayTv() when fetchMoreAiringTodayTv != null:
+return fetchMoreAiringTodayTv(_that);case RefreshTvAt() when refreshTvAt != null:
+return refreshTvAt(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( FetchInitialAiringToday value)  fetchInitialAiringToday,required TResult Function( FetchMoreAiringTodayTv value)  fetchMoreAiringTodayTv,required TResult Function( RefreshTvAt value)  refreshTvAt,}){
+final _that = this;
+switch (_that) {
+case FetchInitialAiringToday():
+return fetchInitialAiringToday(_that);case FetchMoreAiringTodayTv():
+return fetchMoreAiringTodayTv(_that);case RefreshTvAt():
+return refreshTvAt(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( FetchInitialAiringToday value)?  fetchInitialAiringToday,TResult? Function( FetchMoreAiringTodayTv value)?  fetchMoreAiringTodayTv,TResult? Function( RefreshTvAt value)?  refreshTvAt,}){
+final _that = this;
+switch (_that) {
+case FetchInitialAiringToday() when fetchInitialAiringToday != null:
+return fetchInitialAiringToday(_that);case FetchMoreAiringTodayTv() when fetchMoreAiringTodayTv != null:
+return fetchMoreAiringTodayTv(_that);case RefreshTvAt() when refreshTvAt != null:
+return refreshTvAt(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetchInitialAiringToday,TResult Function()?  fetchMoreAiringTodayTv,TResult Function()?  refreshTvAt,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case FetchInitialAiringToday() when fetchInitialAiringToday != null:
+return fetchInitialAiringToday();case FetchMoreAiringTodayTv() when fetchMoreAiringTodayTv != null:
+return fetchMoreAiringTodayTv();case RefreshTvAt() when refreshTvAt != null:
+return refreshTvAt();case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetchInitialAiringToday,required TResult Function()  fetchMoreAiringTodayTv,required TResult Function()  refreshTvAt,}) {final _that = this;
+switch (_that) {
+case FetchInitialAiringToday():
+return fetchInitialAiringToday();case FetchMoreAiringTodayTv():
+return fetchMoreAiringTodayTv();case RefreshTvAt():
+return refreshTvAt();case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetchInitialAiringToday,TResult? Function()?  fetchMoreAiringTodayTv,TResult? Function()?  refreshTvAt,}) {final _that = this;
+switch (_that) {
+case FetchInitialAiringToday() when fetchInitialAiringToday != null:
+return fetchInitialAiringToday();case FetchMoreAiringTodayTv() when fetchMoreAiringTodayTv != null:
+return fetchMoreAiringTodayTv();case RefreshTvAt() when refreshTvAt != null:
+return refreshTvAt();case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 
@@ -167,6 +308,154 @@ class $AiringTodayTvStateCopyWith<$Res>  {
 $AiringTodayTvStateCopyWith(AiringTodayTvState _, $Res Function(AiringTodayTvState) __);
 }
 
+
+/// Adds pattern-matching-related methods to [AiringTodayTvState].
+extension AiringTodayTvStatePatterns on AiringTodayTvState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( InitialAtTv value)?  initialAtTv,TResult Function( LoadingAtTv value)?  loadingAtTv,TResult Function( LoadedAtTv value)?  loadedAtTv,TResult Function( ErrorAtTv value)?  errorAtTv,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case InitialAtTv() when initialAtTv != null:
+return initialAtTv(_that);case LoadingAtTv() when loadingAtTv != null:
+return loadingAtTv(_that);case LoadedAtTv() when loadedAtTv != null:
+return loadedAtTv(_that);case ErrorAtTv() when errorAtTv != null:
+return errorAtTv(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( InitialAtTv value)  initialAtTv,required TResult Function( LoadingAtTv value)  loadingAtTv,required TResult Function( LoadedAtTv value)  loadedAtTv,required TResult Function( ErrorAtTv value)  errorAtTv,}){
+final _that = this;
+switch (_that) {
+case InitialAtTv():
+return initialAtTv(_that);case LoadingAtTv():
+return loadingAtTv(_that);case LoadedAtTv():
+return loadedAtTv(_that);case ErrorAtTv():
+return errorAtTv(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( InitialAtTv value)?  initialAtTv,TResult? Function( LoadingAtTv value)?  loadingAtTv,TResult? Function( LoadedAtTv value)?  loadedAtTv,TResult? Function( ErrorAtTv value)?  errorAtTv,}){
+final _that = this;
+switch (_that) {
+case InitialAtTv() when initialAtTv != null:
+return initialAtTv(_that);case LoadingAtTv() when loadingAtTv != null:
+return loadingAtTv(_that);case LoadedAtTv() when loadedAtTv != null:
+return loadedAtTv(_that);case ErrorAtTv() when errorAtTv != null:
+return errorAtTv(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initialAtTv,TResult Function()?  loadingAtTv,TResult Function( List<TvSeries> airingToday,  int airingTodayPage,  bool hasMoreAiringToday,  String? minorError)?  loadedAtTv,TResult Function( String message)?  errorAtTv,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case InitialAtTv() when initialAtTv != null:
+return initialAtTv();case LoadingAtTv() when loadingAtTv != null:
+return loadingAtTv();case LoadedAtTv() when loadedAtTv != null:
+return loadedAtTv(_that.airingToday,_that.airingTodayPage,_that.hasMoreAiringToday,_that.minorError);case ErrorAtTv() when errorAtTv != null:
+return errorAtTv(_that.message);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initialAtTv,required TResult Function()  loadingAtTv,required TResult Function( List<TvSeries> airingToday,  int airingTodayPage,  bool hasMoreAiringToday,  String? minorError)  loadedAtTv,required TResult Function( String message)  errorAtTv,}) {final _that = this;
+switch (_that) {
+case InitialAtTv():
+return initialAtTv();case LoadingAtTv():
+return loadingAtTv();case LoadedAtTv():
+return loadedAtTv(_that.airingToday,_that.airingTodayPage,_that.hasMoreAiringToday,_that.minorError);case ErrorAtTv():
+return errorAtTv(_that.message);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initialAtTv,TResult? Function()?  loadingAtTv,TResult? Function( List<TvSeries> airingToday,  int airingTodayPage,  bool hasMoreAiringToday,  String? minorError)?  loadedAtTv,TResult? Function( String message)?  errorAtTv,}) {final _that = this;
+switch (_that) {
+case InitialAtTv() when initialAtTv != null:
+return initialAtTv();case LoadingAtTv() when loadingAtTv != null:
+return loadingAtTv();case LoadedAtTv() when loadedAtTv != null:
+return loadedAtTv(_that.airingToday,_that.airingTodayPage,_that.hasMoreAiringToday,_that.minorError);case ErrorAtTv() when errorAtTv != null:
+return errorAtTv(_that.message);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 

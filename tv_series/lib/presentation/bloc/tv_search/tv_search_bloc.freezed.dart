@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -41,6 +40,142 @@ class $TvSearchEventCopyWith<$Res>  {
 $TvSearchEventCopyWith(TvSearchEvent _, $Res Function(TvSearchEvent) __);
 }
 
+
+/// Adds pattern-matching-related methods to [TvSearchEvent].
+extension TvSearchEventPatterns on TvSearchEvent {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Started value)?  started,TResult Function( OnQueryChangedTv value)?  onQueryChangedTv,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Started() when started != null:
+return started(_that);case OnQueryChangedTv() when onQueryChangedTv != null:
+return onQueryChangedTv(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Started value)  started,required TResult Function( OnQueryChangedTv value)  onQueryChangedTv,}){
+final _that = this;
+switch (_that) {
+case _Started():
+return started(_that);case OnQueryChangedTv():
+return onQueryChangedTv(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Started value)?  started,TResult? Function( OnQueryChangedTv value)?  onQueryChangedTv,}){
+final _that = this;
+switch (_that) {
+case _Started() when started != null:
+return started(_that);case OnQueryChangedTv() when onQueryChangedTv != null:
+return onQueryChangedTv(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function( String query)?  onQueryChangedTv,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Started() when started != null:
+return started();case OnQueryChangedTv() when onQueryChangedTv != null:
+return onQueryChangedTv(_that.query);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function( String query)  onQueryChangedTv,}) {final _that = this;
+switch (_that) {
+case _Started():
+return started();case OnQueryChangedTv():
+return onQueryChangedTv(_that.query);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function( String query)?  onQueryChangedTv,}) {final _that = this;
+switch (_that) {
+case _Started() when started != null:
+return started();case OnQueryChangedTv() when onQueryChangedTv != null:
+return onQueryChangedTv(_that.query);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 
@@ -169,6 +304,154 @@ class $TvSearchStateCopyWith<$Res>  {
 $TvSearchStateCopyWith(TvSearchState _, $Res Function(TvSearchState) __);
 }
 
+
+/// Adds pattern-matching-related methods to [TvSearchState].
+extension TvSearchStatePatterns on TvSearchState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SearchEmpty value)?  searchEmpty,TResult Function( SearchLoading value)?  searchLoading,TResult Function( SearchError value)?  searchError,TResult Function( SearchHasData value)?  searchHasData,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case SearchEmpty() when searchEmpty != null:
+return searchEmpty(_that);case SearchLoading() when searchLoading != null:
+return searchLoading(_that);case SearchError() when searchError != null:
+return searchError(_that);case SearchHasData() when searchHasData != null:
+return searchHasData(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SearchEmpty value)  searchEmpty,required TResult Function( SearchLoading value)  searchLoading,required TResult Function( SearchError value)  searchError,required TResult Function( SearchHasData value)  searchHasData,}){
+final _that = this;
+switch (_that) {
+case SearchEmpty():
+return searchEmpty(_that);case SearchLoading():
+return searchLoading(_that);case SearchError():
+return searchError(_that);case SearchHasData():
+return searchHasData(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SearchEmpty value)?  searchEmpty,TResult? Function( SearchLoading value)?  searchLoading,TResult? Function( SearchError value)?  searchError,TResult? Function( SearchHasData value)?  searchHasData,}){
+final _that = this;
+switch (_that) {
+case SearchEmpty() when searchEmpty != null:
+return searchEmpty(_that);case SearchLoading() when searchLoading != null:
+return searchLoading(_that);case SearchError() when searchError != null:
+return searchError(_that);case SearchHasData() when searchHasData != null:
+return searchHasData(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  searchEmpty,TResult Function()?  searchLoading,TResult Function( String message)?  searchError,TResult Function( List<TvSeries> result)?  searchHasData,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case SearchEmpty() when searchEmpty != null:
+return searchEmpty();case SearchLoading() when searchLoading != null:
+return searchLoading();case SearchError() when searchError != null:
+return searchError(_that.message);case SearchHasData() when searchHasData != null:
+return searchHasData(_that.result);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  searchEmpty,required TResult Function()  searchLoading,required TResult Function( String message)  searchError,required TResult Function( List<TvSeries> result)  searchHasData,}) {final _that = this;
+switch (_that) {
+case SearchEmpty():
+return searchEmpty();case SearchLoading():
+return searchLoading();case SearchError():
+return searchError(_that.message);case SearchHasData():
+return searchHasData(_that.result);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  searchEmpty,TResult? Function()?  searchLoading,TResult? Function( String message)?  searchError,TResult? Function( List<TvSeries> result)?  searchHasData,}) {final _that = this;
+switch (_that) {
+case SearchEmpty() when searchEmpty != null:
+return searchEmpty();case SearchLoading() when searchLoading != null:
+return searchLoading();case SearchError() when searchError != null:
+return searchError(_that.message);case SearchHasData() when searchHasData != null:
+return searchHasData(_that.result);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 

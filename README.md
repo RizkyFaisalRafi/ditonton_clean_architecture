@@ -2,9 +2,7 @@
 
 # Github: https://github.com/RizkyFaisalRafi/ditonton_clean_architecture/tree/Second-Submission
 
-# [![Codemagic build status](https://api.codemagic.io/apps/6848c13e5b1935263639ea9e/6890d0c89cf5f5a9b02b97bc/status_badge.svg)](https://codemagic.io/apps/6848c13e5b1935263639ea9e/6890d0c89cf5f5a9b02b97bc/latest_build)
-
-https://codemagic.io/app/6848c13e5b1935263639ea9e/build/6890d0c89cf5f5a9b02b97bc
+# [![Codemagic build status](https://api.codemagic.io/apps/6848c13e5b1935263639ea9e/6848c13e5b1935263639ea9d/status_badge.svg)](https://codemagic.io/app/6848c13e5b1935263639ea9e/6848c13e5b1935263639ea9d/latest_build)
 
 # Screenshoot Coverage berdasarkan Modularization (tv_series, movies, core, about)
 <img width="1852" height="821" alt="Cuplikan layar 2025-08-04 232607" src="https://github.com/user-attachments/assets/d44151ed-1389-4c1d-b934-a8be4602d2ab" />

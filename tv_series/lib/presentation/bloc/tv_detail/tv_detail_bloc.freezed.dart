@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -41,6 +40,148 @@ class $TvDetailEventCopyWith<$Res>  {
 $TvDetailEventCopyWith(TvDetailEvent _, $Res Function(TvDetailEvent) __);
 }
 
+
+/// Adds pattern-matching-related methods to [TvDetailEvent].
+extension TvDetailEventPatterns on TvDetailEvent {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( FetchTvDetail value)?  fetchTvDetail,TResult Function( AddToWatchlist value)?  addToWatchlist,TResult Function( RemoveFromWatchlist value)?  removeFromWatchlist,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case FetchTvDetail() when fetchTvDetail != null:
+return fetchTvDetail(_that);case AddToWatchlist() when addToWatchlist != null:
+return addToWatchlist(_that);case RemoveFromWatchlist() when removeFromWatchlist != null:
+return removeFromWatchlist(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( FetchTvDetail value)  fetchTvDetail,required TResult Function( AddToWatchlist value)  addToWatchlist,required TResult Function( RemoveFromWatchlist value)  removeFromWatchlist,}){
+final _that = this;
+switch (_that) {
+case FetchTvDetail():
+return fetchTvDetail(_that);case AddToWatchlist():
+return addToWatchlist(_that);case RemoveFromWatchlist():
+return removeFromWatchlist(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( FetchTvDetail value)?  fetchTvDetail,TResult? Function( AddToWatchlist value)?  addToWatchlist,TResult? Function( RemoveFromWatchlist value)?  removeFromWatchlist,}){
+final _that = this;
+switch (_that) {
+case FetchTvDetail() when fetchTvDetail != null:
+return fetchTvDetail(_that);case AddToWatchlist() when addToWatchlist != null:
+return addToWatchlist(_that);case RemoveFromWatchlist() when removeFromWatchlist != null:
+return removeFromWatchlist(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( int id)?  fetchTvDetail,TResult Function( TvDetail tvDetail)?  addToWatchlist,TResult Function( TvDetail tvDetail)?  removeFromWatchlist,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case FetchTvDetail() when fetchTvDetail != null:
+return fetchTvDetail(_that.id);case AddToWatchlist() when addToWatchlist != null:
+return addToWatchlist(_that.tvDetail);case RemoveFromWatchlist() when removeFromWatchlist != null:
+return removeFromWatchlist(_that.tvDetail);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( int id)  fetchTvDetail,required TResult Function( TvDetail tvDetail)  addToWatchlist,required TResult Function( TvDetail tvDetail)  removeFromWatchlist,}) {final _that = this;
+switch (_that) {
+case FetchTvDetail():
+return fetchTvDetail(_that.id);case AddToWatchlist():
+return addToWatchlist(_that.tvDetail);case RemoveFromWatchlist():
+return removeFromWatchlist(_that.tvDetail);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( int id)?  fetchTvDetail,TResult? Function( TvDetail tvDetail)?  addToWatchlist,TResult? Function( TvDetail tvDetail)?  removeFromWatchlist,}) {final _that = this;
+switch (_that) {
+case FetchTvDetail() when fetchTvDetail != null:
+return fetchTvDetail(_that.id);case AddToWatchlist() when addToWatchlist != null:
+return addToWatchlist(_that.tvDetail);case RemoveFromWatchlist() when removeFromWatchlist != null:
+return removeFromWatchlist(_that.tvDetail);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 
@@ -269,6 +410,154 @@ class $TvDetailStateCopyWith<$Res>  {
 $TvDetailStateCopyWith(TvDetailState _, $Res Function(TvDetailState) __);
 }
 
+
+/// Adds pattern-matching-related methods to [TvDetailState].
+extension TvDetailStatePatterns on TvDetailState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( InitialTvDetail value)?  initialTvDetail,TResult Function( LoadingTvDetail value)?  loadingTvDetail,TResult Function( LoadedTvDetail value)?  loadedTvDetail,TResult Function( ErrorTvDetail value)?  errorTvDetail,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case InitialTvDetail() when initialTvDetail != null:
+return initialTvDetail(_that);case LoadingTvDetail() when loadingTvDetail != null:
+return loadingTvDetail(_that);case LoadedTvDetail() when loadedTvDetail != null:
+return loadedTvDetail(_that);case ErrorTvDetail() when errorTvDetail != null:
+return errorTvDetail(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( InitialTvDetail value)  initialTvDetail,required TResult Function( LoadingTvDetail value)  loadingTvDetail,required TResult Function( LoadedTvDetail value)  loadedTvDetail,required TResult Function( ErrorTvDetail value)  errorTvDetail,}){
+final _that = this;
+switch (_that) {
+case InitialTvDetail():
+return initialTvDetail(_that);case LoadingTvDetail():
+return loadingTvDetail(_that);case LoadedTvDetail():
+return loadedTvDetail(_that);case ErrorTvDetail():
+return errorTvDetail(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( InitialTvDetail value)?  initialTvDetail,TResult? Function( LoadingTvDetail value)?  loadingTvDetail,TResult? Function( LoadedTvDetail value)?  loadedTvDetail,TResult? Function( ErrorTvDetail value)?  errorTvDetail,}){
+final _that = this;
+switch (_that) {
+case InitialTvDetail() when initialTvDetail != null:
+return initialTvDetail(_that);case LoadingTvDetail() when loadingTvDetail != null:
+return loadingTvDetail(_that);case LoadedTvDetail() when loadedTvDetail != null:
+return loadedTvDetail(_that);case ErrorTvDetail() when errorTvDetail != null:
+return errorTvDetail(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initialTvDetail,TResult Function()?  loadingTvDetail,TResult Function( TvDetail tvDetail,  List<TvSeries> tvRecommendations,  RequestState recommendationState,  bool isAddedToWatchlist,  String? watchlistMessage)?  loadedTvDetail,TResult Function( String message)?  errorTvDetail,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case InitialTvDetail() when initialTvDetail != null:
+return initialTvDetail();case LoadingTvDetail() when loadingTvDetail != null:
+return loadingTvDetail();case LoadedTvDetail() when loadedTvDetail != null:
+return loadedTvDetail(_that.tvDetail,_that.tvRecommendations,_that.recommendationState,_that.isAddedToWatchlist,_that.watchlistMessage);case ErrorTvDetail() when errorTvDetail != null:
+return errorTvDetail(_that.message);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initialTvDetail,required TResult Function()  loadingTvDetail,required TResult Function( TvDetail tvDetail,  List<TvSeries> tvRecommendations,  RequestState recommendationState,  bool isAddedToWatchlist,  String? watchlistMessage)  loadedTvDetail,required TResult Function( String message)  errorTvDetail,}) {final _that = this;
+switch (_that) {
+case InitialTvDetail():
+return initialTvDetail();case LoadingTvDetail():
+return loadingTvDetail();case LoadedTvDetail():
+return loadedTvDetail(_that.tvDetail,_that.tvRecommendations,_that.recommendationState,_that.isAddedToWatchlist,_that.watchlistMessage);case ErrorTvDetail():
+return errorTvDetail(_that.message);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initialTvDetail,TResult? Function()?  loadingTvDetail,TResult? Function( TvDetail tvDetail,  List<TvSeries> tvRecommendations,  RequestState recommendationState,  bool isAddedToWatchlist,  String? watchlistMessage)?  loadedTvDetail,TResult? Function( String message)?  errorTvDetail,}) {final _that = this;
+switch (_that) {
+case InitialTvDetail() when initialTvDetail != null:
+return initialTvDetail();case LoadingTvDetail() when loadingTvDetail != null:
+return loadingTvDetail();case LoadedTvDetail() when loadedTvDetail != null:
+return loadedTvDetail(_that.tvDetail,_that.tvRecommendations,_that.recommendationState,_that.isAddedToWatchlist,_that.watchlistMessage);case ErrorTvDetail() when errorTvDetail != null:
+return errorTvDetail(_that.message);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 

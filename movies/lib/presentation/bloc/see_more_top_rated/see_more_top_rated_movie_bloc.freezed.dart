@@ -1,6 +1,5 @@
-// dart format width=80
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -41,6 +40,148 @@ class $SeeMoreTopRatedMovieEventCopyWith<$Res>  {
 $SeeMoreTopRatedMovieEventCopyWith(SeeMoreTopRatedMovieEvent _, $Res Function(SeeMoreTopRatedMovieEvent) __);
 }
 
+
+/// Adds pattern-matching-related methods to [SeeMoreTopRatedMovieEvent].
+extension SeeMoreTopRatedMovieEventPatterns on SeeMoreTopRatedMovieEvent {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( FetchInitialTopRatedMovies value)?  fetchInitialTopRatedMovies,TResult Function( FetchMoreTopRatedSeeMoreMovies value)?  fetchMoreTopRatedSeeMoreMovies,TResult Function( RefreshTopRatedMovies value)?  refreshTopRatedMovies,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case FetchInitialTopRatedMovies() when fetchInitialTopRatedMovies != null:
+return fetchInitialTopRatedMovies(_that);case FetchMoreTopRatedSeeMoreMovies() when fetchMoreTopRatedSeeMoreMovies != null:
+return fetchMoreTopRatedSeeMoreMovies(_that);case RefreshTopRatedMovies() when refreshTopRatedMovies != null:
+return refreshTopRatedMovies(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( FetchInitialTopRatedMovies value)  fetchInitialTopRatedMovies,required TResult Function( FetchMoreTopRatedSeeMoreMovies value)  fetchMoreTopRatedSeeMoreMovies,required TResult Function( RefreshTopRatedMovies value)  refreshTopRatedMovies,}){
+final _that = this;
+switch (_that) {
+case FetchInitialTopRatedMovies():
+return fetchInitialTopRatedMovies(_that);case FetchMoreTopRatedSeeMoreMovies():
+return fetchMoreTopRatedSeeMoreMovies(_that);case RefreshTopRatedMovies():
+return refreshTopRatedMovies(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( FetchInitialTopRatedMovies value)?  fetchInitialTopRatedMovies,TResult? Function( FetchMoreTopRatedSeeMoreMovies value)?  fetchMoreTopRatedSeeMoreMovies,TResult? Function( RefreshTopRatedMovies value)?  refreshTopRatedMovies,}){
+final _that = this;
+switch (_that) {
+case FetchInitialTopRatedMovies() when fetchInitialTopRatedMovies != null:
+return fetchInitialTopRatedMovies(_that);case FetchMoreTopRatedSeeMoreMovies() when fetchMoreTopRatedSeeMoreMovies != null:
+return fetchMoreTopRatedSeeMoreMovies(_that);case RefreshTopRatedMovies() when refreshTopRatedMovies != null:
+return refreshTopRatedMovies(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetchInitialTopRatedMovies,TResult Function()?  fetchMoreTopRatedSeeMoreMovies,TResult Function()?  refreshTopRatedMovies,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case FetchInitialTopRatedMovies() when fetchInitialTopRatedMovies != null:
+return fetchInitialTopRatedMovies();case FetchMoreTopRatedSeeMoreMovies() when fetchMoreTopRatedSeeMoreMovies != null:
+return fetchMoreTopRatedSeeMoreMovies();case RefreshTopRatedMovies() when refreshTopRatedMovies != null:
+return refreshTopRatedMovies();case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetchInitialTopRatedMovies,required TResult Function()  fetchMoreTopRatedSeeMoreMovies,required TResult Function()  refreshTopRatedMovies,}) {final _that = this;
+switch (_that) {
+case FetchInitialTopRatedMovies():
+return fetchInitialTopRatedMovies();case FetchMoreTopRatedSeeMoreMovies():
+return fetchMoreTopRatedSeeMoreMovies();case RefreshTopRatedMovies():
+return refreshTopRatedMovies();case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetchInitialTopRatedMovies,TResult? Function()?  fetchMoreTopRatedSeeMoreMovies,TResult? Function()?  refreshTopRatedMovies,}) {final _that = this;
+switch (_that) {
+case FetchInitialTopRatedMovies() when fetchInitialTopRatedMovies != null:
+return fetchInitialTopRatedMovies();case FetchMoreTopRatedSeeMoreMovies() when fetchMoreTopRatedSeeMoreMovies != null:
+return fetchMoreTopRatedSeeMoreMovies();case RefreshTopRatedMovies() when refreshTopRatedMovies != null:
+return refreshTopRatedMovies();case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 
@@ -167,6 +308,154 @@ class $SeeMoreTopRatedMovieStateCopyWith<$Res>  {
 $SeeMoreTopRatedMovieStateCopyWith(SeeMoreTopRatedMovieState _, $Res Function(SeeMoreTopRatedMovieState) __);
 }
 
+
+/// Adds pattern-matching-related methods to [SeeMoreTopRatedMovieState].
+extension SeeMoreTopRatedMovieStatePatterns on SeeMoreTopRatedMovieState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( InitialTopRatedMSeeMore value)?  initialTopRatedMSeeMore,TResult Function( LoadingTopRatedMSeeMore value)?  loadingTopRatedMSeeMore,TResult Function( LoadedTopRatedMSeeMore value)?  loadedTopRatedMSeeMore,TResult Function( ErrorTopRatedMSeeMore value)?  errorTopRatedMSeeMore,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case InitialTopRatedMSeeMore() when initialTopRatedMSeeMore != null:
+return initialTopRatedMSeeMore(_that);case LoadingTopRatedMSeeMore() when loadingTopRatedMSeeMore != null:
+return loadingTopRatedMSeeMore(_that);case LoadedTopRatedMSeeMore() when loadedTopRatedMSeeMore != null:
+return loadedTopRatedMSeeMore(_that);case ErrorTopRatedMSeeMore() when errorTopRatedMSeeMore != null:
+return errorTopRatedMSeeMore(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( InitialTopRatedMSeeMore value)  initialTopRatedMSeeMore,required TResult Function( LoadingTopRatedMSeeMore value)  loadingTopRatedMSeeMore,required TResult Function( LoadedTopRatedMSeeMore value)  loadedTopRatedMSeeMore,required TResult Function( ErrorTopRatedMSeeMore value)  errorTopRatedMSeeMore,}){
+final _that = this;
+switch (_that) {
+case InitialTopRatedMSeeMore():
+return initialTopRatedMSeeMore(_that);case LoadingTopRatedMSeeMore():
+return loadingTopRatedMSeeMore(_that);case LoadedTopRatedMSeeMore():
+return loadedTopRatedMSeeMore(_that);case ErrorTopRatedMSeeMore():
+return errorTopRatedMSeeMore(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( InitialTopRatedMSeeMore value)?  initialTopRatedMSeeMore,TResult? Function( LoadingTopRatedMSeeMore value)?  loadingTopRatedMSeeMore,TResult? Function( LoadedTopRatedMSeeMore value)?  loadedTopRatedMSeeMore,TResult? Function( ErrorTopRatedMSeeMore value)?  errorTopRatedMSeeMore,}){
+final _that = this;
+switch (_that) {
+case InitialTopRatedMSeeMore() when initialTopRatedMSeeMore != null:
+return initialTopRatedMSeeMore(_that);case LoadingTopRatedMSeeMore() when loadingTopRatedMSeeMore != null:
+return loadingTopRatedMSeeMore(_that);case LoadedTopRatedMSeeMore() when loadedTopRatedMSeeMore != null:
+return loadedTopRatedMSeeMore(_that);case ErrorTopRatedMSeeMore() when errorTopRatedMSeeMore != null:
+return errorTopRatedMSeeMore(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initialTopRatedMSeeMore,TResult Function()?  loadingTopRatedMSeeMore,TResult Function( List<Movie> topRated,  int topRatedPage,  bool hasMoreTopRated,  String? minorError)?  loadedTopRatedMSeeMore,TResult Function( String message)?  errorTopRatedMSeeMore,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case InitialTopRatedMSeeMore() when initialTopRatedMSeeMore != null:
+return initialTopRatedMSeeMore();case LoadingTopRatedMSeeMore() when loadingTopRatedMSeeMore != null:
+return loadingTopRatedMSeeMore();case LoadedTopRatedMSeeMore() when loadedTopRatedMSeeMore != null:
+return loadedTopRatedMSeeMore(_that.topRated,_that.topRatedPage,_that.hasMoreTopRated,_that.minorError);case ErrorTopRatedMSeeMore() when errorTopRatedMSeeMore != null:
+return errorTopRatedMSeeMore(_that.message);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initialTopRatedMSeeMore,required TResult Function()  loadingTopRatedMSeeMore,required TResult Function( List<Movie> topRated,  int topRatedPage,  bool hasMoreTopRated,  String? minorError)  loadedTopRatedMSeeMore,required TResult Function( String message)  errorTopRatedMSeeMore,}) {final _that = this;
+switch (_that) {
+case InitialTopRatedMSeeMore():
+return initialTopRatedMSeeMore();case LoadingTopRatedMSeeMore():
+return loadingTopRatedMSeeMore();case LoadedTopRatedMSeeMore():
+return loadedTopRatedMSeeMore(_that.topRated,_that.topRatedPage,_that.hasMoreTopRated,_that.minorError);case ErrorTopRatedMSeeMore():
+return errorTopRatedMSeeMore(_that.message);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initialTopRatedMSeeMore,TResult? Function()?  loadingTopRatedMSeeMore,TResult? Function( List<Movie> topRated,  int topRatedPage,  bool hasMoreTopRated,  String? minorError)?  loadedTopRatedMSeeMore,TResult? Function( String message)?  errorTopRatedMSeeMore,}) {final _that = this;
+switch (_that) {
+case InitialTopRatedMSeeMore() when initialTopRatedMSeeMore != null:
+return initialTopRatedMSeeMore();case LoadingTopRatedMSeeMore() when loadingTopRatedMSeeMore != null:
+return loadingTopRatedMSeeMore();case LoadedTopRatedMSeeMore() when loadedTopRatedMSeeMore != null:
+return loadedTopRatedMSeeMore(_that.topRated,_that.topRatedPage,_that.hasMoreTopRated,_that.minorError);case ErrorTopRatedMSeeMore() when errorTopRatedMSeeMore != null:
+return errorTopRatedMSeeMore(_that.message);case _:
+  return null;
+
+}
+}
+
+}
 
 /// @nodoc
 
