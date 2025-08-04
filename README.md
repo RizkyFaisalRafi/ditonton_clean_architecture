@@ -2,7 +2,7 @@
 
 # Github: https://github.com/RizkyFaisalRafi/ditonton_clean_architecture/tree/Second-Submission
 
-# [![Codemagic build status](https://api.codemagic.io/apps/6848c13e5b1935263639ea9e/6890d0c89cf5f5a9b02b97bc/status_badge.svg)](https://codemagic.io/apps/6848c13e5b1935263639ea9e/6890d0c89cf5f5a9b02b97bc/latest_build)
+# Codemagic: [![Codemagic build status](https://api.codemagic.io/apps/6848c13e5b1935263639ea9e/6848c13e5b1935263639ea9d/status_badge.svg)](https://codemagic.io/app/6848c13e5b1935263639ea9e/6848c13e5b1935263639ea9d/latest_build)
 
 https://codemagic.io/app/6848c13e5b1935263639ea9e/build/6890d0c89cf5f5a9b02b97bc
 
@@ -13,7 +13,8 @@ https://codemagic.io/app/6848c13e5b1935263639ea9e/build/6890d0c89cf5f5a9b02b97bc
 <img width="1858" height="338" alt="Cuplikan layar 2025-08-04 232717" src="https://github.com/user-attachments/assets/c2e4a9a2-4cac-410b-8609-89cc4a5085e7" />
 
 # Screenshoot CodeMagic:
-<img width="1915" height="970" alt="Cuplikan layar 2025-08-04 233100" src="https://github.com/user-attachments/assets/d6cec819-f128-4cbb-ae6b-8f383f4d292b" />
+<img width="1886" height="967" alt="image" src="https://github.com/user-attachments/assets/c992f3d9-3eeb-447a-a7d6-c2c5ded0f159" />
+
 
 # Screenshoot Firebase
 <img width="1920" height="1080" alt="Screenshot (147)" src="https://github.com/user-attachments/assets/a448a315-3396-4066-b95f-14f1cafbbb4a" />
