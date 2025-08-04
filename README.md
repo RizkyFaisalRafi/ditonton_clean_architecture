@@ -1,8 +1,8 @@
 # a199-flutter-expert-project
 
-[//]: # (# Github: https://github.com/RizkyFaisalRafi/a199-flutter-expert-project)
+# Github: https://github.com/RizkyFaisalRafi/ditonton_clean_architecture/tree/Second-Submission
 
-[//]: # (# [![Codemagic build status]&#40;https://api.codemagic.io/apps/6379c4a01063f44db75df13a/6379c4a01063f44db75df139/status_badge.svg&#41;]&#40;https://codemagic.io/apps/6379c4a01063f44db75df13a/6379c4a01063f44db75df139/latest_build&#41;)
+# [![Codemagic build status](https://api.codemagic.io/apps/6379c4a01063f44db75df13a/6379c4a01063f44db75df139/status_badge.svg)](https://codemagic.io/apps/6379c4a01063f44db75df13a/6379c4a01063f44db75df139/latest_build)
 
 Repository ini merupakan project awal dan akhir submission kelas Flutter Expert Dicoding Indonesia
 2025.
