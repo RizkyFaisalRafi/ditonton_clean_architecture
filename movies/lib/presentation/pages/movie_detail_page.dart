@@ -36,108 +36,128 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocListener<MovieDetailBloc, MovieDetailState>(
-        listener: (context, state) {
-          if (state is LoadedMovieDetail) {
-            final message = state.watchlistMessage;
-            if (message != null && message.isNotEmpty) {
-              if (message == MovieDetailState.watchlistAddSuccessMessage ||
-                  message == MovieDetailState.watchlistRemoveSuccessMessage) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(message)));
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(content: Text(message));
-                  },
-                );
+    return PopScope(
+      // Set canPop menjadi false untuk mengambil alih navigasi kembali
+      canPop: false,
+      // Gunakan onPopInvoked untuk menangani aksi "kembali"
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        // Jika pop sudah terjadi karena sebab lain, jangan lakukan apa-apa
+        if (didPop) {
+          return;
+        }
+
+        // Lakukan cleanup SnackBar SEKARANG, saat widget masih 100% aktif
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+
+        // Pop secara manual, dan teruskan 'result' untuk menjaga
+        // fungsionalitas jika pop dipicu dengan sebuah nilai.
+        // Lakukan pop secara manual SETELAH cleanup selesai
+        Navigator.of(context).pop(result);
+      },
+
+      child: Scaffold(
+        body: BlocListener<MovieDetailBloc, MovieDetailState>(
+          listener: (context, state) {
+            if (state is LoadedMovieDetail) {
+              final message = state.watchlistMessage;
+              if (message != null && message.isNotEmpty) {
+                if (message == MovieDetailState.watchlistAddSuccessMessage ||
+                    message == MovieDetailState.watchlistRemoveSuccessMessage) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message)));
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(content: Text(message));
+                    },
+                  );
+                }
               }
             }
-          }
-        },
-        child: BlocBuilder<MovieDetailBloc, MovieDetailState>(
-          builder: (context, state) {
-            return switch (state) {
-              InitialMovieDetail() => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              LoadingMovieDetail() => Center(
-                child: Lottie.asset(
-                  loadingBarLottiePath,
-                  width: 150,
-                  height: 150,
+          },
+          child: BlocBuilder<MovieDetailBloc, MovieDetailState>(
+            builder: (context, state) {
+              return switch (state) {
+                InitialMovieDetail() => const Center(
+                  child: CircularProgressIndicator(),
                 ),
-              ),
-              LoadedMovieDetail(
-                movieDetail: final movieDetail,
-                movieRecommendations: final movieRecommendations,
-                isAddedToWatchlist: final isAddedToWatchlist,
-              ) =>
-                SafeArea(
-                  child: DetailContent(
-                    movieDetail,
-                    movieRecommendations,
-                    isAddedToWatchlist,
+                LoadingMovieDetail() => Center(
+                  child: Lottie.asset(
+                    loadingBarLottiePath,
+                    width: 150,
+                    height: 150,
                   ),
                 ),
+                LoadedMovieDetail(
+                  movieDetail: final movieDetail,
+                  movieRecommendations: final movieRecommendations,
+                  isAddedToWatchlist: final isAddedToWatchlist,
+                ) =>
+                  SafeArea(
+                    child: DetailContent(
+                      movieDetail,
+                      movieRecommendations,
+                      isAddedToWatchlist,
+                    ),
+                  ),
 
-              // Error(message: final message) => ErrorStateWidget2(
-              //   message: message,
-              //   onRetry: () {
-              //     MovieDetailEvent.fetchMovieDetail(widget.id);
-              //   },
-              // ),
-              ErrorMovieDetail(message: final message) => ErrorStateWidget2(
-                message: message,
-                onRetry: () {
-                  context.read<MovieDetailBloc>().add(
-                    MovieDetailEvent.fetchMovieDetail(widget.id),
-                  );
-                },
-              ),
+                // Error(message: final message) => ErrorStateWidget2(
+                //   message: message,
+                //   onRetry: () {
+                //     MovieDetailEvent.fetchMovieDetail(widget.id);
+                //   },
+                // ),
+                ErrorMovieDetail(message: final message) => ErrorStateWidget2(
+                  message: message,
+                  onRetry: () {
+                    context.read<MovieDetailBloc>().add(
+                      MovieDetailEvent.fetchMovieDetail(widget.id),
+                    );
+                  },
+                ),
 
-              MovieDetailState() => throw UnimplementedError(),
-            };
-          },
+                MovieDetailState() => throw UnimplementedError(),
+              };
+            },
+          ),
         ),
-      ),
 
-      // Provider Movie Detail
-      // body: Consumer<MovieDetailNotifier>(
-      //   builder: (context, provider, child) {
-      //     if (provider.movieState == RequestState.Loading) {
-      //       return Center(
-      //         child: Lottie.asset(
-      //           key: Key('loading_movie_detail'),
-      //           'assets/image_lottie/loading_bar.json',
-      //           width: 100,
-      //           height: 100,
-      //           fit: BoxFit.fill,
-      //         ),
-      //       );
-      //     } else if (provider.movieState == RequestState.Loaded) {
-      //       final movie = provider.movie;
-      //       return SafeArea(
-      //         child: DetailContent(
-      //           movie!,
-      //           provider.movieRecommendations,
-      //           provider.isAddedToWatchlist,
-      //         ),
-      //       );
-      //     } else {
-      //       return Center(
-      //         child: ErrorStateWidget2(
-      //           message: provider.message,
-      //           onRetry: () => provider.fetchMovieDetail(widget.id),
-      //         ),
-      //       );
-      //     }
-      //   },
-      // ),
+        // Provider Movie Detail
+        // body: Consumer<MovieDetailNotifier>(
+        //   builder: (context, provider, child) {
+        //     if (provider.movieState == RequestState.Loading) {
+        //       return Center(
+        //         child: Lottie.asset(
+        //           key: Key('loading_movie_detail'),
+        //           'assets/image_lottie/loading_bar.json',
+        //           width: 100,
+        //           height: 100,
+        //           fit: BoxFit.fill,
+        //         ),
+        //       );
+        //     } else if (provider.movieState == RequestState.Loaded) {
+        //       final movie = provider.movie;
+        //       return SafeArea(
+        //         child: DetailContent(
+        //           movie!,
+        //           provider.movieRecommendations,
+        //           provider.isAddedToWatchlist,
+        //         ),
+        //       );
+        //     } else {
+        //       return Center(
+        //         child: ErrorStateWidget2(
+        //           message: provider.message,
+        //           onRetry: () => provider.fetchMovieDetail(widget.id),
+        //         ),
+        //       );
+        //     }
+        //   },
+        // ),
+      ),
     );
   }
 }
@@ -163,8 +183,8 @@ class DetailContent extends StatelessWidget {
         CachedNetworkImage(
           imageUrl: 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
           width: screenWidth,
-          placeholder:
-              (context, url) => Center(child: CircularProgressIndicator()),
+          placeholder: (context, url) =>
+              Center(child: CircularProgressIndicator()),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
 
@@ -255,11 +275,8 @@ class DetailContent extends StatelessWidget {
                                 RatingBarIndicator(
                                   rating: movie.voteAverage! / 2,
                                   itemCount: 5,
-                                  itemBuilder:
-                                      (context, index) => Icon(
-                                        Icons.star,
-                                        color: kMikadoYellow,
-                                      ),
+                                  itemBuilder: (context, index) =>
+                                      Icon(Icons.star, color: kMikadoYellow),
                                   itemSize: 24,
                                 ),
                                 Text('${movie.voteAverage}'),
@@ -280,62 +297,62 @@ class DetailContent extends StatelessWidget {
                                   ) =>
                                     recState == RequestState.loading
                                         ? const Center(
-                                          child: CircularProgressIndicator(),
-                                        )
+                                            child: CircularProgressIndicator(),
+                                          )
                                         : recState == RequestState.loaded
                                         ? SizedBox(
-                                          height: 150,
-                                          child: ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemBuilder: (context, index) {
-                                              final movie = recs[index];
-                                              return Padding(
-                                                padding: const EdgeInsets.all(
-                                                  4.0,
-                                                ),
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    Navigator.pushReplacementNamed(
-                                                      context,
-                                                      movieDetailRoute,
-                                                      arguments: movie.id,
-                                                    );
-                                                  },
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                          Radius.circular(8),
-                                                        ),
-                                                    child: CachedNetworkImage(
-                                                      imageUrl:
-                                                          'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                                                      placeholder:
-                                                          (
-                                                            context,
-                                                            url,
-                                                          ) => const Center(
-                                                            child:
-                                                                CircularProgressIndicator(),
+                                            height: 150,
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) {
+                                                final movie = recs[index];
+                                                return Padding(
+                                                  padding: const EdgeInsets.all(
+                                                    4.0,
+                                                  ),
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      Navigator.pushReplacementNamed(
+                                                        context,
+                                                        movieDetailRoute,
+                                                        arguments: movie.id,
+                                                      );
+                                                    },
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          const BorderRadius.all(
+                                                            Radius.circular(8),
                                                           ),
-                                                      errorWidget:
-                                                          (
-                                                            context,
-                                                            url,
-                                                            error,
-                                                          ) => const Icon(
-                                                            Icons.error,
-                                                          ),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                                                        placeholder:
+                                                            (
+                                                              context,
+                                                              url,
+                                                            ) => const Center(
+                                                              child:
+                                                                  CircularProgressIndicator(),
+                                                            ),
+                                                        errorWidget:
+                                                            (
+                                                              context,
+                                                              url,
+                                                              error,
+                                                            ) => const Icon(
+                                                              Icons.error,
+                                                            ),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                            itemCount: recs.length,
-                                          ),
-                                        )
+                                                );
+                                              },
+                                              itemCount: recs.length,
+                                            ),
+                                          )
                                         : const Text(
-                                          "Failed to load recommendations.",
-                                        ),
+                                            "Failed to load recommendations.",
+                                          ),
                                   _ => const SizedBox.shrink(),
                                 };
                               },

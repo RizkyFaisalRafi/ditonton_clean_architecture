@@ -7,7 +7,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lottie/lottie.dart';
 
 class TvSeriesDetailPage extends StatefulWidget {
-
   final int id;
 
   const TvSeriesDetailPage({super.key, required this.id});
@@ -17,6 +16,9 @@ class TvSeriesDetailPage extends StatefulWidget {
 }
 
 class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
+  // 1. Deklarasikan variabel
+  ScaffoldMessengerState? _scaffoldMessenger;
+
   @override
   void initState() {
     super.initState();
@@ -34,67 +36,107 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
     context.read<TvDetailBloc>().add(FetchTvDetail(widget.id));
   }
 
+  // 2. Simpan referensi di didChangeDependencies()
+  // widget yang dijalankan setelah initState() dan setiap kali dependensi widget
+  // (seperti ScaffoldMessenger) berubah. Pada titik ini, widget sepenuhnya aktif
+  // dan aman untuk memanggil ScaffoldMessenger.of(context).
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _scaffoldMessenger = ScaffoldMessenger.of(context);
+  }
+
+  // 3. Gunakan referensi di dalam dispose()
+  @override
+  void dispose() {
+    _scaffoldMessenger?.removeCurrentSnackBar();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocListener<TvDetailBloc, TvDetailState>(
-        listener: (context, state) {
-          if (state is LoadedTvDetail) {
-            final message = state.watchlistMessage;
-            if (message != null && message.isNotEmpty) {
-              if (message == TvDetailState.watchlistAddSuccessMessage ||
-                  message == TvDetailState.watchlistRemoveSuccessMessage) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(message)));
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(content: Text(message));
-                  },
-                );
+    return PopScope(
+      // Set canPop menjadi false untuk mengambil alih navigasi kembali
+      canPop: false,
+      // Gunakan onPopInvoked untuk menangani aksi "kembali"
+      onPopInvokedWithResult: (bool didPop, dynamic? result) {
+        // Jika pop sudah terjadi karena sebab lain, jangan lakukan apa-apa
+        if (didPop) {
+          return;
+        }
+
+        // Lakukan cleanup SnackBar SEKARANG, saat widget masih 100% aktif
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+
+        // Pop secara manual, dan teruskan 'result' untuk menjaga
+        // fungsionalitas jika pop dipicu dengan sebuah nilai.
+        // Lakukan pop secara manual SETELAH cleanup selesai
+        Navigator.of(context).pop(result);
+      },
+
+      child: Scaffold(
+        body: BlocListener<TvDetailBloc, TvDetailState>(
+          listener: (context, state) {
+            if (state is LoadedTvDetail) {
+              final message = state.watchlistMessage;
+              if (message != null && message.isNotEmpty) {
+                if (message == TvDetailState.watchlistAddSuccessMessage ||
+                    message == TvDetailState.watchlistRemoveSuccessMessage) {
+                  // menangani kasus pengguna menekan tombol watchlist berulang
+                  // kali dengan cepat tanpa meninggalkan halaman.
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message)));
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(content: Text(message));
+                    },
+                  );
+                }
               }
             }
-          }
-        },
-        child: BlocBuilder<TvDetailBloc, TvDetailState>(
-          builder: (context, state) {
-            if (state is LoadingTvDetail) {
-              return Center(
-                child: Lottie.asset(
-                  loadingBarLottiePath,
-                  width: 150,
-                  height: 150,
-                ),
-              );
-            } else if (state is LoadedTvDetail) {
-              return SafeArea(
-                child: DetailContents(
-                  state.tvDetail,
-                  state.tvRecommendations,
-                  state.isAddedToWatchlist,
-                ),
-              );
-            } else if (state is ErrorTvDetail) {
-              return ErrorStateWidget2(
-                message: state.message,
-                onRetry: () {
-                  context.read<TvDetailBloc>().add(
-                    TvDetailEvent.fetchTvDetail(widget.id),
-                  );
-                },
-              );
-            } else if (state is InitialTvDetail) {
-              return Center(
-                child: CircularProgressIndicator(key: Key('initialState')),
-              );
-            } else {
-              // Mengembalikan widget kosong sebagai fallback
-              return const SizedBox.shrink();
-            }
           },
+          child: BlocBuilder<TvDetailBloc, TvDetailState>(
+            builder: (context, state) {
+              if (state is LoadingTvDetail) {
+                return Center(
+                  child: Lottie.asset(
+                    loadingBarLottiePath,
+                    width: 150,
+                    height: 150,
+                  ),
+                );
+              } else if (state is LoadedTvDetail) {
+                return SafeArea(
+                  child: DetailContents(
+                    state.tvDetail,
+                    state.tvRecommendations,
+                    state.isAddedToWatchlist,
+                  ),
+                );
+              } else if (state is ErrorTvDetail) {
+                return ErrorStateWidget2(
+                  message: state.message,
+                  onRetry: () {
+                    context.read<TvDetailBloc>().add(
+                      TvDetailEvent.fetchTvDetail(widget.id),
+                    );
+                  },
+                );
+              } else if (state is InitialTvDetail) {
+                return Center(
+                  child: CircularProgressIndicator(key: Key('initialState')),
+                );
+              } else {
+                // Mengembalikan widget kosong sebagai fallback
+                return const SizedBox.shrink();
+              }
+            },
+          ),
         ),
       ),
     );
@@ -106,26 +148,24 @@ class DetailContents extends StatelessWidget {
   final List<TvSeries> recommendations;
   final bool isAddedWatchlist;
 
-  const DetailContents(this.tvDetail,
-      this.recommendations,
-      this.isAddedWatchlist, {
-        super.key,
-      });
+  const DetailContents(
+    this.tvDetail,
+    this.recommendations,
+    this.isAddedWatchlist, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Stack(
       children: [
         // Gambar poster vertikal
         CachedNetworkImage(
           imageUrl: 'https://image.tmdb.org/t/p/w500${tvDetail.posterPath}',
           width: screenWidth,
-          placeholder:
-              (context, url) => Center(child: CircularProgressIndicator()),
+          placeholder: (context, url) =>
+              Center(child: CircularProgressIndicator()),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
 
@@ -155,17 +195,12 @@ class DetailContents extends StatelessWidget {
                             if (tvDetail.backdropPath != null)
                               CachedNetworkImage(
                                 imageUrl:
-                                'https://image.tmdb.org/t/p/w500${tvDetail
-                                    .backdropPath}',
+                                    'https://image.tmdb.org/t/p/w500${tvDetail.backdropPath}',
                                 fit: BoxFit.cover,
                                 width: double.infinity,
-                                placeholder:
-                                    (context, url) =>
-                                    Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                errorWidget:
-                                    (context, url, error) =>
+                                placeholder: (context, url) =>
+                                    Center(child: CircularProgressIndicator()),
+                                errorWidget: (context, url, error) =>
                                     Icon(Icons.broken_image, size: 100),
                               )
                             else
@@ -249,12 +284,8 @@ class DetailContents extends StatelessWidget {
                                 RatingBarIndicator(
                                   rating: (tvDetail.voteAverage ?? 0) / 2,
                                   itemCount: 5,
-                                  itemBuilder:
-                                      (context, _) =>
-                                      Icon(
-                                        Icons.star,
-                                        color: kMikadoYellow,
-                                      ),
+                                  itemBuilder: (context, _) =>
+                                      Icon(Icons.star, color: kMikadoYellow),
                                   itemSize: 25,
                                 ),
                                 const SizedBox(width: 8),
@@ -306,38 +337,32 @@ class DetailContents extends StatelessWidget {
                             // Creator / Created By
                             Text(
                               'Created by',
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .titleMedium,
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
                             const SizedBox(height: 8),
                             Wrap(
                               spacing: 8,
-                              children:
-                              tvDetail.createdBy?.isNotEmpty == true
+                              children: tvDetail.createdBy?.isNotEmpty == true
                                   ? tvDetail.createdBy!.map((creator) {
-                                return Chip(
-                                  label: Text(
-                                    creator.name ?? 'Unknown',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.blueAccent,
-                                );
-                              }).toList()
+                                      return Chip(
+                                        label: Text(
+                                          creator.name ?? 'Unknown',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        backgroundColor: Colors.blueAccent,
+                                      );
+                                    }).toList()
                                   : [
-                                const Chip(
-                                  label: Text(
-                                    'Unknown',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.grey,
-                                ),
-                              ],
+                                      const Chip(
+                                        label: Text(
+                                          'Unknown',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        backgroundColor: Colors.grey,
+                                      ),
+                                    ],
                             ),
 
                             SizedBox(height: 16),
@@ -353,86 +378,83 @@ class DetailContents extends StatelessWidget {
                             Text('Season Information', style: kHeading6),
                             const SizedBox(height: 8),
                             tvDetail.seasons != null &&
-                                tvDetail.seasons!.isNotEmpty
+                                    tvDetail.seasons!.isNotEmpty
                                 ? SizedBox(
-                              height: 200,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: tvDetail.seasons!.length,
-                                itemBuilder: (context, index) {
-                                  final season = tvDetail.seasons![index];
-                                  return Container(
-                                    width: 140,
-                                    margin: const EdgeInsets.only(
-                                      right: 12,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                          BorderRadius.circular(8),
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                            season.posterPath != null
-                                                ? 'https://image.tmdb.org/t/p/w300${season
-                                                .posterPath}'
-                                                : noImage,
-                                            // placeholder
-                                            width: 140,
-                                            height: 100,
-                                            fit: BoxFit.cover,
-                                            placeholder:
-                                                (context, url) =>
-                                                Center(
-                                                  child:
-                                                  CircularProgressIndicator(),
+                                    height: 200,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: tvDetail.seasons!.length,
+                                      itemBuilder: (context, index) {
+                                        final season = tvDetail.seasons![index];
+                                        return Container(
+                                          width: 140,
+                                          margin: const EdgeInsets.only(
+                                            right: 12,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      season.posterPath != null
+                                                      ? 'https://image.tmdb.org/t/p/w300${season.posterPath}'
+                                                      : noImage,
+                                                  // placeholder
+                                                  width: 140,
+                                                  height: 100,
+                                                  fit: BoxFit.cover,
+                                                  placeholder: (context, url) =>
+                                                      Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(
+                                                            Icons.broken_image,
+                                                          ),
                                                 ),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                Icon(
-                                                  Icons.broken_image,
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(
+                                                season.name ?? 'Unknown Season',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
                                                 ),
+                                              ),
+                                              SizedBox(height: 4),
+                                              Text(
+                                                '${season.episodeCount ?? 0} episodes',
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                              SizedBox(height: 2),
+                                              Text(
+                                                season.airDate ?? 'No date',
+                                                style: TextStyle(
+                                                  color: Colors.white54,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        SizedBox(height: 8),
-                                        Text(
-                                          season.name ?? 'Unknown Season',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        SizedBox(height: 4),
-                                        Text(
-                                          '${season.episodeCount ??
-                                              0} episodes',
-                                          style: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                        SizedBox(height: 2),
-                                        Text(
-                                          season.airDate ?? 'No date',
-                                          style: TextStyle(
-                                            color: Colors.white54,
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                      ],
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                            )
+                                  )
                                 : Text(
-                              'No season information available.',
-                              style: TextStyle(color: Colors.white54),
-                            ),
+                                    'No season information available.',
+                                    style: TextStyle(color: Colors.white54),
+                                  ),
 
                             SizedBox(height: 16),
 
@@ -496,25 +518,22 @@ class DetailContents extends StatelessWidget {
                                               },
                                               child: ClipRRect(
                                                 borderRadius:
-                                                const BorderRadius.all(
-                                                  Radius.circular(8),
-                                                ),
+                                                    const BorderRadius.all(
+                                                      Radius.circular(8),
+                                                    ),
                                                 child: CachedNetworkImage(
                                                   imageUrl:
-                                                  'https://image.tmdb.org/t/p/w500${tv
-                                                      .posterPath}',
-                                                  placeholder:
-                                                      (context,
-                                                      url,) =>
-                                                  const Center(
-                                                    child:
-                                                    CircularProgressIndicator(),
-                                                  ),
+                                                      'https://image.tmdb.org/t/p/w500${tv.posterPath}',
+                                                  placeholder: (context, url) =>
+                                                      const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
                                                   errorWidget:
                                                       (context, url, error) =>
-                                                  const Icon(
-                                                    Icons.error,
-                                                  ),
+                                                          const Icon(
+                                                            Icons.error,
+                                                          ),
                                                 ),
                                               ),
                                             ),
