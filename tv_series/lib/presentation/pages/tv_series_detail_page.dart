@@ -16,9 +16,6 @@ class TvSeriesDetailPage extends StatefulWidget {
 }
 
 class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
-  // 1. Deklarasikan variabel
-  ScaffoldMessengerState? _scaffoldMessenger;
-
   @override
   void initState() {
     super.initState();
@@ -36,36 +33,19 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
     context.read<TvDetailBloc>().add(FetchTvDetail(widget.id));
   }
 
-  // 2. Simpan referensi di didChangeDependencies()
-  // widget yang dijalankan setelah initState() dan setiap kali dependensi widget
-  // (seperti ScaffoldMessenger) berubah. Pada titik ini, widget sepenuhnya aktif
-  // dan aman untuk memanggil ScaffoldMessenger.of(context).
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _scaffoldMessenger = ScaffoldMessenger.of(context);
-  }
-
-  // 3. Gunakan referensi di dalam dispose()
-  @override
-  void dispose() {
-    _scaffoldMessenger?.removeCurrentSnackBar();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
       // Set canPop menjadi false untuk mengambil alih navigasi kembali
       canPop: false,
       // Gunakan onPopInvoked untuk menangani aksi "kembali"
-      onPopInvokedWithResult: (bool didPop, dynamic? result) {
-        // Jika pop sudah terjadi karena sebab lain, jangan lakukan apa-apa
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        // Jika pop sudah terjadi karena sebab lain, tidak lakukan apa-apa
         if (didPop) {
           return;
         }
 
-        // Lakukan cleanup SnackBar SEKARANG, saat widget masih 100% aktif
+        // Lakukan cleanup SnackBar sekarang, saat widget masih 100% aktif
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
 
         // Pop secara manual, dan teruskan 'result' untuk menjaga
@@ -73,7 +53,6 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
         // Lakukan pop secara manual SETELAH cleanup selesai
         Navigator.of(context).pop(result);
       },
-
       child: Scaffold(
         body: BlocListener<TvDetailBloc, TvDetailState>(
           listener: (context, state) {
@@ -82,10 +61,7 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
               if (message != null && message.isNotEmpty) {
                 if (message == TvDetailState.watchlistAddSuccessMessage ||
                     message == TvDetailState.watchlistRemoveSuccessMessage) {
-                  // menangani kasus pengguna menekan tombol watchlist berulang
-                  // kali dengan cepat tanpa meninggalkan halaman.
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
-
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(SnackBar(content: Text(message)));

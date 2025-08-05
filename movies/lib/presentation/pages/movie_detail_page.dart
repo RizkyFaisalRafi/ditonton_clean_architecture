@@ -41,12 +41,12 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
       canPop: false,
       // Gunakan onPopInvoked untuk menangani aksi "kembali"
       onPopInvokedWithResult: (bool didPop, dynamic result) {
-        // Jika pop sudah terjadi karena sebab lain, jangan lakukan apa-apa
+        // Jika pop sudah terjadi karena sebab lain, tidak lakukan apa-apa
         if (didPop) {
           return;
         }
 
-        // Lakukan cleanup SnackBar SEKARANG, saat widget masih 100% aktif
+        // Lakukan cleanup SnackBar sekarang, saat widget masih 100% aktif
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
 
         // Pop secara manual, dan teruskan 'result' untuk menjaga
